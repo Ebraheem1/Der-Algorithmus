@@ -66,6 +66,12 @@ app.use(flash());
 //using the routes file
 app.use(router);
 
+//Global Vars as well
+app.use(function(req, res, next) {
+  res.locals.user = req.session.user;
+  next();
+});
+
 app.listen(8080,function(){
 	console.log('The server is listening on port 8080.....');
 });
