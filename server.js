@@ -12,6 +12,13 @@ var router= require('./app/routes');
 var app = express();
 //Database name is Algorithmus
 var DB_URI = "mongodb://localhost:27017/Algorithmus";
+//Hamdi: Importing the reviews controller                                             <<<<<<<<<<Hamdi(1/3)
+var reviewRouter = express.Router();
+var reviewRoutes = require('./app/controllers/reviewController')(reviewRouter);
+//Hamdi: Importing the reviews controller                                             <<<<<<<<<<Hamdi(2/3)
+var activityRouter = express.Router();
+var activityRoutes = require('./app/controllers/activityController')(activityRouter);
+
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -64,7 +71,13 @@ app.use(expressValidator({
 app.use(flash());
 
 //using the routes file
-app.use(router);
+app.use(router);                                                       
+
+//Hamdi: using the review routes                                  <<<<<<<<<<Hamdi(3/4)
+app.use('/review',reviewRoutes);
+
+//Hamdi: using the activity routes                                <<<<<<<<<<Hamdi(4/4)
+app.use('/activity',activityRoutes);
 
 //Global Vars as well
 app.use(function(req, res, next) {
