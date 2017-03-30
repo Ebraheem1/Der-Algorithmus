@@ -68,7 +68,11 @@ app.use(router);
 
 //Global Vars as well
 app.use(function(req, res, next) {
-  res.locals.user = req.session.user;
+  res.locals.req = req;
+  res.locals.res = res;
+  res.locals.user = req.user || null;
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
   next();
 });
 
