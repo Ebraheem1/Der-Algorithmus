@@ -1,8 +1,10 @@
+//Dependencies
 let User = require('../models/User');
 var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
-//TODO : Clean code .
+
+//Setting up nodemailer.
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -15,24 +17,19 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+//The user controller
 let userController = {
-
-    //Write here the functions in the format of function_name:function(params)
     forgotPassword: function(req, res) {
         var email = req.body.email;
         var username = req.body.username;
         console.log(email);
         console.log(username);
-
-
-
         User.findOne({
             username: username
         }, function(err, user) {
             if (user) {
                 if (user.email == email) {
                     userController.changePassword(user);
-
                     res.send("Password updated correctly");
                 } else {
                     res.send("You entered a wrong email ");
@@ -45,8 +42,10 @@ let userController = {
         });
 
     },
+
+    //Function for generating random password between 5 to 15 characters
     generatePassword: function() {
-        var length = (Math.random() * 10) + 5;
+        var length = (Math.random() * 11) + 5;
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for (var i = 0; i < length; i++) {
@@ -54,7 +53,10 @@ let userController = {
         }
         return text;
     },
+
+    //Function for sending email .
     sendMail: function(user, pass) {
+      //Setting up the mail options .
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', // sender address
             to: user.email, // list of receivers
@@ -71,15 +73,21 @@ let userController = {
             }
         });
     },
+    // Changing password function . Creating new User and giving it all the past user info. because updating
+    // the Hash for password does not work .
     changePassword: function(user) {
         var pass = userController.generatePassword();
         userController.sendMail(user, pass);
+
+        //Creting new user .
         var user2 = new User();
         user2._id = user._id;
         user2.username = user.username;
         user2.password = pass;
         user2.phoneNumber = user.phoneNumber;
         user2.email = user.email;
+
+        //Removing the old user then saving the new user .
         User.remove({
             _id: user._id
         }, function(err) {
@@ -98,4 +106,5 @@ let userController = {
     }
 };
 
+//Exporting the module .
 module.exports = userController;

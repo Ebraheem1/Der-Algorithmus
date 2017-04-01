@@ -71,6 +71,6 @@ app.use(function(req, res, next) {
   next();
 });
 //app.use(router);
-app.listen(8080,function(){ 
+app.listen(8080,function(){
 	console.log('The server is listening on port 8080.....');
 });

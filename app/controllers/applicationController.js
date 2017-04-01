@@ -1,9 +1,11 @@
+//Dependencies.
 let Application = require('../models/Application');
 let Owner = require('../models/BusinessOwner');
 let User = require('../models/User')
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
-//TODO : Clean code .
+var bcrypt = require('bcryptjs');
+//NodeMailer Setup
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -16,45 +18,38 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-var bcrypt = require('bcryptjs');
+//Controller
 let applicationController = {
-    //Write here the functions in the format of function_name:function(params)
-    accept: function(req, res) {
-        var username = req.param('username');// to be changed to the ID when insertion of application is implemented
 
+  //Accepting Application function .
+    accept: function(req, res) {
+        var username = req.param('username');
         Application.findOne({
             username: username
         }, function(err, application) {
             if (application) {
-
                 var owner = new Owner();
                 var user = new User();
-
-
-
+                //copying application properites to user instance .
                 user.username = application.username;
-                user.password = application.password; //check Enc .
+                user.password = application.password;
                 user.phoneNumber = application.phoneNumber;
                 user.email = application.email;
                 owner.name = application.name;
                 owner.description = application.description;
                 owner.locations = application.locations;
-                var bool = false;
-                user.save(function(err) {
-                    if (err)
-                        res.send("Error occured while saving user");
-                    else {
-                        //Code was put in here to avoid asynchronous code.
 
+
+                user.save(function(err) {
+                    if (err){
+                        res.send("Error occured while saving user");
+                      return ;
+                    }
+                    else {  //Code was put in here to avoid asynchronous code.
                         applicationController.findId(application, owner);
                         applicationController.sendAcceptMail(application);
-
                     }
                 });
-
-
-
-
                 res.send("Application accepted successfuly");
             } else {
                 res.send("Application was not found !");
@@ -62,21 +57,25 @@ let applicationController = {
         });
 
     },
+
+    //Rejecting application function
     reject: function(req, res) {
-      var username = req.param('username'); // TODO : to be changed to the ID when insertion of application is implemented
+      var username = req.param('username'); // Could be changed to ID later .
 
       Application.findOne({
           username: username
       }, function(err, application) {
           if (application) {
                     applicationController.sendRejectMail(application);
-                        applicationController.removeApplication(application);
-                        res.send("Application rejected successfuly");
+                    applicationController.removeApplication(application);
+                    res.send("Application rejected successfuly");
           } else {
               res.send("Application was not found !");
           }
       });
     },
+
+//To link the buisness owner with the client instance just made .
     findId: function(application, owner) {
         User.findOne({
             username: application.username
@@ -84,14 +83,14 @@ let applicationController = {
             if (UserA) {
 
                 owner.user_id = UserA._id;
-                applicationController.save(owner);
+                applicationController.save(owner,application);
             } else {
                 console.log('User was not saved in DB');
             }
         });
     },
-
-    save: function(owner) {
+  //To save the owner.
+    save: function(owner,application) {
         console.log(owner.user_id);
         owner.save(function(err) {
             console.log("IN");
@@ -103,13 +102,14 @@ let applicationController = {
             }
         });
     },
+    //To Send the acceptance mail .
     sendAcceptMail: function(application) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', // sender address
             to: application.email, // list of receivers
             subject: 'Hello ✔', // Subject line
             text: 'Hello world', // plain text body
-            html: '<b> Dear ' + application.name + '</b> <br> <h3>Your application to our directory website have been accepted .We are very happy to work with you  ,and We wish to see more of your organization in the near future :D . </h3> <br> <br> -Youssef From Dev. Team ' // html body
+            html: '<b> Dear ' + application.name + ' ,</b> <br> <h3>Your application to our directory website has been accepted .We are very happy to work with you  ,and We wish to see more of your organization in the near future :D . </h3> <br> <br> -Youssef From Dev. Team ' // html body
         };
         transporter.sendMail(mailOptions, function(err, res) {
             if (err)
@@ -119,13 +119,14 @@ let applicationController = {
             }
         });
     },
+  //to Send the rejection mail
     sendRejectMail: function(application) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', //TODO : sender address
             to: application.email, // list of receivers
             subject: 'Hello ✔', // Subject line
             text: 'Hello world', // plain text body
-            html: '<b> Dear ' + application.name + '</b> <br> <h3>We are flattered that you chose us as your main directory website ,but we are  sorry to inform you that your application for our website was rejected.  </h3> <br> <br> -Youssef From Dev. Team ' // html body
+            html: '<b> Dear ' + application.name + ' ,</b> <br> <h3>We are flattered that you chose us as your main directory website ,but we are  sorry to inform you that your application for our website was rejected.  </h3> <br> <br> -Youssef From Dev. Team ' // html body
         };
         transporter.sendMail(mailOptions, function(err, res) {
             if (err)
@@ -135,6 +136,7 @@ let applicationController = {
             }
         });
     },
+    // To remove the application after acceptance or rejection .
     removeApplication: function(application) {
         Application.remove({
             _id: application._id
@@ -147,5 +149,5 @@ let applicationController = {
     }
 };
 
-
+//Exporting the module .
 module.exports = applicationController;
