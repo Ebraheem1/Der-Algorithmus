@@ -11,7 +11,7 @@ var userController = require('./controllers/userController');
 //It's only a tester
 router.post('/createadmin', function(req,res)
 	{
-	var pass = req.body.password;
+	var pass = "123456";
 	var newAdmin= new Administrator({password:pass});
 	administratorController.createAdmin(newAdmin,function(err,admin)
 	{
@@ -46,10 +46,9 @@ passport.use('login', new LocalStrategy(
    		if(isMatch){
    			return done(null, user);
    		}
-
    	});
-   	return;
    }
+   else{
    administratorController.comparePassword(username,password,function(err, isAdmin){
    		if(err) throw err;
    		if(isAdmin && username=="admin"){
@@ -59,12 +58,12 @@ passport.use('login', new LocalStrategy(
    				{
    					throw err;
    				}
-   				console.log("AYwa ya wade3");
+   				console.log("I have found the admin");
           console.log(admin[0]);
-   				//return done(null, admin[0]);
+   				return done(null, admin[0]);
    			});
-   			return;
    		}
+    else{
    	businessownerController.getOwnerByUsername(username,function(err,owner)
    	{
    		if(err)
@@ -80,15 +79,18 @@ passport.use('login', new LocalStrategy(
    				return done(null, owner);
    				}
    			});
-   			return;
    		}
-   		//To be removed after the front-end
-   		console.log("No Valid Data");
-   		return;
-   		//return done(null, false, {message: 'Invalid username or password'});
+      else{
+        //To be removed after the front-end
+        console.log("No Valid Data");
+        return;
+        //return done(null, false, {message: 'Invalid username or password'});
+      }
+
    	});
-   		
+   	}
    	});
+  }
    });
    
    
