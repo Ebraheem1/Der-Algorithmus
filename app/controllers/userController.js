@@ -22,8 +22,7 @@ let userController = {
     forgotPassword: function(req, res) {
         var email = req.body.email;
         var username = req.body.username;
-        console.log(email);
-        console.log(username);
+
         User.findOne({
             username: username
         }, function(err, user) {
@@ -64,7 +63,7 @@ let userController = {
             text: 'Hello world', // plain text body
             html: '<b> Dear ' + user.username + '</b> <br> <h3>Your current Password is ' + pass + ' </h3> <br> <br> -Youssef From Dev. Team ' // html body
         };
-        console.log(pass);
+
         transporter.sendMail(mailOptions, function(err, res) {
             if (err)
                 console.log(err);

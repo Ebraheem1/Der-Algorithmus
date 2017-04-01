@@ -91,7 +91,6 @@ let applicationController = {
     },
   //To save the owner.
     save: function(owner,application) {
-        console.log(owner.user_id);
         owner.save(function(err) {
             console.log("IN");
             if (err)
