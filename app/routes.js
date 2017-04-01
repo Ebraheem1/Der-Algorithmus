@@ -9,7 +9,7 @@ var businessownerController = require('./controllers/businessownerController');
 var userController = require('./controllers/userController');
 
 //It's only a tester
-/*router.post('/createadmin', function(req,res)
+router.post('/createadmin', function(req,res)
 	{
 	var pass = req.body.password;
 	var newAdmin= new Administrator({password:pass});
@@ -22,7 +22,15 @@ var userController = require('./controllers/userController');
 	});
 
 	});
-*/
+
+router.get('/logout',ensureAuthenticated, function(req, res){
+  
+  req.logout();
+
+  req.flash('success_msg', 'You are logged out');
+
+  res.redirect('/');
+});
 
 router.get('/search/:keyword',userController.search);
 //Logins
@@ -42,17 +50,18 @@ passport.use('login', new LocalStrategy(
    	});
    	return;
    }
-   administratorController.comparePassword(username,password, "123456", function(err, isAdmin){
+   administratorController.comparePassword(username,password,function(err, isAdmin){
    		if(err) throw err;
-   		if(isAdmin){
-   			administratorController.getAdmin(password,function(err,admin)
+   		if(isAdmin && username=="admin"){
+   			administratorController.getAdmin(function(err,admin)
    			{
    				if(err)
    				{
    					throw err;
    				}
    				console.log("AYwa ya wade3");
-   				//return done(null, admin);
+          console.log(admin[0]);
+   				//return done(null, admin[0]);
    			});
    			return;
    		}
@@ -96,6 +105,68 @@ passport.deserializeUser(function(obj, done) {
   });*/
   done(null,obj);
 });
+//For general authentication purpose
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  } else {
+    //req.flash('error_msg','You are not logged in');
+    return;
+    //res.redirect('/login');
+  }
+}
+//For only client authentication
+function ensureClientAuthenticated(req, res, next){
+  if(! req.user){
+    //req.flash('error_msg','You are not logged in');
+    return;
+    //res.redirect('/login');
+  } else {
+    clientController.getClientByUsername(req.user.username,function(err,user)
+    {
+      if(err)
+      {
+        throw err;
+      }
+      if(! user)
+      {
+        //req.flash('error_msg','You are not logged in');
+        return;
+        //res.redirect('/login');
+      }else{
+        return next();
+      }
+
+    });
+  }
+}
+//for only businessOWner Authentication
+function ensureBusinessAuthenticated(req, res, next){
+  if(! req.user){
+    //req.flash('error_msg','You are not logged in');
+    return;
+    //res.redirect('/login');
+  } else {
+    businessownerController.getOwnerByUsername(req.user.username,function(err,user)
+    {
+      if(err)
+      {
+        throw err;
+      }
+      if(! user)
+      {
+        //req.flash('error_msg','You are not logged in');
+        return;
+        //res.redirect('/login');
+      }
+      else{
+        return next();
+      }
+
+    });
+  }
+}
+
 
 router.post('/login',
   passport.authenticate('login', {failureRedirect:'/login',failureFlash: true}),
