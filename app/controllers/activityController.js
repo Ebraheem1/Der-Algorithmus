@@ -1,10 +1,11 @@
-var Activity = require('../models/Activity');
+let Activity = require('../models/Activity');
 
-module.exports = function(activityRouter){
+
+let activityController={
 
 
 	// http://localhost:8080/activity/newActivity
-	activityRouter.post('/newActivity', function(req, res){
+	newActivity:function(req,res){
 		var activity = new Activity();
 		activity.type = req.body.type;
 		activity.description = req.body.description;
@@ -25,12 +26,12 @@ module.exports = function(activityRouter){
 				}
 			});
 
-		}
-	});
+		}		
+	},
 
 
-	// http://localhost:8080/activity/editActivity/#
-	activityRouter.put('/editActivity/:id', function(req, res){
+	// http://localhost:8080/activity/editActivity/#	
+	editActivity: function(req,res){
 		var activity_BusinessOwner_id = req.body.BusinessOwner_id;
 		var activity_type = req.body.type;
 		var activity_description =  req.body.description;
@@ -72,9 +73,10 @@ module.exports = function(activityRouter){
 
 		        }
 	        });
-		}
-	});
+		}		
+	}
 
-	return activityRouter;
-}
+};
+
+module.exports = activityController;
 

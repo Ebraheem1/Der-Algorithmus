@@ -1,11 +1,11 @@
-var Review = require('../models/Review');
+let Review = require('../models/Review');
       
 
-module.exports = function(reviewRouter){
+let reviewController={
 
 
 	// http://localhost:8080/review/newReview
-	reviewRouter.post('/newReview', function(req, res){
+	newReview:function(req,res){
 		var review = new Review();
 		review.user_id = req.body.user_id;
 		review.business_id = req.body.business_id;
@@ -27,12 +27,12 @@ module.exports = function(reviewRouter){
 			});
 
 		}
-	});
+	},
 
-
+	
 	// http://localhost:8080/review/editReview/#
 	//by using angular's ng-show, it will be guaranteed that each user can only update his own reviews
-	reviewRouter.put('/editReview/:id', function(req, res){
+	editReview: function(req,res){
 		var review_user_id = req.body.user_id;
 		var review_newComment = req.body.comment;
 		var review_id =  req.params.id;
@@ -69,12 +69,12 @@ module.exports = function(reviewRouter){
 		        }
 	        });
 		}
-	});
+	},
 
 
 	// http://localhost:8080/review/deleteReview/#
 	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
-	reviewRouter.delete('/deleteReview/:id', function(req, res){
+	deleteReview: function(req,res){
 		var review_user_id = req.body.user_id;
         var review_id =  req.params.id;
         var missingFields = review_user_id==null || review_user_id=='';
@@ -108,10 +108,11 @@ module.exports = function(reviewRouter){
 	            }
        		});
 		}
-	});
+	}
 
 
-	return reviewRouter;
-}
+};
+
+module.exports = reviewController;
 
 
