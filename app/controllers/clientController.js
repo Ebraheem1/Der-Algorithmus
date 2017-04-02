@@ -14,20 +14,9 @@ view_summary:function(req,res){
   else {
     res.render('home',{BusinessOwner});
   }
-})
-}
-view_summary:function(req,res){
-  BusinessOwner.find(function(err,BusinessOwner)
-{
-    if(err)
-            res.render('home',{errors:"There exist no Venues"});
-    else {
-            res.render('home',{
-              BusinessOwner}
-            );
-    }
-  });
+});
 },
+
 
 
 get_update_Info:function(req,res){
