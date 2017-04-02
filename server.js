@@ -10,6 +10,7 @@ var paginate = require('express-paginate');
 var expressValidator = require('express-validator');
 var router= require('./app/routes');
 var app = express();
+var UserId;
 //Database name is Algorithmus
 var DB_URI = "mongodb://localhost:27017/Algorithmus";
 
