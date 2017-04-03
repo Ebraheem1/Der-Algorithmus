@@ -17,7 +17,7 @@ comparePassword:function(candidatePassword, hash, callback){
 getClientById:function(id,callback)
     {
     	Client.findById(id, callback);
-    },
+    }
 
 };
 
