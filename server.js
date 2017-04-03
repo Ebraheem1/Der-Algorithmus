@@ -30,6 +30,9 @@ app.use(passport.session());
 //To remove the warning
 mongoose.Promise = global.Promise;
 
+//pagination
+app.use(paginate.middleware(10, 50));
+
 //DB connection
 mongoose.connect(DB_URI,function(err)
 {

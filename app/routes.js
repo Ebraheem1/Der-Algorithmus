@@ -1,13 +1,21 @@
 var express = require('express');
 var router = express.Router();
+
+var administratorController = require('./controllers/administratorController');
+var applicationController = require('./controllers/applicationController');
+var businessOwnerController = require('./controllers/businessownerController');
 var passport=require('passport');
 var LocalStrategy=require('passport-local').Strategy;
 var Administrator = require('./models/Administrator');
 var clientController = require('./controllers/clientController');
-var administratorController = require('./controllers/administratorController');
-var businessownerController = require('./controllers/businessownerController');
 var userController = require('./controllers/userController');
-var authController = require('./controllers/AuthenticationController')
+var authController = require('./controllers/AuthenticationController');
+
+
+
+
+
+
 
 //It's only a tester
 router.post('/createadmin', function(req,res)
@@ -98,6 +106,21 @@ passport.deserializeUser(function(obj, done) {
   done(null,obj);
 });
 
+//routing for viewing applications
+router.get('/applications/:page', administratorController.viewApplicationsIndex);
+router.get('/applications', administratorController.viewApplications);
+
+//routing for creating application
+router.post('/business/apply', applicationController.createApplication);
+
+//routing for updating basic info
+router.post('/business/update-info', businessOwnerController.updateInfo);
+
+//routing for locations operations
+router.post('/business/locations/add', businessOwnerController.addLocation);
+
+//routing for security
+router.post('/security/change-password', businessOwnerController.changePassword);
 
 router.get('/logout',authController.ensureAuthenticated, authController.generalLogOut);
 
@@ -113,3 +136,4 @@ router.post('/login',
 
 //export router
 module.exports = router;
+
