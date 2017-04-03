@@ -1,5 +1,4 @@
-var passport=require('passport');
-var LocalStrategy=require('passport-local').Strategy;
+
 var administratorController = require('./administratorController');
 var businessownerController = require('./businessownerController');
 var userController = require('./userController');
