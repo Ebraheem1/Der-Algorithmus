@@ -6,6 +6,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 let businessownerController={
 
+
 	updateInfo: function(req, res){
 
 		req.checkBody('name', 'Name Required').notEmpty();
@@ -205,7 +206,7 @@ let businessownerController={
 
 				    		}else{
 
-				    			res.send('a7a');
+				    			res.send('wrong password');
 
 				    		}
 
@@ -226,6 +227,19 @@ let businessownerController={
 
 	}
 
+
+//Write here the functions in the format of function_name:function(params)
+getOwnerByUsername:function(username,callback)
+    {
+    	var query = {username: username};
+    	BusinessOwner.findOne(query, callback);
+    },
+comparePassword:function(candidatePassword, hash, callback){
+    	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+    	if(err) throw err;
+    	callback(null, isMatch);
+	});
+    }
 };
 
 module.exports = businessownerController;
