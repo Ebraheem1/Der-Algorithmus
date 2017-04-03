@@ -10,9 +10,9 @@ view_summary:function(req,res){
   BusinessOwner.find(function(err,BusinessOwner)
 {
   if(err)
-  res.render('home',{errors:"There exist no Venues"});
+  res.send('There exist no Venues');
   else {
-    res.render('home',{BusinessOwner});
+    res.send(BusinessOwner);
   }
 });
 },
@@ -20,7 +20,7 @@ view_summary:function(req,res){
 
 
 get_update_Info:function(req,res){
-  res.render('update_Info');
+  res.send('update_Info');
 },
 
 
@@ -38,13 +38,13 @@ update_Info:function(req,res){
   if(req.body.phoneNumber!=null | req.body.phoneNumber!="")
   {
       User.updateOne({username:req.user.username},{$set:{phoneNumber:req.body.phoneNumber}});
-      res.render('home',{message:'Account Updated Succesfully'});
+      res.send('Account Updated Succesfully');
   }
   if(req.body.email!=null | req.body.email!="")
   {
     User.updateOne({username:req.user.username},{$set:{email:req.body.email}});
-      res.render('home',{message:'Account Updated Succesfully'});
 
+    res.send('Account Updated Succesfully');
   }
   if(req.body.newpassword!=null | req.body.newpassword!="")
   {
@@ -53,7 +53,7 @@ update_Info:function(req,res){
     var errors=req.validationErrors();
     if(errors)
     {
-      res.render('update_Info',{errors:errors});
+      res.send(errors);
     }
     else {
           var flag=userG.comparePassword(req.body.oldPassword);
@@ -62,12 +62,12 @@ update_Info:function(req,res){
                 if(err)
                   return next(err);
                   User.updateOne({username:req.user.username},{$set:{password:hash}});
-                res.render('home',{message:'Account Updated Succesfully'});
+                res.send('Account Updated Succesfully');
 
             });
           }
           else {
-            res.render('update_Info',{errors:'Incorrect oldPassword'});
+            res.send('Incorrect oldPassword');
           }
     }
   }
@@ -78,30 +78,30 @@ update_Info:function(req,res){
       if(err)//this means that there is no other user with this username
       {
         User.updateOne({username:req.user.username},{$set:{username:req.body.username}});
-        res.render('home',{message:'Account Updated Succesfully'});
+        res.send('Account Updated Succesfully');
 
       }
       else {
-        res.render('update_Info',{errors:'This Username unavailable'});
+        res.send('This Username unavailable');
       }
     });
   }
   if(req.body.firstName!=null | req.body.firstName!="")
   {
     User.updateOne({user_id:iD},{$set:{firstName:req.body.firstName}});
-      res.render('home',{message:'Account Updated Succesfully'});
+    res.send('Account Updated Succesfully');
 
   }
   if(req.body.lastName!=null | req.body.lastName!="")
   {
     User.updateOne({user_id:iD},{$set:{lastName:req.body.lastName}});
-      res.render('home',{message:'Account Updated Succesfully'});
+    res.send('Account Updated Succesfully');
 
   }
   if(req.body.gender!=null | req.body.gender!="")
   {
     User.updateOne({user_id:iD},{$set:{gender:req.body.gender}});
-      res.render('home',{message:'Account Updated Succesfully'});
+      res.send('Account Updated Succesfully');
 
   }
 },
@@ -111,10 +111,10 @@ view_Business:function(req,res){
   {
     if(err)
     {
-      res.redirect('Home');
+      res.send(err);
     }
     else {
-      res.render('view_Business',{business:BusinessOwner});
+      res.send(BusinessOwner);
     }
   });
 }

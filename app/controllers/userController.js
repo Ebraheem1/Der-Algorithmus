@@ -4,7 +4,7 @@ let Client = require('../models/Client');
 let userController={
   register:function(req,res)
   {
-    res.render('register');
+    res.send('register');
   },
 
   createUser:function(req,res)
@@ -24,9 +24,9 @@ let userController={
     if(errors|req.body.username=='admin'|req.body.username=='Admin')
     {
       if(errors)
-      res.render('register',{errors:errors});
+      res.send(errors);
       else
-      res.render('register',{errors:'Invalid Username'});
+      res.send('Invalid Username');
 
     }
     else {
@@ -40,7 +40,7 @@ let userController={
       }
   user.save(function(err){
     if(err){
-            res.render('register',{errors:err.msg});
+            res.send(err);
       }
     else {
               var client=new Client({
@@ -51,10 +51,10 @@ let userController={
             });
             client.save(function(err){
                 if(err){
-                  res.render('register',{errors:err.msg});
+                  res.send(err);
                 }
                 else {
-                  console.log('ss');
+                  res.send('Client saved !');
                 }
             });
         }
