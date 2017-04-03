@@ -30,6 +30,9 @@ app.use(passport.session());
 //To remove the warning
 mongoose.Promise = global.Promise;
 
+//pagination
+app.use(paginate.middleware(10, 50));
+
 //DB connection
 mongoose.connect(DB_URI,function(err)
 {
@@ -67,7 +70,11 @@ app.use(flash());
 app.use(router);
 //Global Vars as well
 app.use(function(req, res, next) {
-  res.locals.user = req.session.user;
+  res.locals.req = req;
+  res.locals.res = res;
+  res.locals.user = req.user || null;
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
   next();
 });
 //app.use(router);
