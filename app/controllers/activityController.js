@@ -1,8 +1,6 @@
 let Activity = require('../models/Activity');
 
-
 let activityController={
-
 
 	// http://localhost:8080/activity/newActivity
 	newActivity:function(req,res){
@@ -28,7 +26,6 @@ let activityController={
 
 		}		
 	},
-
 
 	// http://localhost:8080/activity/editActivity/#	
 	editActivity: function(req,res){

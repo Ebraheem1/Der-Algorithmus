@@ -1,8 +1,6 @@
 let Review = require('../models/Review');
       
-
 let reviewController={
-
 
 	// http://localhost:8080/review/newReview
 	newReview:function(req,res){
@@ -29,7 +27,6 @@ let reviewController={
 		}
 	},
 
-	
 	// http://localhost:8080/review/editReview/#
 	//by using angular's ng-show, it will be guaranteed that each user can only update his own reviews
 	editReview: function(req,res){
@@ -42,7 +39,7 @@ let reviewController={
 		}
 		else{
 			Review.findOne({_id:review_id}, function(err, review) {
-		        if (err) {
+		        if(err){
 		            res.send(err);
 		        }
 		        else{
@@ -56,7 +53,7 @@ let reviewController={
 				        else{
 				        	review.comment = review_newComment;
 				            review.save(function(err) {
-				                if (err) {
+				                if(err){
 				                    res.send(err);
 				                } 
 				                else {
@@ -70,7 +67,6 @@ let reviewController={
 	        });
 		}
 	},
-
 
 	// http://localhost:8080/review/deleteReview/#
 	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
@@ -96,11 +92,12 @@ let reviewController={
 			            }
 			            else{
 			            	Review.findOneAndRemove({ _id:review_id }, function(err, reviewToBeDeleted) {
-	                        if (err) 
-	                        	res.send(err);
-	                        else{
-	                        	res.send('Review has been deleted successfully.'); 
-	                        }
+		                        if(err){
+		                        	res.send(err);
+		                        }
+		                        else{
+		                        	res.send('Review has been deleted successfully.'); 
+		                        }
 	                    	});
 			                
 			            }
