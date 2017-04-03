@@ -1,6 +1,6 @@
+//Dependencies
 var express = require('express');
 var router = express.Router();
-
 var administratorController = require('./controllers/administratorController');
 var applicationController = require('./controllers/applicationController');
 var businessOwnerController = require('./controllers/businessownerController');
@@ -10,10 +10,6 @@ var Administrator = require('./models/Administrator');
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
-
-
-
-
 
 
 
@@ -105,13 +101,18 @@ passport.deserializeUser(function(obj, done) {
   });*/
   done(null,obj);
 });
+//Routes
+
+router.post('/application/:username/reject',applicationController.reject);
+router.post('/application/:username/accept',applicationController.accept);
+router.post('/user/forgotPassword',userController.forgotPassword);
 
 //routing for viewing applications
 router.get('/applications/:page', administratorController.viewApplicationsIndex);
 router.get('/applications', administratorController.viewApplications);
 
 //routing for creating application
-router.post('/business/apply', applicationController.createApplication);
+router.post('/business/apply', applicationControllear.createApplication);
 
 //routing for updating basic info
 router.post('/business/update-info', businessOwnerController.updateInfo);
@@ -136,4 +137,5 @@ router.post('/login',
 
 //export router
 module.exports = router;
+
 

@@ -5,8 +5,8 @@ var businessownerSchema = mongoose.Schema({
 	name: String,
 	description: String,
 	locations: [String],
-	rating: Number,
-	types:[String]
+  types:[String],
+	rating: Number
 	});
 
 var BusinessOwner = mongoose.model("BusinessOwner", businessownerSchema);
