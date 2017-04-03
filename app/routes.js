@@ -7,6 +7,7 @@ var clientController = require('./controllers/clientController');
 var administratorController = require('./controllers/administratorController');
 var businessownerController = require('./controllers/businessownerController');
 var userController = require('./controllers/userController');
+var authController = require('./controllers/AuthenticationController')
 
 //It's only a tester
 router.post('/createadmin', function(req,res)
@@ -23,63 +24,54 @@ router.post('/createadmin', function(req,res)
 
 	});
 
-router.get('/logout',ensureAuthenticated, function(req, res){
-  
-  req.logout();
 
-  req.flash('success_msg', 'You are logged out');
-
-  res.redirect('/');
-});
-
-router.get('/search/:keyword',userController.search);
 //Logins
 passport.use('login', new LocalStrategy(
   function(username, password, done) {
    clientController.getClientByUsername(username, function(err, user){
-   	if(err) {
-   		throw err;
-   	}
-   	if(user){
-   	clientController.comparePassword(password, user.password, function(err, isMatch){
-   		if(err) throw err;
-   		if(isMatch){
-   			return done(null, user);
-   		}
-   	});
+    if(err) {
+      throw err;
+    }
+    if(user){
+    clientController.comparePassword(password, user.password, function(err, isMatch){
+      if(err) throw err;
+      if(isMatch){
+        return done(null, user);
+      }
+    });
    }
    else{
    administratorController.comparePassword(username,password,function(err, isAdmin){
-   		if(err) throw err;
-   		if(isAdmin && username=="admin"){
-   			administratorController.getAdmin(function(err,admin)
-   			{
-   				if(err)
-   				{
-   					throw err;
-   				}
-   				console.log("I have found the admin");
-          console.log(admin[0]);
-   				return done(null, admin[0]);
-   			});
-   		}
+      if(err) throw err;
+      if(isAdmin && username=="admin"){
+        administratorController.getAdmin(function(err,admin)
+        {
+          if(err)
+          {
+            throw err;
+          }
+          console.log("I have found the admin");
+              console.log(admin[0]);
+          return done(null, admin[0]);
+        });
+      }
     else{
-   	businessownerController.getOwnerByUsername(username,function(err,owner)
-   	{
-   		if(err)
-   		{
-   			throw err;
-   		}
-   		if(owner)
-   		{
-   			businessownerController.comparePassword(password,owner.password,function(err,isMatch)
-   			{
-   				if(err) throw err;
-   				if(isMatch){
-   				return done(null, owner);
-   				}
-   			});
-   		}
+    businessownerController.getOwnerByUsername(username,function(err,owner)
+    {
+      if(err)
+      {
+        throw err;
+      }
+      if(owner)
+      {
+        businessownerController.comparePassword(password,owner.password,function(err,isMatch)
+        {
+          if(err) throw err;
+          if(isMatch){
+          return done(null, owner);
+          }
+        });
+      }
       else{
         //To be removed after the front-end
         console.log("No Valid Data");
@@ -87,13 +79,11 @@ passport.use('login', new LocalStrategy(
         //return done(null, false, {message: 'Invalid username or password'});
       }
 
-   	});
-   	}
-   	});
+    });
+    }
+    });
   }
    });
-   
-   
   }));
 
 passport.serializeUser(function(user, done) {
@@ -107,74 +97,17 @@ passport.deserializeUser(function(obj, done) {
   });*/
   done(null,obj);
 });
-//For general authentication purpose
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated()){
-    return next();
-  } else {
-    //req.flash('error_msg','You are not logged in');
-    return;
-    //res.redirect('/login');
-  }
-}
-//For only client authentication
-function ensureClientAuthenticated(req, res, next){
-  if(! req.user){
-    //req.flash('error_msg','You are not logged in');
-    return;
-    //res.redirect('/login');
-  } else {
-    clientController.getClientByUsername(req.user.username,function(err,user)
-    {
-      if(err)
-      {
-        throw err;
-      }
-      if(! user)
-      {
-        //req.flash('error_msg','You are not logged in');
-        return;
-        //res.redirect('/login');
-      }else{
-        return next();
-      }
 
-    });
-  }
-}
-//for only businessOWner Authentication
-function ensureBusinessAuthenticated(req, res, next){
-  if(! req.user){
-    //req.flash('error_msg','You are not logged in');
-    return;
-    //res.redirect('/login');
-  } else {
-    businessownerController.getOwnerByUsername(req.user.username,function(err,user)
-    {
-      if(err)
-      {
-        throw err;
-      }
-      if(! user)
-      {
-        //req.flash('error_msg','You are not logged in');
-        return;
-        //res.redirect('/login');
-      }
-      else{
-        return next();
-      }
 
-    });
-  }
-}
+router.get('/logout',authController.ensureAuthenticated, authController.generalLogOut);
 
+router.get('/search/:keyword',userController.search);
 
 router.post('/login',
   passport.authenticate('login', {failureRedirect:'/login',failureFlash: true}),
   function(req, res) {
-  	req.flash('success_msg', 'You are logged in correctly :)');
-  	return;
+    req.flash('success_msg', 'You are logged in correctly :)');
+    return;
     //res.redirect('/profile');
   });
 
