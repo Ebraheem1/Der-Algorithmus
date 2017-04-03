@@ -1,7 +1,7 @@
-
 //Dependencies
 var express = require('express');
 var router = express.Router();
+
 var reviewController=require('./controllers/reviewController');
 var activityController=require('./controllers/activityController');
 var administratorController = require('./controllers/administratorController');
@@ -13,10 +13,6 @@ var Administrator = require('./models/Administrator');
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
-
-
-
-
 
 
 //It's only a tester
@@ -66,7 +62,7 @@ passport.use('login', new LocalStrategy(
         });
       }
     else{
-    businessownerController.getOwnerByUsername(username,function(err,owner)
+    businessOwnerController.getOwnerByUsername(username,function(err,owner)
     {
       if(err)
       {
@@ -74,7 +70,7 @@ passport.use('login', new LocalStrategy(
       }
       if(owner)
       {
-        businessownerController.comparePassword(password,owner.password,function(err,isMatch)
+        businessOwnerController.comparePassword(password,owner.password,function(err,isMatch)
         {
           if(err) throw err;
           if(isMatch){
@@ -139,6 +135,12 @@ router.delete('/review/deleteReview/:id', reviewController.deleteReview);
 
 router.post('/activity/newActivity', activityController.newActivity);
 router.put('/activity/editActivity/:id', activityController.editActivity);
+
+router.post('/addActivity',businessOwnerController.addActivity);
+router.get('/deleteActivity/:activityId',businessOwnerController.deleteActivity);
+
+router.get('/viewBusinesses',administratorController.viewBusinesses);
+router.get('/removeBusiness/:businessId',administratorController.removeBusiness);
 
 router.post('/login',
   passport.authenticate('login', {failureRedirect:'/login',failureFlash: true}),
