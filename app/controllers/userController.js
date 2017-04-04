@@ -4,7 +4,7 @@ var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 
-//Setting up nodemailer.
+//The transport settings required for nodemailer . ( sender mail / refresh & accessToken / client ID and secret)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -19,6 +19,8 @@ const transporter = nodemailer.createTransport({
 
 //The user controller
 let userController = {
+  // This function is used in case of the user forgetting the password . we go search for the user by the username
+  //then we check that the email inserted is equal to the mail of the user you want to change the password for .
     forgotPassword: function(req, res) {
         var email = req.body.email;
         var username = req.body.username;
@@ -59,7 +61,7 @@ let userController = {
         return text;
     },
 
-    //Function for sending email .
+    //Function for sending email . we set the mail options to send a mail with certain format to the email of the user
     sendMail: function(user, pass) {
       //Setting up the mail options .
         let mailOptions = {
@@ -79,7 +81,7 @@ let userController = {
         });
     },
     // Changing password function . Creating new User and giving it all the past user info. because updating
-    // the Hash for password does not work .
+    // the Hash for password does not work ,then we remove the previous user .
     changePassword: function(user) {
         var pass = userController.generatePassword();
         userController.sendMail(user, pass);

@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 
 
-//NodeMailer Setup
+//The transport settings required for nodemailer . ( sender mail / refresh & accessToken / client ID and secret)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -26,7 +26,8 @@ const transporter = nodemailer.createTransport({
 //Controller
 let applicationController = {
 
-    //Accepting Application function .
+    //Accepting Application function . we find the application with the given username ,  then we create a new buisness owner
+    // and user
     accept: function(req, res) {
         req.checkBody('username', 'Name Required').notEmpty();
         var errors = req.validationErrors();
@@ -140,7 +141,8 @@ let applicationController = {
         });
     },
 
-    //To link the buisness owner with the client instance just made .
+    //To link the buisness owner with the client instance just made . we find the id of the user made so we can create
+    //the owner using it
     findId: function(application, owner) {
         User.findOne({
             username: application.username
@@ -167,6 +169,7 @@ let applicationController = {
         });
     },
     //To Send the acceptance mail .
+    //This method is used to send the acceptance mail with a certain format to the mail which was present in the application (owner mail )
     sendAcceptMail: function(application) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', // sender address
@@ -183,7 +186,7 @@ let applicationController = {
             }
         });
     },
-    //to Send the rejection mail
+    //to Send the rejection mail.with a certain format to the mail which was present in the application (owner mail )
     sendRejectMail: function(application) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', //TODO : sender address
@@ -200,7 +203,8 @@ let applicationController = {
             }
         });
     },
-    // To remove the application after acceptance or rejection .
+    // To remove the application after acceptance or rejection . we search for the application with the application id
+    //and delete it 
     removeApplication: function(application) {
         Application.remove({
             _id: application._id
