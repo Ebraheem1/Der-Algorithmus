@@ -5,8 +5,10 @@ var businessownerSchema = mongoose.Schema({
 	name: String,
 	description: String,
 	locations: [String],
-	rating: Number,
-	types:[String]
+	ratings: [{ client_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: true} ,
+				rating: {type:Number,min:0, max:10} }],
+	avgRating: {type:Number, default: 0},
+	types: [String]
 	});
 
 var BusinessOwner = mongoose.model("BusinessOwner", businessownerSchema);

@@ -1,13 +1,17 @@
+//Dependencies
 var express = require('express');
 var router = express.Router();
+
+var reviewController=require('./controllers/reviewController');
+var activityController=require('./controllers/activityController');
+var administratorController = require('./controllers/administratorController');
+var applicationController = require('./controllers/applicationController');
+var businessOwnerController = require('./controllers/businessownerController');
 var passport=require('passport');
 var LocalStrategy=require('passport-local').Strategy;
 var clientController = require('./controllers/clientController');
-var administratorController = require('./controllers/administratorController');
-var businessownerController = require('./controllers/businessownerController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
-var x = require('./controllers/untitleds');
 
 
 
@@ -49,6 +53,7 @@ passport.use('login', new LocalStrategy(
         });
       }
     else{
+
     businessownerController.getOwner(username,password,function(err,businessOwner)
     {
       if(err)
@@ -77,11 +82,47 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null,obj);
 });
+//Routes
 
+router.post('/application/:username/reject',applicationController.reject);
+router.post('/application/:username/accept',applicationController.accept);
+router.post('/user/forgotPassword',userController.forgotPassword);
+
+//routing for viewing applications
+router.get('/applications/:page', administratorController.viewApplicationsIndex);
+router.get('/applications', administratorController.viewApplications);
+
+//routing for creating application
+router.post('/business/apply', applicationControllear.createApplication);
+
+//routing for updating basic info
+router.post('/business/update-info', businessOwnerController.updateInfo);
+
+//routing for locations operations
+router.post('/business/locations/add', businessOwnerController.addLocation);
+
+//routing for security
+router.post('/security/change-password', businessOwnerController.changePassword);
 
 router.get('/logout',authController.ensureAuthenticated, authController.generalLogOut);
 
 router.get('/search/:keyword',userController.search);
+
+router.post('/review/newReview', reviewController.newReview);
+router.put('/review/editReview/:id', reviewController.editReview);
+router.delete('/review/deleteReview/:id', reviewController.deleteReview);
+
+router.get('/review/view', reviewController.viewBusinessReviews );
+router.get('/business/rate', clientController.rateBusiness );
+
+router.post('/activity/newActivity', activityController.newActivity);
+router.put('/activity/editActivity/:id', activityController.editActivity);
+
+router.post('/addActivity',businessOwnerController.addActivity);
+router.get('/deleteActivity/:activityId',businessOwnerController.deleteActivity);
+
+router.get('/viewBusinesses',administratorController.viewBusinesses);
+router.get('/removeBusiness/:businessId',administratorController.removeBusiness);
 
 router.post('/login',
   passport.authenticate('login', {failureRedirect:'/login',failureFlash: true}),

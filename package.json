@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Ebraheem1/Der-Algorithmus#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
     "connect-flash": "^0.1.1",
@@ -32,6 +33,8 @@
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
-    "xoauth2": "^1.2.0"
+    "xoauth2": "^1.2.0",
+    "sendgrid": "^4.9.0"
+
   }
 }
