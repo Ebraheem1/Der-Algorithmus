@@ -6,6 +6,9 @@ var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 
+
+
+
 //Setting up nodemailer.
 const transporter = nodemailer.createTransport({
     service: 'gmail',

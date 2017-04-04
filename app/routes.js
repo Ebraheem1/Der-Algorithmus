@@ -54,7 +54,7 @@ passport.use('login', new LocalStrategy(
       }
     else{
 
-    businessownerController.getOwner(username,password,function(err,businessOwner)
+    businessOwnerController.getOwner(username,password,function(err,businessOwner)
     {
       if(err)
       {
@@ -108,6 +108,11 @@ router.get('/logout',authController.ensureAuthenticated, authController.generalL
 
 router.get('/search/:keyword',userController.search);
 
+router.post('/gallery', businessOwnerController.addMedia);
+router.post('/offer', businessOwnerController.addOffer);
+router.get('/showReview', businessOwnerController.showReview);
+router.post('/reply', businessOwnerController.reply);
+
 router.post('/review/newReview', reviewController.newReview);
 router.put('/review/editReview/:id', reviewController.editReview);
 router.delete('/review/deleteReview/:id', reviewController.deleteReview);
@@ -134,3 +139,4 @@ router.post('/login',
 
 //export router
 module.exports = router;
+
