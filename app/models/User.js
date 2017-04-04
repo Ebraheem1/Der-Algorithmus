@@ -28,6 +28,7 @@ UserSchema.pre('save', function(next) {// before saving The User this schema wil
 
 
 
+
 UserSchema.methods.comparePassword = function(password){
 
   return  bcrypt.compareSync(password,this.password);
@@ -35,3 +36,12 @@ UserSchema.methods.comparePassword = function(password){
 
 
 module.exports = mongoose.model('User', UserSchema);
+
+module.exports.createUser = function(newUser, callback){
+	bcrypt.genSalt(10, function(err, salt) {
+	    bcrypt.hash(newUser.password, salt, function(err, hash) {
+	        newUser.password = hash;
+	        newUser.save(callback);
+	    });
+	});
+}
