@@ -36,13 +36,13 @@ app.use(paginate.middleware(10, 50));
 //DB connection
 mongoose.connect(DB_URI,function(err)
 {
-	if(err)
-	{
-		console.log('There is an erroor: ' + err);
+  if(err)
+  {
+    console.log('There is an erroor: ' + err);
 
-	}else{
-		console.log('Success!');
-	}
+  }else{
+    console.log('Success!');
+  }
 });
 
 // Express Validator
@@ -79,5 +79,7 @@ app.use(function(req, res, next) {
 });
 //app.use(router);
 app.listen(8080,function(){
-	console.log('The server is listening on port 8080.....');
+  
+  console.log('The server is listening on port 8080.....');
+  
 });

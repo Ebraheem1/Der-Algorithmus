@@ -1,6 +1,9 @@
+
 //Dependencies
 var express = require('express');
 var router = express.Router();
+var reviewController=require('./controllers/reviewController');
+var activityController=require('./controllers/activityController');
 var administratorController = require('./controllers/administratorController');
 var applicationController = require('./controllers/applicationController');
 var businessOwnerController = require('./controllers/businessownerController');
@@ -10,6 +13,9 @@ var Administrator = require('./models/Administrator');
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
+
+
+
 
 
 
@@ -127,6 +133,13 @@ router.get('/logout',authController.ensureAuthenticated, authController.generalL
 
 router.get('/search/:keyword',userController.search);
 
+router.post('/review/newReview', reviewController.newReview);
+router.put('/review/editReview/:id', reviewController.editReview);
+router.delete('/review/deleteReview/:id', reviewController.deleteReview);
+
+router.post('/activity/newActivity', activityController.newActivity);
+router.put('/activity/editActivity/:id', activityController.editActivity);
+
 router.post('/login',
   passport.authenticate('login', {failureRedirect:'/login',failureFlash: true}),
   function(req, res) {
@@ -137,5 +150,6 @@ router.post('/login',
 
 //export router
 module.exports = router;
+
 
 
