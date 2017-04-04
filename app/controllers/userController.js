@@ -4,8 +4,9 @@ let Activity = require('../models/Activity');
 var bcrypt = require('bcryptjs');
 
 let userController={
-
-//Write here the functions in the format of function_name:function(params)
+//Here I search using keyword (Regular Expression) to match the keyword that the user writes
+//with either the name of the businessOwner, the description of the businessOwner, or
+//the types of the activity appear in our activity collection
 search:function(req,res)
 {
 	var keyword = req.params.keyword;
