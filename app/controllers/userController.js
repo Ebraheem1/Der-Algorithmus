@@ -2,13 +2,13 @@ let User = require('../models/User');
 var bcrypt = require('bcryptjs');
 let Client = require('../models/Client');
 let userController={
-  register:function(req,res)
-  {
-    res.send('register');
-  },
-
-  createUser:function(req,res)
-  {
+  /*create user (client), the request contains the attributes of the user,
+  check the attribute not to be empty and aslo check password length between 8 to 15 and
+  also contain at least one (uppercase letter,lowercase letter,number,Special character)
+  and after checking that there is no errors in the attributes create user and save it and then
+  create client with id reference to the user created and the other attributes.
+  */
+  createUser:function(req,res){
     req.checkBody('username',' Username Required').notEmpty();
     req.checkBody('email',' Email Required').isEmail();
     req.checkBody('firstName',' firstName Required').notEmpty();
@@ -20,8 +20,8 @@ let userController={
     req.checkBody('confirmPassword','Passwords do not match').equals(req.body.password);
 
     var errors=req.validationErrors();
-
-    if(errors|req.body.username=='admin'|req.body.username=='Admin')
+    console.log(errors);
+    if(errors)
     {
       if(errors)
       res.send(errors);
@@ -59,7 +59,88 @@ let userController={
             });
         }
   });
+},
+
+/*
+function used to update the username of the user, first it checks if he will update it
+with the same name as the current username, the respond will indicates that this is his current
+username then it will search in the data base to make sure that there is no user with the username
+entered if there exists the respond will indicate that this username is invalid to use and if this
+username is not used it will update the user and resave it.
+*/
+
+changeUsername:function(req,res){
+
+  var newUsername=req.body.username;
+  if(req.body.oldUsername == newUsername){
+
+    res.send('This is your current username!');
+
+  }else{
+
+      User.findOne({username:newUsername},function(err,user){
+
+        if(err)
+          res.send(err);
+        else {
+          if(!user)
+          {
+
+            User.findOne({username:req.body.oldUsername}, function(err, currentUser){
+
+              if(err){
+
+                res.send(err);
+
+              }else{
+
+                if(currentUser){
+
+                    currentUser.username = newUsername;
+                    currentUser.save(function(err){
+
+                      if(err){
+
+                        res.send(err);
+
+                      }else{
+
+                        res.send('Account Updated Successfully!');
+
+                      }
+
+                    });
+
+                }else{
+
+                  res.send('user not found');
+
+                }
+
+              }
+
+            });
+
+        }
+        else {
+          res.send('username is Unavailable');
+        }
+      }
+
+      });
+
+  }
+
+
 }
+
+
+
+
+
+
+
+
 
 };
 

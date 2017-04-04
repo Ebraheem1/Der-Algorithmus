@@ -4,15 +4,14 @@ var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 
 
-router.get('/register',userController.register);
 router.post('/register',userController.createUser);
 
-router.get('/view_summary',clientController.view_summary);
+router.get('/view-summary',clientController.viewSummaries);
 
-router.get('/update_Info',clientController.get_update_Info);
-router.post('/update_Info',clientController.update_Info);
+router.post('/update-Info',clientController.updateInfo);
 
-router.get('/BusinessOwner/:id', clientController.view_Business);
+router.get('/businessOwner/:id', clientController.viewBusiness);
 
+router.post('/change-username',userController.changeUsername);
 
 module.exports = router;
