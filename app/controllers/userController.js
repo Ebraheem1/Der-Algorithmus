@@ -1,12 +1,10 @@
 //Dependencies
 let User = require('../models/User');
-let BusinessOwner= require('../models/BusinessOwner');
-let Activity = require('../models/Activity');
 var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 
-//Setting up nodemailer.
+//The transport settings required for nodemailer . ( sender mail / refresh & accessToken / client ID and secret)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -19,13 +17,18 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-
 //The user controller
 let userController = {
+  // This function is used in case of the user forgetting the password . we go search for the user by the username
+  //then we check that the email inserted is equal to the mail of the user you want to change the password for .
     forgotPassword: function(req, res) {
         var email = req.body.email;
         var username = req.body.username;
-       User.findOne({
+        req.checkBody('email', 'Email Required').notEmpty();
+        req.checkBody('username', 'Username Required').notEmpty();
+        	var errors = req.validationErrors();
+          if(errors){
+        User.findOne({
             username: username
         }, function(err, user) {
             if (user) {
@@ -40,74 +43,16 @@ let userController = {
                 res.send("Could not find user!");
                 return;
             }
-        });
+        });}
+        else{
+          res.send(errors);
+        }
 
     },
 
-//Write here the functions in the format of function_name:function(params)
-search:function(req,res)
-{
-	var keyword = req.params.keyword;
-	var flag=0;
-	var list=[];
-	BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}]},function(err,businesses)
-	{
-		if(businesses.length > 0)
-		{
-			
-			for(var i =0 ; i < businesses.length  ; i++)
-			{
-				flag  = 0 ;
-				for(var j =0; j < list.length && (!flag); j++)
-				{
-					if(list[j] == businesses[i])
-					{
-						flag = 1;
-					}
-				}
-				if(!flag)
-				{
-					list.push(businesses[i]);
-				}
-			}
-		}
-		Activity.find({type: new RegExp(".*"+keyword+".*")},function(err,activities)
-		{
-			for(var i = 0 ; i< activities.length ; i++)
-			{
-				flag = 0;
-				BusinessOwner.findById(activities[i].BusinessOwner_id, function(error,business)
-					{
-						if(business)
-						{
-							for(var j = 0; j < list.length && (!flag) ; j++)
-							{
-								if(list[j] == business)
-								{
-									flag = 1;
-								}
-							}
-							if(!flag)
-							{
-								list.push(business);
-							}
-
-						}
-					});
-			}
-		});
-
-	});
-	//Here we render to the view + the list variable
-
-},
-
-
-       
-
     //Function for generating random password between 5 to 15 characters
     generatePassword: function() {
-        var length = (Math.random() * 11) + 5;
+        var length = (Math.random() * 6) + 10;
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for (var i = 0; i < length; i++) {
@@ -116,7 +61,7 @@ search:function(req,res)
         return text;
     },
 
-    //Function for sending email .
+    //Function for sending email . we set the mail options to send a mail with certain format to the email of the user
     sendMail: function(user, pass) {
       //Setting up the mail options .
         let mailOptions = {
@@ -136,7 +81,7 @@ search:function(req,res)
         });
     },
     // Changing password function . Creating new User and giving it all the past user info. because updating
-    // the Hash for password does not work .
+    // the Hash for password does not work ,then we remove the previous user .
     changePassword: function(user) {
         var pass = userController.generatePassword();
         userController.sendMail(user, pass);

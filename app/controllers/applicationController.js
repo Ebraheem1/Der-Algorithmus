@@ -4,13 +4,13 @@ let Owner = require('../models/BusinessOwner');
 let User = require('../models/User');
 var bcrypt = require('bcryptjs');
 var expressValidator = require('express-validator');
-var bodyParser=require('body-parser');
-var mongoose=require('mongoose');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 
 
-//NodeMailer Setup
+//The transport settings required for nodemailer . ( sender mail / refresh & accessToken / client ID and secret)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -26,43 +26,49 @@ const transporter = nodemailer.createTransport({
 //Controller
 let applicationController = {
 
-  //Accepting Application function .
+    //Accepting Application function . we find the application with the given username ,  then we create a new buisness owner
+    // and user
     accept: function(req, res) {
-        var username = req.param('username');
-        Application.findOne({
-            username: username
-        }, function(err, application) {
-            if (application) {
-                var owner = new Owner();
-                var user = new User();
-                //copying application properites to user instance .
-                user.username = application.username;
-                user.password = application.password;
-                user.phoneNumber = application.phoneNumber;
-                user.email = application.email;
-                owner.name = application.name;
-                owner.description = application.description;
-                owner.locations = application.locations;
+        req.checkBody('username', 'Name Required').notEmpty();
+        var errors = req.validationErrors();
+        if (!errors) {
+            var username = req.param('username');
+            Application.findOne({
+                username: username
+            }, function(err, application) {
+                if (application) {
+                    var owner = new Owner();
+                    var user = new User();
+                    //copying application properites to user instance .
+                    user.username = application.username;
+                    user.password = application.password;
+                    user.phoneNumber = application.phoneNumber;
+                    user.email = application.email;
+                    owner.name = application.name;
+                    owner.description = application.description;
+                    owner.locations = application.locations;
 
 
-                user.save(function(err) {
-                    if (err){
-                        res.send("Error occured while saving user");
-                      return ;
-                    }
-                    else {  //Code was put in here to avoid asynchronous code.
-                        applicationController.findId(application, owner);
-                        applicationController.sendAcceptMail(application);
-                    }
-                });
-                res.send("Application accepted successfuly");
-            } else {
-                res.send("Application was not found !");
-            }
-        });
+                    user.save(function(err) {
+                        if (err) {
+                            res.send("Error occured while saving user");
+                            return;
+                        } else { //Code was put in here to avoid asynchronous code.
+                            applicationController.findId(application, owner);
+                            applicationController.sendAcceptMail(application);
+                        }
+                    });
+                    res.send("Application accepted successfuly");
+                } else {
+                    res.send("Application was not found !");
+                }
+            });
+        } else {
+            res.send(errors);
+        }
 
     },
-    createApplication: function(req, res){
+    createApplication: function(req, res) {
 
         req.checkBody('name', 'Name Required').notEmpty();
         req.checkBody('username', 'Username Required').notEmpty();
@@ -74,8 +80,8 @@ let applicationController = {
 
         var errors = req.validationErrors();
 
-        if(!errors){            
-                
+        if (!errors) {
+
             var application = new Application({
 
                 username: req.body.username,
@@ -88,30 +94,30 @@ let applicationController = {
             });
 
             bcrypt.genSalt(10, function(err, salt) {
-                
+
                 bcrypt.hash(req.body.password, salt, function(err, hash) {
 
                     application.password = hash;
-                    
-                    application.save(function(err){     
 
-                        if(err){
-                            
+                    application.save(function(err) {
+
+                        if (err) {
+
                             res.redirect('/business/apply');
-                        
-                        }else{
+
+                        } else {
 
                             res.send('Your application has been submitted successfully. We will notify you once the review process has been completed');
 
                         }
 
-                    });             
-                
-                });
-            
-            }); 
+                    });
 
-        }else{
+                });
+
+            });
+
+        } else {
 
             res.send(errors);
 
@@ -120,22 +126,23 @@ let applicationController = {
     },
     //Rejecting application function
     reject: function(req, res) {
-      var username = req.param('username'); // Could be changed to ID later .
+        var username = req.param('username'); // Could be changed to ID later .
 
-      Application.findOne({
-          username: username
-      }, function(err, application) {
-          if (application) {
-                    applicationController.sendRejectMail(application);
-                    applicationController.removeApplication(application);
-                    res.send("Application rejected successfuly");
-          } else {
-              res.send("Application was not found !");
-          }
-      });
+        Application.findOne({
+            username: username
+        }, function(err, application) {
+            if (application) {
+                applicationController.sendRejectMail(application);
+                applicationController.removeApplication(application);
+                res.send("Application rejected successfuly");
+            } else {
+                res.send("Application was not found !");
+            }
+        });
     },
 
-//To link the buisness owner with the client instance just made .
+    //To link the buisness owner with the client instance just made . we find the id of the user made so we can create
+    //the owner using it
     findId: function(application, owner) {
         User.findOne({
             username: application.username
@@ -143,14 +150,14 @@ let applicationController = {
             if (UserA) {
 
                 owner.user_id = UserA._id;
-                applicationController.save(owner,application);
+                applicationController.save(owner, application);
             } else {
                 console.log('User was not saved in DB');
             }
         });
     },
-  //To save the owner.
-    save: function(owner,application) {
+    //To save the owner.
+    save: function(owner, application) {
         owner.save(function(err) {
             console.log("IN");
             if (err)
@@ -162,6 +169,7 @@ let applicationController = {
         });
     },
     //To Send the acceptance mail .
+    //This method is used to send the acceptance mail with a certain format to the mail which was present in the application (owner mail )
     sendAcceptMail: function(application) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', // sender address
@@ -178,7 +186,7 @@ let applicationController = {
             }
         });
     },
-  //to Send the rejection mail
+    //to Send the rejection mail.with a certain format to the mail which was present in the application (owner mail )
     sendRejectMail: function(application) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', //TODO : sender address
@@ -195,7 +203,8 @@ let applicationController = {
             }
         });
     },
-    // To remove the application after acceptance or rejection .
+    // To remove the application after acceptance or rejection . we search for the application with the application id
+    //and delete it 
     removeApplication: function(application) {
         Application.remove({
             _id: application._id
@@ -210,3 +219,5 @@ let applicationController = {
 
 //Exporting the module .
 module.exports = applicationController;
+Window size: 1855 x 1056
+Viewport size: 1855 x
