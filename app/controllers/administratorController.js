@@ -1,6 +1,7 @@
 //required dependencies
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+
 var bcrypt = require('bcryptjs');
 var expressValidator = require('express-validator');
 var paginate = require('express-paginate');
@@ -10,8 +11,50 @@ let Administrator = require('../models/Administrator');
 let Application = require('../models/Application');
 
 
+let Administrator = require('../models/Administrator');
+let BusinessOwner= require('../models/BusinessOwner');
+
+
 let administratorController={
 
+	viewBusinesses:function(req,res){
+
+		BusinessOwner.find( {}, function(err,BusinessesArray){
+
+			if(err){
+        
+        res.send(err);
+        
+      }else{
+        // should be replaced with page rendering in sprint 2
+			  res.json(BusinessesArray);
+       
+      }
+
+			
+
+		});
+	},
+
+	removeBusiness: function(req,res){
+
+		BusinessOwner.findByIdAndRemove( req.params.businessId, function(err){
+
+			if(err){
+      
+        res.send(err);
+      
+      }else{
+       
+        // should be replaced with page rendering in sprint 2
+			  res.end('Business removed successfully !');
+
+        
+      }
+
+			
+		});
+	},
 
 	viewApplications: function(req, res){
 
@@ -95,7 +138,7 @@ createAdmin:function(newAdmin, callback){
 	        newAdmin.save(callback);
 	    });
 	});
-},
+}
 
 };
 
