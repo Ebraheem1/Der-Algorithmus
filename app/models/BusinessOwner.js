@@ -5,7 +5,7 @@ var businessownerSchema = mongoose.Schema({
 	name: String,
 	description: String,
 	locations: [String],
-	pictures : [String],
+	gallery : [String],
 	offers : [String]
 	});
 

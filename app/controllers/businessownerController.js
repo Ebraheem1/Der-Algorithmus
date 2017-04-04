@@ -1,11 +1,12 @@
 let BusinessOwner = require('../models/BusinessOwner');
+var Review = require('../models/Review');
 var bcrypt = require('bcryptjs');
 var path = require('path');
 var multer = require('multer');
-var ownerUploadsPath = path.resolve(__dirname,"images");
+var ownerUploadsPath = path.resolve(__dirname,"gallery");
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, './public/images');
+    callback(null, './public/gallery');
   },
   filename: function (req, file, callback) {
   	if(file.originalname != null || file.originalname !=''){
@@ -14,41 +15,20 @@ var storage = multer.diskStorage({
   	var arr = filename.split(".");
   	var filetype = arr[arr.length-1];
   	//should be replaced when session is used
-  	var businessownerID='58e0d7b68515e50fe8daad9f';
+  	var businessownerID='58e3bbdfb803791535b613cf';
   	BusinessOwner.findById(businessownerID,function(err,businessowner){
-  		if (err) throw err ;
+  		if (err) res.send(err) ; 
   		else {
 
         var newfilename = businessowner.name + '-' + Date.now()+'.'+filetype;
         callback(null, newfilename);
-        if (businessowner.pictures[0]=='')
-        {
-        	businessowner.pictures=[newfilename];
-        	businessowner.save();
-        }
-        else 
-        {
-    	businessowner.pictures.push(newfilename);
-    	businessowner.save();
-        }
+        businessowner.gallery.push(newfilename);
+    	  businessowner.save();
+        
     
   		}
 
   	});
-  /*	var newfilename = req.user.name + '-' + Date.now()+'.'+filetype;
-    callback(null, newfilename);
-        if (req.user.pictures[0]=='')
-        {
-        	req.user.pictures=[newfilename];
-        	req.user.save();
-        }
-        else 
-        {
-    	req.user.pictures.push(newfilename);
-    	req.user.save();
-        }
-    	req.flash('success_msg','A picture uploaded successfully');
-*/
    
   }
 }
@@ -58,54 +38,23 @@ var storage = multer.diskStorage({
 
 
 let businessownerController={
-	addPicture:function(req,res){
+
+  // this function for uploading pictures and videos to the gallery of the businessOwner
+	addMedia:function(req,res){
 	upload(req,res,function(err){
 		if(err){
-			throw err ; 
+			res.send(err) ; 
 		}
 	});
  }, 
-
-   createBusiness : function(req,res){
-
-   	BusinessOwner.create(req.body,function(err,businessowner){
-
-   		if(err) throw err;
-
-   		res.end('businessowner created successfully');
-   	});
-
-
-
-/*	var newUser = new BusinessOwner({
-			user_id:'58e0261992c309223c4404e2',
-			name: req.body.name,
-			description:req.body.description,
-
-
-		});
-
-		BusinessOwner.createBusinessOwner(newUser, function(err, user){
-			if(err){
-			if(err.name == 'MongoError'){ 	
-				req.flash('error_msg', 'username already exists');
-			}}
-			else{
-			console.log(user);
-				req.flash('success_msg', 'You are registered successfully');
-		}
-		});
-
-	*/	
-},
-
-
+   
+// this function for adding any offer (discount or bounce) by the businessOwner
    addOffer : function(req,res){
 	var offer = req.body.offer ;
 
-	var businessownerID='58e0d7b68515e50fe8daad9f';
+	var businessownerID='58e3bbdfb803791535b613cf';
   	BusinessOwner.findById(businessownerID,function(err,businessowner){
-  		if (err) throw err ;
+  		if (err) res.send(err) ; 
   		else {
 
 	businessowner.offers.push(offer);
@@ -120,10 +69,53 @@ let businessownerController={
 	
   });
 
-}
-}
-//Write here the functions in the format of function_name:function(params)
+},
 
+// this function for showing reviews of the logged-in businessOwner
+  showReview : function(req,res){
+
+    var businessownerID='58e3bbdfb803791535b613cf';
+    Review.find({business_id:businessownerID},function(err,reviews){
+      if (err) res.send(err) ; 
+      else {
+          reviews.forEach(function(review){
+            console.log(review);
+            
+          });
+      
+
+
+}
+res.end('Done');
+  });
+ },
+
+//this function to reply on a specific review by the businessOwner
+ reply : function(req,res){
+       var reply = req.body.reply;
+
+       var reviewID='58e3c08808c6391680f28efe';
+    Review.findById(reviewID,function(err,review){
+      if (err) res.send(err) ; 
+      else {
+
+    review.reply = reply;
+    review.save(); 
+   
+
+
+}
+
+    res.end('DONE');
+
+  
+  });
+
+
+ }
+
+
+}
 
 module.exports = businessownerController;
 
