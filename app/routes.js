@@ -1,3 +1,4 @@
+
 //Dependencies
 var express = require('express');
 var router = express.Router();
@@ -84,6 +85,17 @@ passport.deserializeUser(function(obj, done) {
 });
 //Routes
 
+
+router.post('/register',userController.createUser);
+
+router.get('/view-summary',clientController.viewSummaries);
+
+router.post('/update-Info',clientController.updateInfo);
+
+router.get('/businessOwner/:id', clientController.viewBusiness);
+
+router.post('/change-username',userController.changeUsername);
+
 router.post('/application/:username/reject',applicationController.reject);
 router.post('/application/:username/accept',applicationController.accept);
 router.post('/user/forgotPassword',userController.forgotPassword);
@@ -139,4 +151,5 @@ router.post('/login',
 
 //export router
 module.exports = router;
+
 

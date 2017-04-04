@@ -10,6 +10,7 @@ var paginate = require('express-paginate');
 var expressValidator = require('express-validator');
 var router= require('./app/routes');
 var app = express();
+var UserId;
 //Database name is Algorithmus
 var DB_URI = "mongodb://localhost:27017/Algorithmus";
 
@@ -80,7 +81,5 @@ app.use(function(req, res, next) {
 
 //app.use(router);
 app.listen(8080,function(){
-  
-  console.log('The server is listening on port 8080.....');
-  
+	console.log('The server is listening on port 8080.....');
 });

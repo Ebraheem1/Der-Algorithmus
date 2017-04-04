@@ -7,7 +7,7 @@ var clientSchema = mongoose.Schema({
 		required: true
 	},
 	lastName: String,
-	gender: String,
+	gender: String
 });
 
 var Client = mongoose.model("Client", clientSchema);

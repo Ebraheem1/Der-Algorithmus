@@ -15,14 +15,17 @@ var UserSchema = new Schema({
 
 UserSchema.pre('save', function(next) {// before saving The User this schema will be executed
   var user = this ;
-  bcrypt.hash(user.password,null,null,function(err,hash){
-    if(err)
+	bcrypt.genSalt(10, function(err, salt) {
+	bcrypt.hash(user.password, salt, function(err, hash) {
+	    if(err)
       return next(err); // jump to next
-    user.password = hash ;
-    next();
+    	user.password = hash ;
+    	next();
   });
 
 });
+});
+
 
 
 
