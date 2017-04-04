@@ -133,6 +133,9 @@ router.post('/review/newReview', reviewController.newReview);
 router.put('/review/editReview/:id', reviewController.editReview);
 router.delete('/review/deleteReview/:id', reviewController.deleteReview);
 
+router.get('/review/view', reviewController.viewBusinessReviews );
+router.get('/business/rate', clientController.rateBusiness );
+
 router.post('/activity/newActivity', activityController.newActivity);
 router.put('/activity/editActivity/:id', activityController.editActivity);
 
@@ -152,6 +155,4 @@ router.post('/login',
 
 //export router
 module.exports = router;
-
-
 

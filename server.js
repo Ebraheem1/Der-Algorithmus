@@ -77,6 +77,7 @@ app.use(function(req, res, next) {
   res.locals.error_msg = req.flash('error_msg');
   next();
 });
+
 //app.use(router);
 app.listen(8080,function(){
   
