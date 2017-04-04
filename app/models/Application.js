@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var applicationSchema = mongoose.Schema({
     username:{
         type:String,
-        required:true, 
+        required:true,
         unique:true
     },
     password:String,
