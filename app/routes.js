@@ -9,80 +9,63 @@ var applicationController = require('./controllers/applicationController');
 var businessOwnerController = require('./controllers/businessownerController');
 var passport=require('passport');
 var LocalStrategy=require('passport-local').Strategy;
-var Administrator = require('./models/Administrator');
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
 
 
-//It's only a tester
-router.post('/createadmin', function(req,res)
-	{
-	var pass = "123456";
-	var newAdmin= new Administrator({password:pass});
-	administratorController.createAdmin(newAdmin,function(err,admin)
-	{
-		if(err){
-			throw err;
-		}
-		console.log(admin);
-	});
-
-	});
 
 
-//Logins
+
+//Passport authentication
 passport.use('login', new LocalStrategy(
+  //here we have username and password as an input parameters
+  //we search if a client exists with in the Client table so we authenticate the client
+  //If we couldn't find a client with matching username and password, so we search if
+  //the data passed from the front-end is matching admin credentials, thus, the
+  //authentication would be done for admins.
+  //If the data didn't match also the admin credentials, so we search in the BusinessOwner
+  //table, if we found a matched tuple then the authentication would be done for 
+  //BusinessOwner, if not found then the data entered doesn't exist in my system
+  //an error message is displayed accordingly.
   function(username, password, done) {
-   clientController.getClientByUsername(username, function(err, user){
+    
+   clientController.getClient(username,password, function(err, client){
     if(err) {
-      throw err;
+      return done(null, false, {message: 'Error Happened'});
     }
-    if(user){
-    clientController.comparePassword(password, user.password, function(err, isMatch){
-      if(err) throw err;
-      if(isMatch){
-        return done(null, user);
-      }
-    });
+    if(client){
+      return done(null, client);
    }
    else{
    administratorController.comparePassword(username,password,function(err, isAdmin){
-      if(err) throw err;
+      if(err){
+        return done(null, false, {message: 'Error Happened'});
+      } 
       if(isAdmin && username=="admin"){
         administratorController.getAdmin(function(err,admin)
         {
           if(err)
           {
-            throw err;
+            return done(null, false, {message: 'Error Happened'});
           }
-          console.log("I have found the admin");
-              console.log(admin[0]);
           return done(null, admin[0]);
         });
       }
     else{
-    businessOwnerController.getOwnerByUsername(username,function(err,owner)
+
+    businessownerController.getOwner(username,password,function(err,businessOwner)
     {
       if(err)
       {
-        throw err;
+        return done(null, false, {message: 'Error Happened'});
       }
-      if(owner)
+      if(businessOwner)
       {
-        businessOwnerController.comparePassword(password,owner.password,function(err,isMatch)
-        {
-          if(err) throw err;
-          if(isMatch){
-          return done(null, owner);
-          }
-        });
+        return done(null, businessOwner);
       }
       else{
-        //To be removed after the front-end
-        console.log("No Valid Data");
-        return;
-        //return done(null, false, {message: 'Invalid username or password'});
+        return done(null, false, {message: 'Invalid username or password'});
       }
 
     });
@@ -93,14 +76,10 @@ passport.use('login', new LocalStrategy(
   }));
 
 passport.serializeUser(function(user, done) {
-  //done(null, user.id);
   done(null,user);
 });
 
 passport.deserializeUser(function(obj, done) {
-  /*clientController.getClientById(id, function(err, user) {
-    done(err, user);
-  });*/
   done(null,obj);
 });
 //Routes
@@ -155,4 +134,3 @@ router.post('/login',
 
 //export router
 module.exports = router;
-

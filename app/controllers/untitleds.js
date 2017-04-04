@@ -44,63 +44,61 @@ let userController = {
 
     },
 
-//Here I search using keyword (Regular Expression) to match the keyword that the user writes
-//with either the name of the businessOwner, the description of the businessOwner, or
-//the types of the activity appear in our activity collection
+//Write here the functions in the format of function_name:function(params)
 search:function(req,res)
 {
-    var keyword = req.params.keyword;
-    var flag=0;
-    var list=[];
-    BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}]},function(err,businesses)
-    {
-        if(businesses.length > 0)
-        {
-            
-            for(var i =0 ; i < businesses.length  ; i++)
-            {
-                flag  = 0 ;
-                for(var j =0; j < list.length && (!flag); j++)
-                {
-                    if(list[j] == businesses[i])
-                    {
-                        flag = 1;
-                    }
-                }
-                if(!flag)
-                {
-                    list.push(businesses[i]);
-                }
-            }
-        }
-        Activity.find({type: new RegExp(".*"+keyword+".*")},function(err,activities)
-        {
-            for(var i = 0 ; i< activities.length ; i++)
-            {
-                flag = 0;
-                BusinessOwner.findById(activities[i].BusinessOwner_id, function(error,business)
-                    {
-                        if(business)
-                        {
-                            for(var j = 0; j < list.length && (!flag) ; j++)
-                            {
-                                if(list[j] == business)
-                                {
-                                    flag = 1;
-                                }
-                            }
-                            if(!flag)
-                            {
-                                list.push(business);
-                            }
+	var keyword = req.params.keyword;
+	var flag=0;
+	var list=[];
+	BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}]},function(err,businesses)
+	{
+		if(businesses.length > 0)
+		{
+			
+			for(var i =0 ; i < businesses.length  ; i++)
+			{
+				flag  = 0 ;
+				for(var j =0; j < list.length && (!flag); j++)
+				{
+					if(list[j] == businesses[i])
+					{
+						flag = 1;
+					}
+				}
+				if(!flag)
+				{
+					list.push(businesses[i]);
+				}
+			}
+		}
+		Activity.find({type: new RegExp(".*"+keyword+".*")},function(err,activities)
+		{
+			for(var i = 0 ; i< activities.length ; i++)
+			{
+				flag = 0;
+				BusinessOwner.findById(activities[i].BusinessOwner_id, function(error,business)
+					{
+						if(business)
+						{
+							for(var j = 0; j < list.length && (!flag) ; j++)
+							{
+								if(list[j] == business)
+								{
+									flag = 1;
+								}
+							}
+							if(!flag)
+							{
+								list.push(business);
+							}
 
-                        }
-                    });
-            }
-        });
+						}
+					});
+			}
+		});
 
-    });
-    //Here we render to the view + the list variable
+	});
+	//Here we render to the view + the list variable
 
 },
 
@@ -109,7 +107,7 @@ search:function(req,res)
 
     //Function for generating random password between 5 to 15 characters
     generatePassword: function() {
-        var length = (Math.random() * 6) + 10;
+        var length = (Math.random() * 11) + 5;
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for (var i = 0; i < length; i++) {
@@ -172,3 +170,4 @@ search:function(req,res)
 
 //Exporting the module .
 module.exports = userController;
+
