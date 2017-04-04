@@ -1,15 +1,15 @@
 //Dependencies
 let User = require('../models/User');
-let BusinessOwner= require('../models/BusinessOwner');
-let Activity = require('../models/Activity');
 var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 
+//The transport settings required for nodemailer . ( sender mail / refresh & accessToken / client ID and secret)
 
 
 
-//Setting up nodemailer.
+
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -22,13 +22,18 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-
 //The user controller
 let userController = {
+  // This function is used in case of the user forgetting the password . we go search for the user by the username
+  //then we check that the email inserted is equal to the mail of the user you want to change the password for .
     forgotPassword: function(req, res) {
         var email = req.body.email;
         var username = req.body.username;
-       User.findOne({
+        req.checkBody('email', 'Email Required').notEmpty();
+        req.checkBody('username', 'Username Required').notEmpty();
+        	var errors = req.validationErrors();
+          if(errors){
+        User.findOne({
             username: username
         }, function(err, user) {
             if (user) {
@@ -43,9 +48,13 @@ let userController = {
                 res.send("Could not find user!");
                 return;
             }
-        });
+        });}
+        else{
+          res.send(errors);
+        }
 
     },
+
 
 //Here I search using keyword (Regular Expression) to match the keyword that the user writes
 //with either the name of the businessOwner, the description of the businessOwner, or
@@ -108,9 +117,7 @@ search:function(req,res)
 },
 
 
-       
-
-    //Function for generating random password between 5 to 15 characters
+    //Function for generating random password between 10 to 15 characters
     generatePassword: function() {
         var length = (Math.random() * 6) + 10;
         var text = "";
@@ -121,7 +128,7 @@ search:function(req,res)
         return text;
     },
 
-    //Function for sending email .
+    //Function for sending email . we set the mail options to send a mail with certain format to the email of the user
     sendMail: function(user, pass) {
       //Setting up the mail options .
         let mailOptions = {
@@ -141,7 +148,7 @@ search:function(req,res)
         });
     },
     // Changing password function . Creating new User and giving it all the past user info. because updating
-    // the Hash for password does not work .
+    // the Hash for password does not work ,then we remove the previous user .
     changePassword: function(user) {
         var pass = userController.generatePassword();
         userController.sendMail(user, pass);

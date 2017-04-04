@@ -60,12 +60,10 @@ let businessownerController={// this function for uploading pictures and videos 
   		if (err) res.send(err) ; 
   		else {
 
+
 	businessowner.offers.push(offer);
     businessowner.save();	
-   
-
-
-}
+        }
 
 		res.end('DONE');
 
@@ -73,6 +71,7 @@ let businessownerController={// this function for uploading pictures and videos 
   });
 
 },
+ 
 
 // this function for showing reviews of the logged-in businessOwner
   showReview : function(req,res){
@@ -460,4 +459,3 @@ getOwner:function(username,password,callback)
 
 
 module.exports = businessownerController;
-
