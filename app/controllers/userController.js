@@ -129,8 +129,8 @@ let userController={
                   User.findOne({username:newUsername},function(err,user){
 
                     if(err){
-            	  res.send(err);
-            	}
+                res.send(err);
+              }
                     else {
                       if(!user)
                       {

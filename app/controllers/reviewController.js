@@ -9,6 +9,8 @@ let reviewController={
 
 	
 	//clients write review about business
+	//this function receives requests for creating new reviews, and makes an entry to the database
+	//the function ensures that the request includes the required fields (user_id, business_id, comment)
 	newReview:function(req,res){
 		var review = new Review();
 		review.user_id = req.body.user_id;
@@ -33,6 +35,9 @@ let reviewController={
 		}
 	},
 
+	//by using angular's ng-show, it will be guaranteed that each user can only update his own reviews
+	//this function receives requests for editing reviews, an review has multiple attributes;
+	//the function ensures that the request includes the required fields (user_id, business_id, comment)
 	//by using angular's ng-show, it will be guaranteed that each user can only update his own reviews
 	editReview: function(req,res){
 		var review_user_id = req.body.user_id;
@@ -73,6 +78,9 @@ let reviewController={
 		}
 	},
 
+	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
+	//this function receives requests for deleting reviews
+	//the function ensures that the request includes the required field (user_id)
 	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
 	deleteReview: function(req,res){
 		var review_user_id = req.body.user_id;

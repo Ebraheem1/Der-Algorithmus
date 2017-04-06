@@ -8,8 +8,8 @@ var applicationSchema = mongoose.Schema({
         unique:true
     },
     email:{
-    	type:String,
-    	unique:true
+        type:String,
+        unique:true
     },
     phoneNumber: String,
     description:String,

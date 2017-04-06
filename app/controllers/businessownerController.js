@@ -17,16 +17,16 @@ var storage = multer.diskStorage({
         callback(null, './public/gallery');
     },
     filename: function (req, file, callback) {
-      	if(file.originalname != null || file.originalname !=''){
-          	var filename = file.originalname;
-          	var arr = filename.split(".");
-          	var filetype = arr[arr.length-1];
-          	//should be replaced when session is used
-          	var businessownerID=req.body.BusinessOwnerId;
-          	BusinessOwner.findById(businessownerID,function(err,businessowner){
-          		if (err) 
+        if(file.originalname != null || file.originalname !=''){
+            var filename = file.originalname;
+            var arr = filename.split(".");
+            var filetype = arr[arr.length-1];
+            //should be replaced when session is used
+            var businessownerID=req.body.BusinessOwnerId;
+            BusinessOwner.findById(businessownerID,function(err,businessowner){
+                if (err) 
                     return ; 
-          		else {
+                else {
                     if(!businessowner){
                         return ;
                     }else{
@@ -40,9 +40,9 @@ var storage = multer.diskStorage({
                     
                 
             
-          		}
+                }
 
-          	});
+            });
        
         }
 
@@ -52,7 +52,7 @@ var upload = multer({ storage: storage}).single('fileToUpload');
 
 let businessownerController={
 // this function for uploading pictures and videos to the gallery of the businessOwner
-	addMedia:function(req,res){
+    addMedia:function(req,res){
         
 
             upload(req,res,function(err){
@@ -68,28 +68,28 @@ let businessownerController={
                 res.send('No Data entered');
             }
         });
-    	 }, 
+         }, 
    
 // this function for adding any offer (discount or bounse) by the businessOwner
     addOffer : function(req,res){
-	
+    
         var offer = req.body.offer ;
-    	var businessownerID = req.body.businessownerID;
-      	BusinessOwner.findById(businessownerID,function(err,businessowner){
-      		if (err) 
+        var businessownerID = req.body.businessownerID;
+        BusinessOwner.findById(businessownerID,function(err,businessowner){
+            if (err) 
                 res.send(err) ; 
-      		else {
+            else {
              
                 if(!businessowner){
                     res.send('No businessowner');
                     return ;
                                   }
-        	    businessowner.offers.push(offer);
-                businessowner.save();	
+                businessowner.offers.push(offer);
+                businessowner.save();   
                 res.send('Your offer has been posted successfully');
             }
 
-    	});
+        });
 
     },
  
@@ -136,9 +136,9 @@ let businessownerController={
     },
 
     // business owner adds a new activity
-	addActivity:function(req,res){
+    addActivity:function(req,res){
 
-		
+        
         req.checkBody('type', 'type Required').notEmpty();
         req.checkBody('price', 'pricing Required').notEmpty();
         if(isNaN(req.body.price))
@@ -152,7 +152,7 @@ let businessownerController={
 
         if(!errors){
 
-    		var BusinessOwnerId=req.params.BusinessOwnerId;
+            var BusinessOwnerId=req.params.BusinessOwnerId;
 
             req.body.BusinessOwner_id=BusinessOwnerId;
 
@@ -200,18 +200,18 @@ let businessownerController={
                 }
 
             });
-    		
+            
         }else{
             res.send(errors);
         }
 
-	},
+    },
 
    // business owner deletes an activity
-	deleteActivity: function(req,res){
+    deleteActivity: function(req,res){
 
-		// should be replaced with req.user._id later 
-		var BusinessOwnerId=req.params.BusinessOwnerId;
+        // should be replaced with req.user._id later 
+        var BusinessOwnerId=req.params.BusinessOwnerId;
 
         BusinessOwner.findById(BusinessOwnerId,function(err,businessOwner){
 
@@ -272,7 +272,7 @@ let businessownerController={
 
         });
 
-	},
+    },
 
     //this function updates the business owners info with that provided in the request
     //if a field has no specified value to update it with, it is not changed at all
