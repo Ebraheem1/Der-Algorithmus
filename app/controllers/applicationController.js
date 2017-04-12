@@ -2,15 +2,16 @@
 let Application = require('../models/Application');
 let Owner = require('../models/BusinessOwner');
 let User = require('../models/User');
+let userController = require('./userController');
 var bcrypt = require('bcryptjs');
 var expressValidator = require('express-validator');
-var bodyParser=require('body-parser');
-var mongoose=require('mongoose');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 
 
-//NodeMailer Setup
+//The transport settings required for nodemailer . ( sender mail / refresh & accessToken / client ID and secret)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -26,90 +27,143 @@ const transporter = nodemailer.createTransport({
 //Controller
 let applicationController = {
 
-  //Accepting Application function .
+    //Accepting Application function . we find the application with the given username ,  then we create a new buisness owner
+    // and user
     accept: function(req, res) {
-        var username = req.param('username');
-        Application.findOne({
-            username: username
-        }, function(err, application) {
-            if (application) {
-                var owner = new Owner();
-                var user = new User();
-                //copying application properites to user instance .
-                user.username = application.username;
-                user.password = application.password;
-                user.phoneNumber = application.phoneNumber;
-                user.email = application.email;
-                owner.name = application.name;
-                owner.description = application.description;
-                owner.locations = application.locations;
+         var pass = userController.generatePassword();
+       
+
+    
+        var errors=null;
+        if (!errors) {
+            var username = req.param('username');
+            Application.findOne({
+                username: username
+            }, function(err, application) {
+                if(application){
+                    var owner = new Owner();
+                    var user = new User();
+                    //copying application properites to user instance .
+                    user.username = application.username;
+                    user.password = pass;
+                    user.phoneNumber = application.phoneNumber;
+                    user.email = application.email;
+                    owner.name = application.name;
+                    owner.description = application.description;
+                    owner.locations = application.locations;
 
 
-                user.save(function(err) {
-                    if (err){
-                        res.send("Error occured while saving user");
-                      return ;
-                    }
-                    else {  //Code was put in here to avoid asynchronous code.
-                        applicationController.findId(application, owner);
-                        applicationController.sendAcceptMail(application);
-                    }
-                });
-                res.send("Application accepted successfuly");
-            } else {
-                res.send("Application was not found !");
-            }
-        });
+                    user.save(function(err) {
+                        if (err) {
+                            res.send("Error occured while saving user");
+                            return;
+                        } else { //Code was put in here to avoid asynchronous code.
+                            applicationController.findId(application, owner);
+                            applicationController.sendAcceptMail(application,pass);
+                        }
+                    });
+                    res.send("Application accepted successfuly");
+                    return;
+                } else {
+                    res.send("Application was not found !");
+                    return;
+                }
+            });
+        } else {
+            res.send(errors);
+            return;
+        }
 
     },
-    createApplication: function(req, res){
+
+    //in this function we create a business owner application using the data provided by the applicant
+    //this application is to be later reviewed by the admin
+    createApplication: function(req, res) {
 
         req.checkBody('name', 'Name Required').notEmpty();
         req.checkBody('username', 'Username Required').notEmpty();
         req.checkBody('email', 'Email Required').notEmpty();
         req.checkBody('email', 'Not a valid email address').isEmail();
-        req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
-        req.checkBody('password-confirm', 'Passwords do not match').equals(req.body.password);
-        req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i");
+        req.checkBody('locations', 'at least one location is Required').notEmpty();
+        req.checkBody('description', 'description Required').notEmpty();
+        req.checkBody('phoneNumber', 'phoneNumber Required').notEmpty();
 
         var errors = req.validationErrors();
 
-        if(!errors){            
-                
-            var application = new Application({
+        if (!errors){
+            
+            if(req.body.username.toLowerCase() == 'admin'){
 
-                username: req.body.username,
-                name: req.body.name,
-                email: req.body.email,
-                phoneNumber: req.body.phoneNumber,
-                description: req.body.description,
-                locations: req.body.locations
+                res.send('Username Unavailable');
+            
+            }else{
+            
+                User.find({username:req.body.username}, function(err, users){
 
-            });
+                    if(err){
 
-            bcrypt.genSalt(10, function(err, salt) {
-                
-                bcrypt.hash(req.body.password, salt, function(err, hash) {
+                        res.json(err);
 
-                    application.password = hash;
-                    
-                    application.save(function(err){     
+                    }else{
 
-                        if(err){
-                            
-                            res.redirect('/business/apply');
-                        
+                        if(users.length>0){
+
+                            res.send('Username already in use!');
+
                         }else{
 
-                            res.send('Your application has been submitted successfully. We will notify you once the review process has been completed');
+                            User.find({email: req.body.email}, function(err, users){
+
+                                if(err){
+                                    
+                                    res.json(err);
+
+                                }else{
+
+                                    if(users.length>0){
+
+                                        res.send('email already in use!');
+
+                                    }else{
+
+                                         var application = new Application({
+
+                                            username: req.body.username,
+                                            name: req.body.name,
+                                            email: req.body.email,
+                                            phoneNumber: req.body.phoneNumber,
+                                            description: req.body.description,
+                                            locations: req.body.locations
+
+                                        });  
+
+                                        application.save(function(err){
+                                        
+                                            if(err){
+                                        
+                                                res.json(err);
+                                        
+                                            }else{
+                                        
+                                                res.send('Your application was submitted succesffuly! you\'ll be notified once it is reviewed');
+                                        
+                                            }
+                                                 
+                                        });
+                                                                        
+                                    }
+
+                                }
+
+                            });
 
                         }
 
-                    });             
-                
+                    }
+
                 });
-            
-            }); 
+
+            }
 
         }else{
 
@@ -120,22 +174,23 @@ let applicationController = {
     },
     //Rejecting application function
     reject: function(req, res) {
-      var username = req.param('username'); // Could be changed to ID later .
+        var username = req.param('username'); // Could be changed to ID later .
 
-      Application.findOne({
-          username: username
-      }, function(err, application) {
-          if (application) {
-                    applicationController.sendRejectMail(application);
-                    applicationController.removeApplication(application);
-                    res.send("Application rejected successfuly");
-          } else {
-              res.send("Application was not found !");
-          }
-      });
+        Application.findOne({
+            username: username
+        }, function(err, application) {
+            if (application) {
+                applicationController.sendRejectMail(application);
+                applicationController.removeApplication(application);
+                res.send("Application rejected successfuly");
+            } else {
+                res.send("Application was not found !");
+            }
+        });
     },
 
-//To link the buisness owner with the client instance just made .
+    //To link the buisness owner with the client instance just made . we find the id of the user made so we can create
+    //the owner using it
     findId: function(application, owner) {
         User.findOne({
             username: application.username
@@ -143,42 +198,39 @@ let applicationController = {
             if (UserA) {
 
                 owner.user_id = UserA._id;
-                applicationController.save(owner,application);
-            } else {
-                console.log('User was not saved in DB');
-            }
+                applicationController.save(owner, application);
+            } 
         });
     },
-  //To save the owner.
-    save: function(owner,application) {
+    //To save the owner.
+    save: function(owner, application) {
         owner.save(function(err) {
-            console.log("IN");
             if (err)
-                console.log("Error occured while saving BusinessOwner");
+                return;
             else {
-                console.log("Business Owner saved ");
                 applicationController.removeApplication(application);
             }
         });
     },
     //To Send the acceptance mail .
-    sendAcceptMail: function(application) {
+    //This method is used to send the acceptance mail with a certain format to the mail which was present in the application (owner mail )
+    sendAcceptMail: function(application,pass) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', // sender address
             to: application.email, // list of receivers
             subject: 'Hello ✔', // Subject line
             text: 'Hello world', // plain text body
-            html: '<b> Dear ' + application.name + ' ,</b> <br> <h3>Your application to our directory website has been accepted .We are very happy to work with you  ,and We wish to see more of your organization in the near future :D . </h3> <br> <br> -Youssef From Dev. Team ' // html body
+            html: '<b> Dear ' + application.name + ' ,</b> <br> <h3>Your application to our directory website has been accepted .We are very happy to work with you  ,and We wish to see more of your organization in the near future :D your password is '+pass+' . </h3> <br> <br> -Youssef From Dev. Team ' // html body
         };
         transporter.sendMail(mailOptions, function(err, res) {
             if (err)
-                console.log(err);
+                res.send(err);
             else {
-                console.log("Email sent");
+                res.send("Email sent");
             }
         });
     },
-  //to Send the rejection mail
+    //to Send the rejection mail.with a certain format to the mail which was present in the application (owner mail )
     sendRejectMail: function(application) {
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', //TODO : sender address
@@ -189,24 +241,27 @@ let applicationController = {
         };
         transporter.sendMail(mailOptions, function(err, res) {
             if (err)
-                console.log(err);
+                res.send(err);
             else {
-                console.log("Email sent");
+                res.send("Email sent");
             }
         });
     },
-    // To remove the application after acceptance or rejection .
+    // To remove the application after acceptance or rejection . we search for the application with the application id
+    //and delete it 
     removeApplication: function(application) {
         Application.remove({
             _id: application._id
         }, function(err) {
-            if (err)
-                console.log("Error has occured during deletion");
-            else
-                console.log("Application deleted succesffuly");
+            if (err){
+            
+                return;
+            }
+            
         });
     }
 };
 
 //Exporting the module .
 module.exports = applicationController;
+

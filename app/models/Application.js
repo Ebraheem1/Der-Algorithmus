@@ -7,10 +7,9 @@ var applicationSchema = mongoose.Schema({
         required:true,
         unique:true
     },
-    password:String,
     email:{
-    	type:String,
-    	unique:true
+        type:String,
+        unique:true
     },
     phoneNumber: String,
     description:String,
