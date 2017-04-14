@@ -32,20 +32,17 @@ let AuthenticationController = {
   //authentication for regular clients
   ensureClientAuthenticated: function(req, res, next){
       if(! req.user){
-        req.flash('error_msg','You are not logged in');
-        return;
+        return res.json({ success: false, message: 'Authentication failed.' });
       } else {
         Client.findById(req.user._id,function(err,user)
         {
             if(err)
             {
-              res.send(err);
-              return;
+              return res.json({ success: false, message: 'Authentication failed.' });
             }
             if(! user)
             {
-              req.flash('error_msg','You are not logged in');
-              return;
+              return res.json({ success: false, message: 'Authentication failed.' });
             }
             else{
               return next();
@@ -68,11 +65,12 @@ let AuthenticationController = {
   //Logout Function to end the session
   generalLogOut: function(req,res)
   {
-    req.logout();
+      req.logout();
 
       req.flash('success_msg', 'You are logged out');
+      console.log(req.iat);
+      res.json('Logout Created Successfully');
 
-      res.redirect('/');
   }
 
 

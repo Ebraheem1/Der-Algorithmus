@@ -35,9 +35,9 @@ mongoose.Promise = global.Promise;
 app.use(paginate.middleware(10, 50));
 
 //for all the requests(routes) to the app, respond by the index page
-app.get('*', function(req,res){
+/*app.get('*', function(req,res){
   res.sendFile(path.join(__dirname + '/public/app/views/index.html'))
-});
+});*/
 
 //DB connection
 mongoose.connect(DB_URI,function(err)
