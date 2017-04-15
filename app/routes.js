@@ -6,10 +6,14 @@ var activityController=require('./controllers/activityController');
 var administratorController = require('./controllers/administratorController');
 var applicationController = require('./controllers/applicationController');
 var businessOwnerController = require('./controllers/businessownerController');
+var User = require('./models/User');
 var passport=require('passport');
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
+var jwt = require('jsonwebtoken');
+var secret = 'DerAlgorithmus'
+
 
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
@@ -162,6 +166,69 @@ router.get('/removeBusiness/:businessId',administratorController.removeBusiness)
 router.post('/createAdmin',administratorController.createAdmin);//done--
 
 
+
+
+router.post('/authenticate', function(req, res) {
+  var missingFields = req.body.username==null || req.body.username=='' || req.body.password==null || req.body.password=='';
+  if(missingFields){
+    res.json({ success: false, message: 'The fields (username, password) are required!' });
+    return;
+  }
+  User.findOne({ username: req.body.username }, function(err, user) {
+      if (err) {
+        res.json({ success: false, message: err });
+      }else {
+        if (!user) {
+            res.json({ success: false, message: 'No account with this username exists!' });
+            return;
+        } 
+        var validPassword = user.comparePassword(req.body.password);
+        if (!validPassword) {
+            res.json({ success: false, message: 'The password you entered is incorrect!' });
+        } else {
+          var token = jwt.sign({username: user.username, user_id:user._id}, secret, { expiresIn: '24h'});
+          res.json({ success: true, message: 'Successfully logged in.', token: token});
+        }
+        
+      }
+  });
+});﻿
+
+
+// router.use(function(req, res, next){
+//   var token = req.body.token || req.body.query || req.headers['x-access-token'];
+//   if(token){
+//     jwt.verify(token, secret, function(err, loggedInUser){
+//         if(err){
+//             res.json({success: false, message: 'Invalid Token!'});
+//         } else{
+//             req.loggedInUser = loggedInUser;
+//             next();
+//         }
+//     });
+//   } 
+//   else{
+//     res.json({success: false, message: 'No token exists!'});
+//   }
+// });
+
+router.post('/loggedIn', function(req, res, next){
+    var token = req.body.token || req.body.query || req.headers['x-access-token'];
+    if(token){
+      jwt.verify(token, secret, function(err, loggedInUser){
+          if(err){
+              res.json({success: false, message: 'Invalid Token!'});
+          } else{
+              req.loggedInUser = loggedInUser;
+              res.send(req.loggedInUser);
+
+          }
+      });
+    } 
+    else{
+      res.json({success: false, message: 'No token exists!'});
+    }
+});
 
 
 //export router

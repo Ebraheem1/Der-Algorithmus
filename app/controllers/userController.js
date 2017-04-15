@@ -40,24 +40,24 @@ let userController={
       var errors=req.validationErrors();
       if(errors)
       {
-        res.send(errors);
+        res.json({success: false, message: errors})
         return;
       }
       else {
         if(req.body.username.toLowerCase() == 'admin'){
-          res.send('Username Unavailable');
+          res.json({success: false, message: 'Username Unavailable'})
         }else{
 
             Application.findOne({username:req.body.username},function(err,application)
             {
               if(err)
               {
-                res.send(err);
+                res.json({success: false, message: err})
               }
               else
               {
                 if(application){
-                  res.send('Username Unavailable');
+                  res.json({success: false, message: 'Username Unavailable'})
                 }else{
                   
             var user=new User({
@@ -82,10 +82,10 @@ let userController={
               });
               client.save(function(err){
                   if(err){
-                    res.send(err);
+                    res.json({success: false, message: err})
                   }
                   else {
-                    res.send('Client saved !');
+                    res.json({success: true, message: 'Client saved !'})
                   }
               });
           }

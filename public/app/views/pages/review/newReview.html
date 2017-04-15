@@ -1,0 +1,23 @@
+<br>
+<div class="form-group">
+  <label for="rep"><h3>New Review:</h3></label>
+  <textarea class="form-control" rows="10" id="rep" ng-model="review.revData.comment"></textarea>
+</div>
+
+
+<button type="button" ng-click="review.addReview(revData);" class="btn btn-success">Add Review</button>
+
+<br><br>
+
+<div class="jumbotron text-center" ng-show="review.loading">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<h2>Loading...</h2>
+</div>
+
+<div class="row show-hide-message" ng-show="review.errMsg">
+	<div class="alert alert-danger"> {{review.errMsg}} </div>
+</div>
+
+<div class="row show-hide-message" ng-show="review.successMsg">
+	<div class="alert alert-success"> {{review.successMsg}} </div>
+</div>

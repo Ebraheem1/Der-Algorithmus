@@ -12,23 +12,24 @@ let reviewController={
 	//this function receives requests for creating new reviews, and makes an entry to the database
 	//the function ensures that the request includes the required fields (user_id, business_id, comment)
 	newReview:function(req,res){
+
 		var review = new Review();
 		review.user_id = req.body.user_id;
-		review.business_id = req.body.business_id;
+		review.business_id = '58f13a6ef286e74e0ecdadcc';
 		review.comment = req.body.comment;
-		var missingFields = req.body.user_id==null || req.body.user_id=='' || req.body.business_id==null || req.body.business_id=='' || 
-		                    req.body.comment==null || req.body.comment=='';
+		console.log('here'+req.body.user_id);
+		var missingFields = req.body.user_id==null || req.body.user_id=='' || req.body.comment==null || req.body.comment=='';
 
 		if(missingFields){
-			res.send('The fields: (user_id, business_id, comment) are required!');
+			res.json({success: false, message: 'The fields: (user_id, business_id, comment) are required!'})
 		}
 		else{
 			review.save(function(err){
 				if(err){
-					res.send(err);
+					res.json({success: false, message: err})
 				}
 				else{
-					res.send('Review has been posted successfully.');
+					res.json({success: true, message: 'Review has been posted successfully.'})
 				}
 			});
 
