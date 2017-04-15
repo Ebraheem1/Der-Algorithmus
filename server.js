@@ -9,6 +9,7 @@ var multer  = require('multer');
 var paginate = require('express-paginate');
 var expressValidator = require('express-validator');
 var router= require('./app/routes');
+var path = require('path');
 var app = express();
 //Database name is Algorithmus
 var DB_URI = "mongodb://localhost:27017/Algorithmus";
@@ -16,13 +17,13 @@ var DB_URI = "mongodb://localhost:27017/Algorithmus";
 // Body Parser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
+app.use(express.static(__dirname+'/public')); //make the dir public available to the frontend
 //Express Session
 app.use(session({
     secret: 'secret',
     saveUninitialized: true,
     resave: true
 }));
-
 
 //Passport init
 app.use(passport.initialize());
@@ -32,6 +33,11 @@ mongoose.Promise = global.Promise;
 
 //pagination
 app.use(paginate.middleware(10, 50));
+
+//for all the requests(routes) to the app, respond by the index page
+/*app.get('*', function(req,res){
+  res.sendFile(path.join(__dirname + '/public/app/views/index.html'))
+});*/
 
 //DB connection
 mongoose.connect(DB_URI,function(err)
