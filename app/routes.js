@@ -39,13 +39,11 @@ router.post('/login', function(req, res) {
         expiresIn: '24h' // in seconds
         });
     return res.json({ success: true, token: 'JWT ' + token });
-    //return done(null, client);
  }
  else{
  administratorController.comparePassword(password,function(err, isAdmin){
     if(err){
       return res.json({ success: false, message: 'Authentication failed.' });
-      //return done(null, false, {message: 'Error Happened'});
     } 
     if(isAdmin && username=="admin"){
       administratorController.getAdmin(function(err,admin)
@@ -55,13 +53,11 @@ router.post('/login', function(req, res) {
 
         {
           return res.json({ success: false, message: 'Authentication failed.' });
-          //return done(null, false, {message: 'Error Happened'});
         }
         var token = jwt.sign({user:admin[0],type:0}, secret, {
-        expiresIn: '24h' // in seconds
+        expiresIn: '24h' 
         });
         return res.json({ success: true, token: 'JWT ' + token });
-        //return done(null, admin[0]);
       });
     }
   else{
@@ -74,10 +70,9 @@ router.post('/login', function(req, res) {
     if(businessOwner)
     {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
-        expiresIn: '24h' // in seconds
+        expiresIn: '24h' 
         });
       return res.json({ success: true, token: 'JWT ' + token });
-      //return done(null, businessOwner);
     }
     else{
       return res.json({ success: false, message: 'Authentication failed. Invalid username or password' });

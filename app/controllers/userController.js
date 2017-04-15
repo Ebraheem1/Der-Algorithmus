@@ -226,24 +226,20 @@ let userController={
       var keyword = req.params.keyword;
       var flag=0;
       var list=[];
-
       BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}, {types:{"$in": [new RegExp(".*"+keyword+".*")]}}]},function(err,businesses){
         
         if(err){
+          res.json({success:false, message: 'The search fails, try it again :)'})
+        }
+        if(businesses.length > 0){
+          
+          res.json({success:true,businesses:businesses});
+            
+        }else{
 
-          res.send(err);
-          return;
+          res.json({success:true,businesses:businesses,message:'No matched Venues found'});
 
         }
-          if(businesses.length > 0){
-            
-            res.send(businesses);
-              
-          }else{
-
-            res.send('no records to show');
-
-          }
 
       });
 
