@@ -1,6 +1,6 @@
 angular.module('authServices', [])
 
-.factory('Authentication',function($http, AuthenticationToken){
+.factory('Authentication',function($http, AuthenticationToken, $q){
 
 	authFactory = {};
 

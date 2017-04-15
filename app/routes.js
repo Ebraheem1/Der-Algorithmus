@@ -206,7 +206,6 @@ router.post('/loggedIn', function(req, res, next){
               res.json({success: false, message: 'Invalid Token!'});
           } else{
               req.loggedInUser = loggedInUser;
-              console.log(req.loggedInUser)
               res.send(req.loggedInUser);
 
           }

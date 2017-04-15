@@ -20,8 +20,8 @@ angular.module('appRoutes', ['ngRoute'])
 		templateUrl: 'app/views/pages/users/login.html',
 	})
 
-	.when('/review', {
-		templateUrl: 'app/views/pages/users/review.html',
+	.when('/review/newReview', {
+		templateUrl: 'app/views/pages/review/newReview.html',
 		controller: 'reviewCtrl',
 		controllerAs: 'review'
 	})

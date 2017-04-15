@@ -6,6 +6,7 @@ angular.module('reviewServices',[])
 	reviewFactory = {};
 
 	reviewFactory.newReview = function(revData){
+		console.log(revData);
 		return $http.post('/review/newReview', revData);
 	};
 
