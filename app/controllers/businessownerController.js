@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 let User = require('../models/User');
 let Activity = require('../models/Activity');
+let RepeatableActivity = require('../models/RepeatableActivity');
+let NonRepeatableActivity = require('../models/NonRepeatableActivity');
 
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -51,6 +53,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage}).single('fileToUpload');
 
 let businessownerController={
+
 // this function for uploading pictures and videos to the gallery of the businessOwner
     addMedia:function(req,res){
         
@@ -135,76 +138,100 @@ let businessownerController={
 
     },
 
-    // business owner adds a new activity
+    updateBusinessTypes:function(businessOwner,addedType){
+
+        var typesArray=businessOwner.types;
+        var index=typesArray.indexOf(addedType);
+        //if no activites with the same type added before, then add this to the types array of the businessOwner
+        if(index == -1)
+        {
+            businessOwner.types.push(addedType);
+            businessOwner.save(function(err,businessOwner){
+
+                if(err)
+                    return res.send(err);
+            });
+        }
+
+    },
+
     addActivity:function(req,res){
 
         
-        req.checkBody('type', 'type Required').notEmpty();
-        req.checkBody('price', 'pricing Required').notEmpty();
-        if(isNaN(req.body.price))
-        {
-            res.send('Price must be a number');
-            return;
-        }
-
-        var errors = req.validationErrors();
-
-
-        if(!errors){
-
-            var BusinessOwnerId=req.params.BusinessOwnerId;
-
-            req.body.BusinessOwner_id=BusinessOwnerId;
-
-            BusinessOwner.findById(BusinessOwnerId,function(err,businessOwner){
-
-                if(!businessOwner){
-
-                    res.send('wrong ID for business owner');
-                    return;
-                }
-
-                if(err){
-
-                    res.send(err);
-
-                }else{
-
-                    var typesArray=businessOwner.types;
-                    var index=typesArray.indexOf(req.body.type);
-                    //if no activites with the same type added before, then add this to the types array of the businessOwner
-                    if(index == -1)
-                    {
-                        businessOwner.types.push(req.body.type);
-                        businessOwner.save(function(err,businessOwner){
-                            if(err){
-
-                                res.send(err);
-                                return;
-                            }
-                            
-                        });
-                    }
-                    Activity.create(req.body,function(err,activity){
-
-                        if(err){
-
-                             res.send(err); 
-                             return;
-                        }
-                        // should be replaced with page rendering in sprint 2
-                        res.send('Activity has been created successfully!');                                    
+        var type=req.body.type;
         
-                    });                           
+        req.body.businessOwner_id=req.params.BusinessOwnerId;
+
+        BusinessOwner.findById(req.params.BusinessOwnerId,function(err,businessOwner){
+
+            if(!businessOwner)
+                return res.send('wrong ID for business owner');
+
+            if(err)
+                return res.send(err);
+
+            if(req.file != undefined)
+                req.body.image=req.file.filename;
+
+            if(type=='Trip' || type=='Safari')
+            {
+                NonRepeatableActivity.create(req.body,function(err,nonRepeatableActivity){
+
+                    if(err)
+                        return res.send(err);
+
+                    businessownerController.updateBusinessTypes(businessOwner,type);
+                    res.send('Activity has been created successfully!');
+
+                });
+            }
+            else if(type=='Room-Escaping' || type=='Paintball Fight' || type=='Battlefield' || type=='Playground')
+            {
+                RepeatableActivity.create(req.body,function(err,repeatableActivity){
+
+                    if(err)
+                        return res.send(err);
+
+                    for(var i=1;i<=req.body.pricePackagesCount;i++)
+                    {
+
+                        repeatableActivity.pricePackages.push(
+                            { 
+                                participants: req.body['participant' + i],
+                                price: req.body['price'+ i]
+                            });
+                    }
+                    for(var i=1;i<=req.body.slotsCount;i++)
+                    {
+                        repeatableActivity.slots.push(
+                            {
+                                startTime: req.body['startTime'+i],
+                                endTime: req.body['endTime'+i]
+                            });
+
+                    }
+                    for(var i=0;i<7;i++)
+                    {
+                        if(req.body['day'+i])
+                            repeatableActivity.dayOffs.push(i);
+
+                    }
+                    repeatableActivity.save(function(err){
+                        if(err)
+                            return res.send(err);
+                    });
                     
-                }
+                    businessownerController.updateBusinessTypes(businessOwner,type);
+                    return res.send('Activity has been created successfully!');
 
-            });
-            
-        }else{
-            res.send(errors);
-        }
+                });
 
+
+            }
+
+
+        });
+       
     },
 
    // business owner deletes an activity

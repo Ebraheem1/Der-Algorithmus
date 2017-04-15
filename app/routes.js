@@ -11,6 +11,7 @@ var LocalStrategy=require('passport-local').Strategy;
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
+var multer = require('multer')
 
 
 //Passport authentication
@@ -134,7 +135,7 @@ router.post('/business/rate', clientController.rateBusiness );//done--
 
 router.put('/activity/editActivity/:id', activityController.editActivity);//done--
 
-router.post('/addActivity/:BusinessOwnerId',businessOwnerController.addActivity);//done --
+router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
 router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--
 
 router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
@@ -149,6 +150,7 @@ router.post('/login',
     res.send("Logged In successfully");
     return;
   });//done--
+
 
 //export router
 module.exports = router;
