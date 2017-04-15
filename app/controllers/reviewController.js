@@ -1,47 +1,48 @@
 let Review = require('../models/Review');
+var User = require('../models/User');
+let Client = require('../models/Client');
+var ObjectId = require('mongodb').ObjectID;
+var BusinessOwner = require('../models/BusinessOwner');
+
       
 let reviewController={
 
-	//http://localhost:8080/review/newReview
+	
+	//clients write review about business
 	//this function receives requests for creating new reviews, and makes an entry to the database
 	//the function ensures that the request includes the required fields (user_id, business_id, comment)
 	newReview:function(req,res){
 		var review = new Review();
-		//in the next sprint, this should be replaced by the authenticated user_id
-		//it will be included in the request body for sprint 1
+		//review.user_id = '58f0da368417bc20aeef0fab';
 		review.user_id = req.body.user_id;
-		review.business_id = req.body.business_id;
+		review.business_id = '58f13a6ef286e74e0ecdadcc';
 		review.comment = req.body.comment;
-		var missingFields = req.body.user_id==null || req.body.user_id=='' || req.body.business_id==null || req.body.business_id=='' || 
-		                    req.body.comment==null || req.body.comment=='';
+		var missingFields = review.user_id==null || review.user_id=='' || review.business_id==null || review.business_id=='' || 
+		                    review.comment==null || review.comment=='';
 
 		if(missingFields){
-			res.send('The fields: (user_id, business_id, comment) are required!');
+			res.json({success: false, message: 'The fields: (user_id, business_id, comment) are required!'})
 		}
 		else{
 			review.save(function(err){
 				if(err){
-					res.send(err);
+					res.json({success: false, message: err})
 				}
 				else{
-					res.send('Review has been posted successfully.');
+					res.json({success: true, message: 'Review has been posted successfully.'})
 				}
 			});
 
 		}
 	},
 
-	//http://localhost:8080/review/editReview/#
+	//by using angular's ng-show, it will be guaranteed that each user can only update his own reviews
 	//this function receives requests for editing reviews, an review has multiple attributes;
 	//the function ensures that the request includes the required fields (user_id, business_id, comment)
 	//by using angular's ng-show, it will be guaranteed that each user can only update his own reviews
 	editReview: function(req,res){
-		//in the next sprint, this should be replaced by the authenticated user_id
-		//it will be included in the request body for sprint 1
 		var review_user_id = req.body.user_id;
 		var review_newComment = req.body.comment;
-		//this is the id of the review instance given by MongoDB
-		//once the user clicks on the option to edit a review, the review's mongoDB _id will be included in the route
 		var review_id =  req.params.id;
 		var missingFields = review_user_id==null || review_user_id=='' || review_newComment==null || review_newComment=='';
 		if(missingFields){
@@ -54,11 +55,9 @@ let reviewController={
 		        }
 		        else{
 			        if(!review){
-			        	//corner-case: using an invalid id in the route
 		                res.send('Review with this id does not exist!');
 		            }
 		            else{
-		            	//corner-case: a user trying to edit another user's review
 			            if(review.user_id!=review_user_id){
 			            	res.send('You can only edit your own review!');
 			            }
@@ -80,16 +79,12 @@ let reviewController={
 		}
 	},
 
-	// http://localhost:8080/review/deleteReview/#
+	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
 	//this function receives requests for deleting reviews
 	//the function ensures that the request includes the required field (user_id)
 	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
 	deleteReview: function(req,res){
-		//in the next sprint, this should be replaced by the authenticated user_id
-		//it will be included in the request body for sprint 1
 		var review_user_id = req.body.user_id;
-		//this is the id of the review instance given by MongoDB
-		//once the user clicks on the option to edit a review, the review's mongoDB _id will be included in the route
         var review_id =  req.params.id;
         var missingFields = review_user_id==null || review_user_id=='';
 		if(missingFields){
@@ -102,12 +97,10 @@ let reviewController={
 	            }
 	            else{
 		            if(!review){
-		            	//corner-case: using an invalid id in the route
 		                res.send('Review with this id does not exist!');
 		            }
 		            else{
 			            if(review.user_id!=review_user_id){
-			            	//corner-case: a user trying to delete another user's review
 			            	res.send('You can only delete your own review!');
 			            }
 			            else{
@@ -125,7 +118,34 @@ let reviewController={
 	            }
        		});
 		}
-	}
+	}, 
+    
+  viewBusinessReviews: function (req, res) {
+
+  
+    var BusID = req.params.businessownerID;
+
+    var conditions = {
+        "business_id": BusID
+    };
+
+    var reviews = Review.find(conditions, function (err, reviews) {
+
+        if (err) {
+
+            res.send(err);
+
+           
+
+        } else {
+
+            res.send(reviews);
+
+        }
+
+    });
+  }  
+
 
 
 };
