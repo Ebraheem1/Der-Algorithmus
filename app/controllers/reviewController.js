@@ -7,6 +7,24 @@ var BusinessOwner = require('../models/BusinessOwner');
       
 let reviewController={
 
+
+	getReview: function(req,res){
+		var review_id =  req.params.id;
+		Review.findOne({_id:review_id}, function(err, review) {
+	        if(err){
+	        	res.json({success: false, message:err});
+	        }
+	        else{
+		        if(!review){
+		        	res.json({success: false, message:'Review with this id does not exist!'});
+	            }
+	            else{
+	            	res.send({success: true, message:'Review has been retrieved successfully.', review: review});
+			    }
+	        }
+        });
+	},
+
 	
 	//clients write review about business
 	//this function receives requests for creating new reviews, and makes an entry to the database
@@ -46,20 +64,20 @@ let reviewController={
 		var review_id =  req.params.id;
 		var missingFields = review_user_id==null || review_user_id=='' || review_newComment==null || review_newComment=='';
 		if(missingFields){
-			res.send('The fields: (user_id, comment) are required!');
+			res.json({success: false, message: 'The fields: (user_id, comment) are required!'});
 		}
 		else{
 			Review.findOne({_id:review_id}, function(err, review) {
 		        if(err){
-		            res.send(err);
+		        	res.json({success: false, message: err});
 		        }
 		        else{
 			        if(!review){
-		                res.send('Review with this id does not exist!');
+			        	res.json({success: false, message: 'Review with this id does not exist!'});
 		            }
 		            else{
 			            if(review.user_id!=review_user_id){
-			            	res.send('You can only edit your own review!');
+			            	res.json({success: false, message: 'You can only edit your own review!'});
 			            }
 				        else{
 				        	review.comment = review_newComment;
@@ -68,7 +86,7 @@ let reviewController={
 				                    res.send(err);
 				                } 
 				                else {
-				                    res.send('Review has been updated successfully.');
+				                	res.json({success: true, message: 'Review has been updated successfully.'});
 				                }
 				            });
 
@@ -84,32 +102,33 @@ let reviewController={
 	//the function ensures that the request includes the required field (user_id)
 	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
 	deleteReview: function(req,res){
+		console.log(req.body.user_id+' | '+req.params.id);
 		var review_user_id = req.body.user_id;
         var review_id =  req.params.id;
         var missingFields = review_user_id==null || review_user_id=='';
 		if(missingFields){
-			res.send('The field: (user_id) is required!');
+			res.json({success: false, message: 'The field: (user_id) is required!'});
 		}
 		else{
 			Review.findOne({_id:review_id}, function(err, review){
 	            if(err){
-	                res.send(err);
+	            	res.json({success: false, message: err});
 	            }
 	            else{
 		            if(!review){
-		                res.send('Review with this id does not exist!');
+		            	res.json({success: false, message: 'Review with this id does not exist!'});
 		            }
 		            else{
 			            if(review.user_id!=review_user_id){
-			            	res.send('You can only delete your own review!');
+			            	res.json({success: false, message: 'You can only delete your own review!'});
 			            }
 			            else{
 			            	Review.findOneAndRemove({ _id:review_id }, function(err, reviewToBeDeleted) {
 		                        if(err){
-		                        	res.send(err);
+		                        	res.json({success: false, message: err});
 		                        }
 		                        else{
-		                        	res.send('Review has been deleted successfully.'); 
+		                        	res.json({success: true, message: 'Review has been deleted successfully.'});
 		                        }
 	                    	});
 			                

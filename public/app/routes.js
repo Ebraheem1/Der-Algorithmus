@@ -26,6 +26,18 @@ angular.module('appRoutes', ['ngRoute'])
 		controllerAs: 'review'
 	})
 
+	.when('/review/review/:id',{
+		templateUrl: 'app/views/pages/review/review.html',
+		controller: 'reviewCtrl',
+		controllerAs: 'review'
+	})
+
+	.when('/activity/activity/:id',{
+		templateUrl: 'app/views/pages/activity/activity.html',
+		controller: 'activityCtrl',
+		controllerAs: 'activity'
+	})
+
 	.otherwise({
 		redirectTo: '/'
 	})

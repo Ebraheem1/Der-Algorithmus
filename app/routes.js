@@ -42,7 +42,7 @@ router.post('/login', function(req, res) {
     var token = jwt.sign({user:client,type:1}, secret, {
         expiresIn: '24h' // in seconds
         });
-    return res.json({ success: true, token: 'JWT ' + token });
+    return res.json({ success: true, token: token });
     //return done(null, client);
  }
  else{
@@ -64,7 +64,7 @@ router.post('/login', function(req, res) {
         var token = jwt.sign({user:admin[0],type:0}, secret, {
         expiresIn: '24h' // in seconds
         });
-        return res.json({ success: true, token: 'JWT ' + token });
+        return res.json({ success: true, token: token });
         //return done(null, admin[0]);
       });
     }
@@ -80,7 +80,7 @@ router.post('/login', function(req, res) {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
         expiresIn: '24h' // in seconds
         });
-      return res.json({ success: true, token: 'JWT ' + token });
+      return res.json({ success: true, token: token });
       //return done(null, businessOwner);
     }
     else{
@@ -148,14 +148,17 @@ router.post('/offer', businessOwnerController.addOffer);//done--
 router.get('/showReview/:businessownerID', businessOwnerController.showReview);//done--
 router.post('/reply/:reviewID', businessOwnerController.reply);//done--
 
+router.get('/review/getReview/:id', reviewController.getReview);//done--
 router.post('/review/newReview', reviewController.newReview);//done--
-router.put('/review/editReview/:id', reviewController.editReview);//done--
-router.delete('/review/deleteReview/:id', reviewController.deleteReview);//done--
+router.post('/review/editReview/:id', reviewController.editReview);//done--
+router.post('/review/deleteReview/:id', reviewController.deleteReview);//done--
 
 router.get('/review/view/:businessownerID', reviewController.viewBusinessReviews );//done--
 router.post('/business/rate', clientController.rateBusiness );//done--
 
-router.put('/activity/editActivity/:id', activityController.editActivity);//done--
+router.get('/activity/getActivity/:id', activityController.getActivity);
+router.post('/activity/newActivity', activityController.newActivity);
+router.post('/activity/editActivity/:id', activityController.editActivity);//done--
 
 router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
 router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--

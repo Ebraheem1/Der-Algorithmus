@@ -14,9 +14,7 @@ angular.module('userControllers', ['userServices'])
 			if(data.data.success){
 				app.successMsg = data.data.message+' Redirecting to homepage...';
 				app.loading = false;
-				$timeout(function() {
-					$location.path('/');
-				}, 1500);
+				$location.path('/');
 			}
 			else{
 				app.errMsg = data.data.message;
