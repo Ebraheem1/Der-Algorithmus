@@ -85,10 +85,10 @@ app.use(function(req, res, next) {
 });
 //app.use(router);
 
-//For any other requests
-app.get('*',function(req,res){
-	res.sendFile(path.join(__dirname+'/public/app/views/index.html'));
-});
+//For any wrong get requests
+// app.get('*',function(req,res){
+// 	res.sendFile(path.join(__dirname+'/public/app/views/pages/home.html'));
+// });
 app.listen(8080,function(){
 
   console.log('The server is listening on port 8080.....');
