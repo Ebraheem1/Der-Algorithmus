@@ -12,15 +12,24 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 	app.isBusinessOwner = Authentication.isBusinessOwner();
 	app.isAdmin = Authentication.isAdmin();
 	app.isLoggedIn= Authentication.isLoggedIn();
+	app.username = AuthenticationToken.getUsername();
+
+	//This function does the login logic in the front-end
+	//It first calls the authServices to call the backend to check
+	//the entered credentials, then it sets some of the returned results
+	//in the window localStorage to be used later in the interface of the website
+	//The information saved in the localStorage are not very critical to be more
+	//secure they are only the token, the username and the type.
 	app.doLogin = function(loginData){
-		app.successMsg = false;
+		
 		app.errMsg = false;
 		
 		Authentication.loginUser(app.loginData).then(function(data){
 			AuthenticationToken.setToken(data.data.token);
+			AuthenticationToken.setUsername(data.data.username);
 			if(data.data.success){
 				AuthenticationToken.setType(data.data.type);
-				app.successMsg = data.data.message;
+				
 				if(data.data.type == 1){
 					$location.path('/');
 					location.reload();
@@ -32,13 +41,16 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 			}
 		});
 	};
-
+	//This function also calls the authServices to make the logout logic in
+	//both front-end and backend.
 	app.doLogout = function(){
 		Authentication.logoutUser();
 		$location.path('/');
 		location.reload();
 	};
-
+	//This function checks whether the user has entered a nonempty search keyword
+	//then it redirects the user to the page that contains the page results of
+	//his/her search keyword.
 	app.searchVenues = function(searchData)
 	{
 		
@@ -47,11 +59,15 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 			$location.path('/');
 		}
 		else{
-			BusinessOwner.search(app.searchData.keyword);
 			$location.path('/search/search/'+app.searchData.keyword);
 			app.searchData={};
 		}
 
+	};
+	//This function only redirects the user to the page that handles
+	//forget password issue.
+	app.forgetPassword = function(){
+		$location.path('/');
 	}
 
 

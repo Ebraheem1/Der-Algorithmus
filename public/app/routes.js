@@ -5,7 +5,6 @@ angular.module('appRoutes', ['ngRoute'])
 .config(function($routeProvider, $locationProvider){
 
 	$routeProvider
-
 	.when('/', {
 		templateUrl: 'app/views/pages/home.html',
 		controller:'mainCtrl',
@@ -17,12 +16,15 @@ angular.module('appRoutes', ['ngRoute'])
 		controller: 'regCtrl',
 		controllerAs: 'register'
 	})
-
+	//This returns the page used for searchResults
+	//and assigns the controller to it
 	.when('/search/search/:keyword',{
 		templateUrl:'app/views/pages/search.html',
 		controller: 'searchCtrl',
 		controllerAs: 'search'
 	})
+	//This returns the page used for login
+	//and assigns the controller to it
 	.when('/loginPage',{
 		templateUrl:'app/views/pages/clientorbusinesslogin.html',
 		controller: 'mainCtrl',

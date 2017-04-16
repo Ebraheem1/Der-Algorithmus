@@ -11,17 +11,9 @@
         <input type="password" placeholder="password" ng-required="true" ng-model="main.loginData.password">
         <button class="btn btn-info btn-block login" type="submit">Login</button>
     </form>
+    <button class="btn btn-info btn-block login" ng-click="main.forgetPassword()" >ForgetPassword</button>
 </div>
 </div>
-<!--
-<div class="jumbotron text-center" ng-show="main.loading">
-    <span class="glyphicon glyphicon-repeat spinner"></span>
-    <h2>Loading...</h2>
-</div>
-
-<div class="row show-hide-message" ng-show="main.successMsg">
-<div class="alert alert-success"> {{main.successMsg}} </div> 
-</div>-->
 
 <div class="row show-hide-message text-center bg-grey" ng-show="main.errMsg">
 <div class="alert alert-danger"> {{main.errMsg}} </div>

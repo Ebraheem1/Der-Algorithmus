@@ -46,7 +46,7 @@ router.post('/login', function(req, res) {
     var token = jwt.sign({user:client,type:1}, secret, {
         expiresIn: '24h' 
         });
-    return res.json({ success: true, type: 1 ,token: 'JWT ' + token });
+    return res.json({ success: true,username:username ,type: 1 ,token: 'JWT ' + token });
  }
  else{
  administratorController.comparePassword(password,function(err, isAdmin){
@@ -63,7 +63,7 @@ router.post('/login', function(req, res) {
         var token = jwt.sign({user:admin[0],type:0}, secret, {
         expiresIn: '24h' 
         });
-        return res.json({ success: true, type: 0 ,token: 'JWT ' + token });
+        return res.json({ success: true, username:username ,type: 0 ,token: 'JWT ' + token });
       });
     }
   else{
@@ -78,7 +78,7 @@ router.post('/login', function(req, res) {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
         expiresIn: '24h' 
         });
-      return res.json({ success: true, type:2 ,token: 'JWT ' + token });
+      return res.json({ success: true,username:username , type:2 ,token: 'JWT ' + token });
     }
     else{
       return res.json({ success: false, message: 'Authentication failed. Invalid username or password' });
