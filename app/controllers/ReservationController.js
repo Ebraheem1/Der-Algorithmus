@@ -3,7 +3,7 @@ let NonRepeatableActivity = require('../models/NonRepeatableActivity');
 let RepeatableActivity = require("../models/RepeatableActivity");
 let NonRepeatableActivityReservation = require("../models/NonRepeatableActivityReservation");
 let RepeatableActivityReservation = require("../models/RepeatableActivityReservation");
-
+let stripe = require("stripe")("sk_test_Hr41ZUg64PJe2duUepC7ruyr");
 let ReservationController={
 
     reserveSlot:function(req,res){
@@ -16,23 +16,18 @@ let ReservationController={
 
 
     repeatableReserveSlot:function(req,res){//TODO : User is in request params according to session ? / CLEAN
-      console.log(req);
+
       var client_id = req.body.client_id; //TODO : to be changed to user._id;
       var slot_id = req.body.slot_id;
-      var participants =  req.body.participants;
+      var package_id = req.body.package_id;
       var date = req.body.date;
       var repeatableActivity_id = req.params.activity_id;
-      var price = req.body.price; // TODO : check what you send in params/ currently the whole price
-console.log(client_id);
-console.log(slot_id);
-console.log(participants);
-console.log(date);
-console.log(repeatableActivity_id);
-console.log(price);
+      var price ;
+
+
       var missingFields = client_id==null ||client_id=='' ||
-       slot_id==null || slot_id==''|| participants==null || participants==''
-      repeatableActivity_id==null || repeatableActivity_id==''|| price ==null
-       || price ==''||date==null || date =='';
+       slot_id==null || slot_id==''||
+      repeatableActivity_id==null || repeatableActivity_id==''||date==null || date =='';
 
       if(missingFields){
         res.json({success:false,status:-1,message:"Please insert all missing fields"});
@@ -46,20 +41,26 @@ console.log(price);
             if(activity){
               res.json({success:false,status:2,message:"Sorry , This slot is already reserved ."});
             }else{
-              var reservation = new RepeatableActivityReservation();
-              reservation.repeatableActivity_id = repeatableActivity_id;
-              reservation.client_id=client_id;
-              reservation.slot_id=slot_id;
-              reservation.participants=participants;
-              reservation.date=date;
-              reservation.price=price;
-              reservation.save(function(err){
-                if(err)
-                res.json({success:false,status:0,message:err});
-                else {
-                  res.json({success:true,status:1,message:"Reserved Successfuly"});
+              RepeatableActivity.findOne({_id:repeatableActivity_id},function(err,activity){
+                if(activity)
+                {
+
+                  var packagee  = activity.pricePackages.id(package_id);
+                    var price = packagee.price;
+                    var participants = packagee.participants;
+
+                  var reservation = new RepeatableActivityReservation();
+                  reservation.repeatableActivity_id = repeatableActivity_id;
+                  reservation.client_id=client_id;
+                  reservation.slot_id=slot_id;
+                  reservation.participants=participants;
+                  reservation.date=date;
+                  reservation.price=price;
+                  return ReservationController.FreeDayCheck(req,res,activity,date,reservation);
+
                 }
               });
+
             }
           }
 
@@ -95,6 +96,7 @@ console.log(price);
                 if(Number(participants)+Number(activity.currentParticipants)>Number(activity.maxParticipants)){
                   res.json({success:false,status:1,message:"Sorry , there are no enough places for you in this activity."});
                 }else{
+
                     var reservation = new NonRepeatableActivityReservation();
                     reservation.nonRepeatableActivity_id = nonRepeatableActivity_id;
                     reservation.client_id = client_id;
@@ -108,7 +110,8 @@ console.log(price);
                           if(err)
                           res.json({success:false,status:0,message:err});
                           else{
-                              res.json({success:true,status:1,message:"Reserved Successfuly"});
+                            ReservationController.Pay(req,res);
+
                           }
                         } );
                       }
@@ -157,6 +160,46 @@ console.log(price);
             }
         });
       }
+    },
+    FreeDayCheck:function(req,res,activity,date,reservation){
+  var dat = new Date(date);
+  console.log(dat);
+  console.log(dat.getDay());
+var found = false ;
+  for(var i =0 ; i<7;i++){
+    if(activity.dayOffs[i]==dat.getDay()){
+      found= true ;
+    }
+  }
+  console.log(found);
+  if(!found){
+      reservation.save(function(err){
+        if(err)
+        res.json({success:false,status:0,message:err});
+        else {
+        ReservationController.Pay(req,res);
+        }
+      });}else{
+          res.json({success:false,status:0,message:"Sorry this day is a day Off. Please choose another"});
+      }
+    },
+    Pay:function(req,res){
+      var token = req.body.stripeToken;
+      var chargeAmount = req.body.chargeAmount;
+      var charge = stripe.charges.create ({
+					amount:chargeAmount,
+					currency:"gbp",
+					source: token
+				},function(err,charge){
+					if(err)
+					console.log(err);
+          else{
+
+          }
+
+
+				});
+
     }
 
 

@@ -8,11 +8,11 @@
     <div class="row">
         <form role="form" ng-submit="resCtrl.ReserveNR(participantsNo)">
             <div class="col-lg-6">
-               <br>
+                <br>
                 <div class="form-group">
                     <label style="color: white">Enter number of participants</label>
                     <div class="input-group">
-                        <input ng-model = "participantsNo"type="number" class="form-control" name="#partic" placeholder="Number of participants" required>
+                        <input ng-model="participantsNo" type="number" class="form-control" name="#partic" placeholder="Number of participants" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
@@ -27,6 +27,7 @@
 
 
 
+                     <h3 style="color: white" ng-if="participantsNo != null"> Price :{{Activity.pricePerPerson * participantsNo}} $</h3>
 
 
 

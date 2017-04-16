@@ -6,16 +6,17 @@
 <div class="container">
     <div class="row">
         <form role="form" ng-submit="resCtrl.ReserveR(res)">
+
             <div class="col-lg-6">
-               <br>
+                <br>
 
 
                 <br />
                 <div class="form-group">
                     <label style="color: white">Choose Appropriate Slot</label>
                     <div class="input-group">
-                          <select ng-model="res.selectedSlot" class = "form-control" placeholder = "Choose" >
-                        <option ng-repeat="x in Activity.slots" value="{{x}}">From {{x.startTime}} To {{x.endTime}}</option>
+                        <select ng-model="res.selectedSlot" class="form-control" placeholder="Choose">
+                        <option ng-repeat="x in Activity.slots" value="{{x._id}}">From {{x.startTime}} To {{x.endTime}}</option>
                           </select>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
@@ -24,22 +25,22 @@
                 <div class="form-group">
                     <label style="color: white">Choose Appropriate Package</label>
                     <div class="input-group">
-                      <select ng-model="res.selectedPackage" class = "form-control" placeholder = "Choose" >
-                    <option ng-repeat="x in Activity.pricePackages" value="{{x}}">Number Of Participants: {{x.participants}}  For: {{x.price}}</option>
+                        <select ng-model="res.selectedPackage" class="form-control" placeholder="Choose">
+                    <option ng-repeat="x in Activity.pricePackages" value="{{x._id}}">Number Of Participants: {{x.participants}}  For: {{x.price}}</option>
                       </select>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
 
-        <br />
-        <div class="form-group">
-            <label style="color: white">Choose Appropriate Date</label>
-            <div class="input-group">
-              <input  class = "form-control" type="date" id="" name="input" ng-model="res.selectedDate"
-     placeholder="yyyy-MM-dd" min={{today}} max="2030-12-31" required /> <!-- Get Date of today-->
-                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-            </div>
-        </div>
+                <br />
+                <div class="form-group">
+                    <label style="color: white">Choose Appropriate Date</label>
+                    <div class="input-group">
+                        <input class="form-control" type="date" id="" name="input" ng-model="res.selectedDate" placeholder="yyyy-MM-dd" min={{today}} max="2030-12-31" required />
+                        <!-- Get Date of today-->
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
                 <br>
 
 
@@ -47,13 +48,20 @@
                 <br> <br>
 
 
+                <h3 style="color: white" ng-if="res.selectedPackage == null">Price : 0 $</h3>
 
+                <div ng-repeat="x in Activity.pricePackages" style="">
+                  
+
+                    <h3 style="color: white" ng-model="res.price2" ng-if="res.selectedPackage ==x._id"> Price :{{x.price}} $</h3>
+                </div>
 
 
 
                 <input type="submit" name="submit" id="submit" value="Reserve" class="btn btn-info pull-right">
             </div>
         </form>
+
         <div class="col-lg-5 col-md-push-1" ng-show="Output">
             <div class="col-md-12">
                 <div class="alert alert-success" ng-show="Successful">

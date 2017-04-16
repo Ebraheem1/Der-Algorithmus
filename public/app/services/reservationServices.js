@@ -12,9 +12,13 @@ angular.module('reservationServices', [])
     price:price});
       return $http.post('reserve/1/'+activity_id,parameters);
     }
-    reservationFactory.ReserveR = function(activity_id,client_id,price,participants,slot_id,date){
-    var parameters = JSON.stringify ({activity_id :activity_id ,client_id:client_id,participants:participants,
-    price:price,slot_id:slot_id,date:date});
+
+
+    reservationFactory.ReserveR = function(activity_id,client_id,package_id,slot_id,date){
+
+
+    var parameters = JSON.stringify ({activity_id :activity_id ,client_id:client_id,
+      package_id:package_id,slot_id:slot_id,date:date});
       return $http.post('reserve/0/'+activity_id,parameters);
     }
     return reservationFactory;

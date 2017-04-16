@@ -28,7 +28,7 @@ angular.module('reservationController',['reservationServices'])
         $location.path('/');
       }, 1500);
         }
-      });
+      } );
     }
 
 
@@ -57,18 +57,29 @@ angular.module('reservationController',['reservationServices'])
 
 
   });
-
+  app.test=function(res){
+      console.log("2ml");
+  }
   app.ReserveR=function(res){
     var client_id = "58f24bf50a785f677525f8f1" // TODO : to be changed to authentication id
-    console.log(res);
-    var price = res.selectedPackage.price;
-    var participants = res.selectedPackage.participants;
+    console.log("wnby");
+
+    var package_id = res.selectedPackage;
     var activity_id = $routeParams.activity_id;
-    var slot_id = res.selectedSlot.id;
+    var slot_id = res.selectedSlot;
     var date = res.selectedDate;
-    Reservation.ReserveR(activity_id,client_id,price,participants,slot_id,date).then(function(data){
-      console.log(data);
-      return data ;
+    Reservation.ReserveR(activity_id,client_id,package_id,slot_id,date).then(function(data){
+      if(!data.data.success){
+        $scope.Output = true ;
+        $scope.Successful = false ;
+        $scope.errorMessage = data.data.message;
+      }else{
+        $scope.Output= true ;
+          $scope.Successful = true ;
+          $timeout(function(){
+      $location.path('/');
+    }, 1500);
+      }
     });
   }
 })
