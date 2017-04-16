@@ -1,0 +1,47 @@
+<br> <br>
+<h1 style="color: white; position: relative;left:75px;">{{Activity.type}} Reservation </h1>
+<h4 style="color: white;position: relative;left:75px;">Destination : {{Activity.destination}}  </h4>
+<h4 style="color: white; position: relative;left:75px;">Traveling Date : {{travelDate}}  </h4>
+<h4 style="color: white; position: relative;left:75px; ">Return Data : {{returnDate}} </h4>
+<br><br><br>
+<div class="container">
+    <div class="row">
+        <form role="form" ng-submit="resCtrl.ReserveNR(participantsNo)">
+            <div class="col-lg-6">
+               <br>
+                <div class="form-group">
+                    <label style="color: white">Enter number of participants</label>
+                    <div class="input-group">
+                        <input ng-model = "participantsNo"type="number" class="form-control" name="#partic" placeholder="Number of participants" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+
+
+
+
+                <br>
+
+                <br>
+                <br> <br>
+
+
+
+
+
+
+                <input type="submit" name="submit" id="submit" value="Reserve" class="btn btn-info pull-right">
+            </div>
+        </form>
+        <div class="col-lg-5 col-md-push-1" ng-show="Output">
+            <div class="col-md-12">
+                <div class="alert alert-success" ng-show="Successful">
+                    <strong><span class="glyphicon glyphicon-ok"></span> Success! Your Account created successfully</strong>
+                </div>
+                <div class="alert alert-danger" ng-hide="Successful">
+                    <span class="glyphicon glyphicon-remove"></span><strong>{{errorMessage}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

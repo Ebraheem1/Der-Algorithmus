@@ -10,7 +10,7 @@ var passport=require('passport');
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
-
+var reservationController = require("./controllers/ReservationController");
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
 var multer = require('multer');
@@ -160,9 +160,10 @@ router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
 router.get('/removeBusiness/:businessId',administratorController.removeBusiness);//done--
 
 router.post('/createAdmin',administratorController.createAdmin);//done--
+// Reservation controller
 
-
-
+router.post('/reserve/:type/:activity_id',reservationController.reserveSlot);
+router.get('/reserve/activity/:activity_type/:activity_id',reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
 
 //export router
 module.exports = router;

@@ -1,0 +1,68 @@
+<br> <br>
+<h1 style="color: white; position: relative;left:75px;">{{Activity.type}} Reservation </h1>
+<h4 style="color: white;position: relative;left:75px;">Description : {{Activity.description}}  </h4>
+
+<br><br><br>
+<div class="container">
+    <div class="row">
+        <form role="form" ng-submit="resCtrl.ReserveR(res)">
+            <div class="col-lg-6">
+               <br>
+
+
+                <br />
+                <div class="form-group">
+                    <label style="color: white">Choose Appropriate Slot</label>
+                    <div class="input-group">
+                          <select ng-model="res.selectedSlot" class = "form-control" placeholder = "Choose" >
+                        <option ng-repeat="x in Activity.slots" value="{{x}}">From {{x.startTime}} To {{x.endTime}}</option>
+                          </select>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <label style="color: white">Choose Appropriate Package</label>
+                    <div class="input-group">
+                      <select ng-model="res.selectedPackage" class = "form-control" placeholder = "Choose" >
+                    <option ng-repeat="x in Activity.pricePackages" value="{{x}}">Number Of Participants: {{x.participants}}  For: {{x.price}}</option>
+                      </select>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+
+        <br />
+        <div class="form-group">
+            <label style="color: white">Choose Appropriate Date</label>
+            <div class="input-group">
+              <input  class = "form-control" type="date" id="" name="input" ng-model="res.selectedDate"
+     placeholder="yyyy-MM-dd" min={{today}} max="2030-12-31" required /> <!-- Get Date of today-->
+                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+            </div>
+        </div>
+                <br>
+
+
+                <br>
+                <br> <br>
+
+
+
+
+
+
+                <input type="submit" name="submit" id="submit" value="Reserve" class="btn btn-info pull-right">
+            </div>
+        </form>
+        <div class="col-lg-5 col-md-push-1" ng-show="Output">
+            <div class="col-md-12">
+                <div class="alert alert-success" ng-show="Successful">
+                    <strong><span class="glyphicon glyphicon-ok"></span> Success! Your Account created successfully</strong>
+                </div>
+                <div class="alert alert-danger" ng-hide="Successful">
+                    <span class="glyphicon glyphicon-remove"></span><strong>{{errorMessage}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

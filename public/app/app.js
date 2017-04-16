@@ -1,4 +1,4 @@
-angular.module('userApp', ['appRoutes'])
+angular.module('userApp', ['appRoutes','reservationController','reservationServices'])
 
 .config(function($httpProvider) {
 

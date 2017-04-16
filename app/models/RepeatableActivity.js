@@ -9,14 +9,13 @@ var PricePackage= new Schema({
 });
 
 var Slot= new Schema({
-
+	
 	startTime: String,
 	endTime: String
 
 });
 
 var RepeatableActivitySchema = new Schema({
-
 	businessOwner_id: {type: mongoose.Schema.Types.ObjectId, ref: 'BusinessOwner', required: true},
 	type: {type: String, required:true}, //Room-Escaping, Paintball Fight, Battlefield, Playground
 	image: {type: String, required:true},
