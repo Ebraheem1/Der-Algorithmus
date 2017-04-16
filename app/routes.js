@@ -28,6 +28,14 @@ require('./config/passport')(passport);
 //BusinessOwner, if not found then the data entered doesn't exist in my system
 //an error message is displayed accordingly.
 router.post('/login', function(req, res) {
+  //These extra checks to maintain the code secure 
+  req.checkBody('username',' Username Required').notEmpty();
+  req.checkBody('password',' Password Required').notEmpty();
+  var errors=req.validationErrors();
+  if(errors)
+  {
+    return res.json({success:false, message: 'Username and Password are required'});
+  }
   var username = req.body.username;
   var password = req.body.password;
   clientController.getClient(username,password, function(err, client){
@@ -36,9 +44,9 @@ router.post('/login', function(req, res) {
   }
   if(client){
     var token = jwt.sign({user:client,type:1}, secret, {
-        expiresIn: '24h' // in seconds
+        expiresIn: '24h' 
         });
-    return res.json({ success: true, token: 'JWT ' + token });
+    return res.json({ success: true, type: 1 ,token: 'JWT ' + token });
  }
  else{
  administratorController.comparePassword(password,function(err, isAdmin){
@@ -49,15 +57,13 @@ router.post('/login', function(req, res) {
       administratorController.getAdmin(function(err,admin)
       {
         if(err)
-
-
         {
           return res.json({ success: false, message: 'Authentication failed.' });
         }
         var token = jwt.sign({user:admin[0],type:0}, secret, {
         expiresIn: '24h' 
         });
-        return res.json({ success: true, token: 'JWT ' + token });
+        return res.json({ success: true, type: 0 ,token: 'JWT ' + token });
       });
     }
   else{
@@ -72,7 +78,7 @@ router.post('/login', function(req, res) {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
         expiresIn: '24h' 
         });
-      return res.json({ success: true, token: 'JWT ' + token });
+      return res.json({ success: true, type:2 ,token: 'JWT ' + token });
     }
     else{
       return res.json({ success: false, message: 'Authentication failed. Invalid username or password' });

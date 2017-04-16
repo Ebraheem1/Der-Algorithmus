@@ -52,9 +52,9 @@
     </button>
     <a class="navbar-brand" href="/">Der Algorithmus</a>
 </div>
-<form class="navbar-form navbar-left" ng-controller="searchCtrl as search" ng-submit="search.searchVenues(searchData)">
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search" ng-model="search.searchData.keyword">
+<form class="navbar-form navbar-left" ng-submit="main.searchVenues(searchData)">
+<div class="input-group">
+    <input type="text" class="form-control" ng-model="main.searchData.keyword" placeholder="Search" >
         <div class="input-group-btn">
             <button class="btn btn-default" type="submit">
                 <i class="glyphicon glyphicon-search"></i>
@@ -66,14 +66,14 @@
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 <ul class="nav navbar-nav navbar-right">
 <li>
-    <a href="#">Register</a>
+    <a href="#" ng-show="!main.isLoggedIn">Register</a>
 </li>
 <li>
-    <a href="#">Login</a>
+    <a href="/loginPage" ng-show="!main.isLoggedIn" >Login</a>
 </li>
 
 
-<li class="dropdown" >
+<li class="dropdown" ng-show="main.isClient" >
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Client name <b class="caret"></b></a>
     <ul class="dropdown-menu">
         <li>
@@ -83,20 +83,20 @@
             <a href="#">Reservations</a> <!-- contains the reservations of the client-->
         </li>
         <li>
-            <a href="#">Logout</a>
+            <a ng-click="main.doLogout()">Logout</a>
         </li>
     </ul>
 </li>
 
 
-<li class="dropdown" ng-show = "">
+<li class="dropdown" ng-show = "main.isBusinessOwner">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" >BusinessOwner name<b class="caret"></b></a>
     <ul class="dropdown-menu">
         <li>
             <a href="#">Profile</a>
         </li>
         <li>
-            <a href="#">Logout</a>
+            <a ng-click="main.doLogout()">Logout</a>
         </li>
     </ul>
 </li>
@@ -109,11 +109,7 @@
 </nav>
 
 <div ng-view> </div>
-<div class="row show-hide-message" ng-controller = "searchCtrl as search" ng-show="search.errMsg">
-    <div class="alert alert-danger">
-        {{search.errMsg}}
-    </div>
-</div>
+
 
 
 <footer class="footer-distributed">

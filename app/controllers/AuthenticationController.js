@@ -66,10 +66,7 @@ let AuthenticationController = {
   generalLogOut: function(req,res)
   {
       req.logout();
-
-      req.flash('success_msg', 'You are logged out');
-      console.log(req.iat);
-      res.json('Logout Created Successfully');
+      res.json({success:true, message:'You are logged Out Correctly'});
 
   }
 

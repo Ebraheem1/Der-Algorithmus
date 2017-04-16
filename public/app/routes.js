@@ -7,20 +7,26 @@ angular.module('appRoutes', ['ngRoute'])
 	$routeProvider
 
 	.when('/', {
-		templateUrl: 'app/views/pages/home.html'
+		templateUrl: 'app/views/pages/home.html',
+		controller:'mainCtrl',
+		controllerAs:'main'
 	})
-
-
+	
 	.when('/register', {
 		templateUrl: 'app/views/pages/users/register.html',
 		controller: 'regCtrl',
 		controllerAs: 'register'
 	})
 
-	.when('/search/:keyword',{
-		templateUrl:'app/views/pages/searchResults.html',
+	.when('/search/search/:keyword',{
+		templateUrl:'app/views/pages/search.html',
 		controller: 'searchCtrl',
 		controllerAs: 'search'
+	})
+	.when('/loginPage',{
+		templateUrl:'app/views/pages/clientorbusinesslogin.html',
+		controller: 'mainCtrl',
+		controllerAs: 'main'
 	})
 
 	.when('/review/newReview', {

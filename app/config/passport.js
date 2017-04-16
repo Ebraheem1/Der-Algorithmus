@@ -85,15 +85,15 @@ passport.use('adminLogin', new JwtStrategy(opts,function(jwt_payload,done)
 passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     
-      User.findOne({user_id: jwt_payload.user.user_id},function(err,admin)
+      User.findById(jwt_payload.user.user_id,function(err,user)
       {
         if(err)
         {
           return done(err,false);
         }
-        if(admin)
+        if(user)
         {
-          return done(null,admin);
+          return done(null,user);
         }else{
 
           Administrator.findOne({id: jwt_payload.user.id},function(err,admin)

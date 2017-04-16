@@ -1,47 +1,34 @@
 //the main controller is responsible for logged-in users, so it will be in the index page, not the routes
-angular.module('mainController', ['authServices'])
+angular.module('mainController', ['authServices','businessOwnerServices'])
 
-.controller('mainCtrl', function(Authentication, $location, $rootScope){
+.controller('mainCtrl', function(Authentication, AuthenticationToken,$location, $rootScope,BusinessOwner){
 
 	var app = this;
-
+	
 	app.dataReady = false;
-	//to be done everytime the url changes
-	$rootScope.$on('$routeChangeStart', function(){
-		if(Authentication.isLoggedIn()){
-			Authentication.getUser().then(function(data){
-				app.username = data.data.username;
-				app.user_id = data.data.user_id;
-				console.log(data);
-				app.isLoggedIn = true;
-				app.dataReady = true;
-			});
-		}
-		else{
-			app.username = '';
-			app.isLoggedIn = false;
-			app.dataReady = true;
-		}
-
-	});
-
+	// AuthenticationToken.setToken();
+	// AuthenticationToken.setType();
+	app.isClient = Authentication.isClient();
+	app.isBusinessOwner = Authentication.isBusinessOwner();
+	app.isAdmin = Authentication.isAdmin();
+	app.isLoggedIn= Authentication.isLoggedIn();
 	app.doLogin = function(loginData){
 		app.successMsg = false;
 		app.errMsg = false;
-		app.loading = true;
 		
 		Authentication.loginUser(app.loginData).then(function(data){
-			
+			AuthenticationToken.setToken(data.data.token);
 			if(data.data.success){
-				app.successMsg = data.data.message+' Redirecting to the homepage...';
-				app.loading = false;
-				$location.path('/');
+				AuthenticationToken.setType(data.data.type);
+				app.successMsg = data.data.message;
+				if(data.data.type == 1){
+					$location.path('/');
+					location.reload();
+				}
 				app.loginData = {};
-				app.successMsg = false;
 			}
 			else{
 				app.errMsg = data.data.message;
-				app.loading = false;
 			}
 		});
 	};
@@ -50,6 +37,22 @@ angular.module('mainController', ['authServices'])
 		Authentication.logoutUser();
 		$location.path('/');
 		location.reload();
+	};
+
+	app.searchVenues = function(searchData)
+	{
+		
+		if(!app.searchData)
+		{
+			$location.path('/');
+		}
+		else{
+			BusinessOwner.search(app.searchData.keyword);
+			$location.path('/search/search/'+app.searchData.keyword);
+			app.searchData={};
+		}
+
 	}
+
 
 });

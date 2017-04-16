@@ -1,28 +1,33 @@
+<br>
+<br>
+<br>
 <div class="container">
 <div class="login-container">
 <div id="output"></div>
 <div class="avatar"></div>
 <div class="form-box">
     <form ng-submit="main.doLogin(loginData);">
-        <input name="user" type="text" placeholder="username" ng-model="main.loginData.username">
-        <input type="password" placeholder="password" ng-model="main.loginData.password">
+        <input name="user" type="text" placeholder="username" ng-required="true" ng-model="main.loginData.username">
+        <input type="password" placeholder="password" ng-required="true" ng-model="main.loginData.password">
         <button class="btn btn-info btn-block login" type="submit">Login</button>
     </form>
 </div>
 </div>
-
+<!--
 <div class="jumbotron text-center" ng-show="main.loading">
     <span class="glyphicon glyphicon-repeat spinner"></span>
     <h2>Loading...</h2>
 </div>
 
-<div class="row show-hide-message" ng-show="main.errMsg">
+<div class="row show-hide-message" ng-show="main.successMsg">
+<div class="alert alert-success"> {{main.successMsg}} </div> 
+</div>-->
+
+<div class="row show-hide-message text-center bg-grey" ng-show="main.errMsg">
 <div class="alert alert-danger"> {{main.errMsg}} </div>
 </div>
 
-<div class="row show-hide-message" ng-show="main.successMsg">
-<div class="alert alert-success"> {{main.successMsg}} </div>
-</div>
+
 </div>
 <style>
 .login-container{
@@ -156,44 +161,3 @@ animation-fill-mode: both;
 animation-name: fadeInUp;
 }
 </style>
-<script type="text/javascript">
-$(function(){
-var textfield = $("input[name=user]");
-$('button[type="submit"]').click(function(e) {
-    e.preventDefault();
-    //little validation just to check username
-    if (textfield.val() != "") {
-        //$("body").scrollTo("#output");
-        $("#output").addClass("alert alert-success animated fadeInUp").html("Welcome back " + "<span style='text-transform:uppercase'>" + textfield.val() + "</span>");
-        $("#output").removeClass(' alert-danger');
-        $("input").css({
-        "height":"0",
-        "padding":"0",
-        "margin":"0",
-        "opacity":"0"
-        });
-        //change button text 
-        $('button[type="submit"]').html("continue")
-        .removeClass("btn-info")
-        .addClass("btn-default").click(function(){
-        $("input").css({
-        "height":"auto",
-        "padding":"10px",
-        "opacity":"1"
-        }).val("");
-        });
-        
-        //show avatar
-        $(".avatar").css({
-            "background-image": "url('http://api.randomuser.me/0.3.2/portraits/women/35.jpg')"
-        });
-    } else {
-        //remove success mesage replaced with error message
-        $("#output").removeClass(' alert alert-success');
-        $("#output").addClass("alert alert-danger animated fadeInUp").html("sorry enter a username ");
-    }
-    //console.log(textfield.val());
-
-});
-});
-</script>
