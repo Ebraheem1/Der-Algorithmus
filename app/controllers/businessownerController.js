@@ -24,8 +24,8 @@ var storage = multer.diskStorage({
             var arr = filename.split(".");
             var filetype = arr[arr.length-1];
             //should be replaced when session is used
-            var businessownerID=req.body.BusinessOwnerId;
-            BusinessOwner.findById(businessownerID,function(err,businessowner){
+            //var businessownerID= req.body.BusinessOwnerId;
+            BusinessOwner.findById(req.params.id,function(err,businessowner){
                 if (err) 
                     return ; 
                 else {
@@ -34,9 +34,17 @@ var storage = multer.diskStorage({
                     }else{
                      var newfilename = businessowner.name + '-' + Date.now()+'.'+filetype;
                      callback(null, newfilename);
-                     businessowner.gallery.push(newfilename);
+                     if(filetype == 'mp4' || filetype == 'mov' || filetype == 'avi' || 
+                        filetype == 'flv' || filetype == 'wmv'){
+                     businessowner.videos.push(newfilename);
                      businessowner.save();
                      checkUpload = 1;
+                 }
+                 else {
+                     businessowner.images.push(newfilename);
+                     businessowner.save();
+                     checkUpload = 1;
+                 }
                     }
 
                     
@@ -60,15 +68,16 @@ let businessownerController={
 
             upload(req,res,function(err){
             if(err){
-                res.send(err); 
+              return res.json({ success: false, message: 'Error Uploading Files .' }); 
             }
             else if (checkUpload ==1)
             {
-                res.send('Your gallery updated successfully');
+               
                 checkUpload = 0;
+                return res.json({ success: true, message: 'Your gallery updated successfully' });
             }
             else{
-                res.send('No Data entered');
+            return res.json({ success: false, message: 'No Data Entered.' });
             }
         });
          }, 

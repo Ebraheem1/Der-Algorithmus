@@ -140,7 +140,7 @@ router.get('/logout', authController.generalLogOut);
 
 router.get('/search/:keyword',userController.search);//done--
 
-router.post('/gallery', businessOwnerController.addMedia);//done--
+router.post('/gallery/:id', businessOwnerController.addMedia);//done--
 router.post('/offer', businessOwnerController.addOffer);//done--
 router.get('/showReview/:businessownerID', businessOwnerController.showReview);//done--
 router.post('/reply/:reviewID', businessOwnerController.reply);//done--

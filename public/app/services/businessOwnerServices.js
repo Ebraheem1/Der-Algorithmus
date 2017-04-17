@@ -11,5 +11,9 @@ angular.module('businessOwnerServices', [])
 		return $http.get('/search/'+$routeParams.keyword);
 	}
 
+	businessOwnerFactory.uploadMedia = function(uploadedData){
+		return $http.post('/gallery/'+$routeParams.keyword);
+	}
+
 	return businessOwnerFactory;
 })

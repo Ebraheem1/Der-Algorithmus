@@ -31,6 +31,12 @@ angular.module('appRoutes', ['ngRoute'])
 		controllerAs: 'main'
 	})
 
+	.when('/gallery/gallery/:keyword',{
+		templateUrl:'app/views/pages/gallery.html',
+		controller: 'businessCtrl',
+		controllerAs : 'business'
+	})
+
 	.when('/review/newReview', {
 		templateUrl: 'app/views/pages/review/newReview.html',
 		controller: 'reviewCtrl',
