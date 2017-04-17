@@ -65,6 +65,10 @@ let AuthenticationController = {
   //Logout Function to end the session
   generalLogOut: function(req,res)
   {
+      if(!req.user)
+      {
+        res.json({success:false, message:'You are not authroized to logout'});
+      }
       req.logout();
       res.json({success:true, message:'You are logged Out Correctly'});
 

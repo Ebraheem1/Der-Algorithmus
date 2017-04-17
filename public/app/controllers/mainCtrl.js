@@ -23,7 +23,6 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 	app.doLogin = function(loginData){
 		
 		app.errMsg = false;
-		
 		Authentication.loginUser(app.loginData).then(function(data){
 			AuthenticationToken.setToken(data.data.token);
 			AuthenticationToken.setUsername(data.data.username);
@@ -44,9 +43,14 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 	//This function also calls the authServices to make the logout logic in
 	//both front-end and backend.
 	app.doLogout = function(){
-		Authentication.logoutUser();
-		$location.path('/');
-		location.reload();
+		Authentication.logoutUser().then(function(data){
+			if(data.data.success)
+			{
+				$location.path('/');
+				location.reload();
+			}
+		});
+		
 	};
 	//This function checks whether the user has entered a nonempty search keyword
 	//then it redirects the user to the page that contains the page results of
