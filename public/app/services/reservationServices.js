@@ -21,5 +21,16 @@ angular.module('reservationServices', [])
       package_id:package_id,slot_id:slot_id,date:date});
       return $http.post('reserve/0/'+activity_id,parameters);
     }
+
+    reservationFactory.getAllReservation = function(client_id){
+
+      return $http.get('api/getReservations/'+client_id);
+    }
+    reservationFactory.cancelReservationR = function(reservation_id){
+      return $http.get('api/cancelReservation/0/'+reservation_id);
+    }
+    reservationFactory.cancelReservationNR = function(reservation_id){
+      return $http.get('api/cancelReservation/1/'+reservation_id);
+    }
     return reservationFactory;
 })

@@ -21,6 +21,12 @@
                 controller: "resCtrlR",
                 controllerAs:"resCtrl"
              })
+             .when('/profile/reservations/',{
+               templateUrl:'app/views/pages/yourReservations.html',
+               controller:"yourReservations",
+               controllerAs:"yrCtrl"
+
+             })
              .otherwise({
                  redirectTo: '/'
              });

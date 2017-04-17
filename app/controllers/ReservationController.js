@@ -166,7 +166,7 @@ var found = false ;
       }
     },
     Pay:function(req,resp){
-      console.log(req.body.client_id);
+
       if(req.body.type==0){
           var token = req.body.stripeToken;
 				      var chargeAmount = req.body.chargeAmount;
@@ -176,7 +176,7 @@ var found = false ;
 					source: token
 				},function(err,charge){
 					if(err)
-					console.log(err);
+            resp.sned(err);
           else{
             var res = new   RepeatableActivityReservation();
             res.repeatableActivity_id = req.body.repeatableActivity_id;
@@ -186,22 +186,18 @@ var found = false ;
             res.participants= req.body.participants;
             res.price=req.body.price;
 
+            res.charge_key=charge.id;
             res.save(function(err){
               if(err){
-                console.log(err);
+
               }else{
-                console.log("ok2");
+
               resp.redirect("/login");
 
               }
             });
-}});
+}});      }else{
 
-
-
-
-      }else{
-        console.log(req.body);
 				var token = req.body.stripeToken;
 				var chargeAmount = req.body.chargeAmount;
 				var charge = stripe.charges.create ({
@@ -210,13 +206,14 @@ var found = false ;
 					source: token
 				},function(err,charge){
 					if(err)
-					console.log(err);
+          res.send(err);
               else{
                 var   res = new NonRepeatableActivityReservation();
                 res.nonRepeatableActivity_id = req.body.nonRepeatableActivity_id;
                 res.client_id = req.body.client_id;
                 res.participants=req.body.participants;
                 res.price = req.body.price;
+                  res.charge_key=charge.id;
                   res.save(function(err){
                     if(err)
                     resp.json({success:false,status:0,message:err});
@@ -238,7 +235,126 @@ var found = false ;
 				});
 
       }
-    }
+    },
+
+
+
+      //Function for getting all reservations of a certain client
+      getAllReservations:function(req,res){
+
+
+        var client_id = req.params.client_id;
+
+
+        NonRepeatableActivityReservation.find({client_id:client_id}).populate('nonRepeatableActivity_id').exec(function(err,reservations1){
+              if(err){
+              res.json({succes:false,message:err});
+              }else{
+               RepeatableActivityReservation.find({client_id:client_id}).populate('repeatableActivity_id').exec(function(err,reservations2){
+                 if(err){
+                   res.json({succes:false,message:err});
+                 }else {
+                     res.json({success:true ,nonRepeatable:reservations1,repeatable:reservations2});
+                 }
+               })
+          }
+        });
+      },
+       //Function for canceling reservation .
+       cancelReservation:function(req,res){
+
+         var reservation_id = req.params.reservation_id;
+         var type = req.params.type;
+         if(type==0){
+            RepeatableActivityReservation.findOne({_id:reservation_id},function(err,reservation){
+              if(err)
+                res.json({succes:false,message:err});
+                else{
+                  RepeatableActivity.findOne({_id:reservation.repeatableActivity_id},function(err,activity){
+                    if(err)
+                       res.json({succes:false,message:err});
+                       else{
+                          var window = activity.cancellationWindow;
+                          var now = new Date();
+                          var date = reservation.date;
+                          var diff = (((Math.abs(date-now)/1000)/60)/60)/24;
+                          if(diff<=window){
+                             res.json({succes:false,message:"Sorry,The deadline for cancelling this reservation has passed!"});
+                           }else{
+
+                             stripe.refunds.create( {
+                                       charge : reservation.charge_key
+                                     },function(err,refund){
+
+                                       if(err)
+                                       res.json({succes:false,message:err});
+                                       else{
+
+                                         RepeatableActivityReservation.remove({_id:reservation._id},function(err){
+                                           if(err)
+                                                res.json({succes:false,message:err});
+                                           else{
+
+                                                res.json({success:true ,message:"Reservation Deleted Successfuly"});
+                                           }
+                                         });
+                                       }
+                                     });
+
+                           }
+                       }
+                  });
+                }
+            });
+
+
+
+         }else{
+                    NonRepeatableActivityReservation.findOne({_id:reservation_id},function(err,reservation){
+                      if(err)
+                      res.json({succes:false,message:err});
+                      else{
+                        NonRepeatableActivity.findOne({_id:reservation.nonRepeatableActivity_id},function(err,activity){
+                          if(err)
+                            res.json({succes:false,message:err});
+                            else{
+                              console.log(activity);
+                              var window = activity.cancellationWindow;
+                              var now = new Date();
+                              var date = activity.travelingDate;
+                                var diff = (((Math.abs(date-now)/1000)/60)/60)/24;
+                                console.log(diff);
+                                if(diff<=window){
+                                   res.json({succes:false,message:"Sorry,The deadline for cancelling this reservation has passed!"});
+                                 }else{
+
+                                   stripe.refunds.create( {
+                                             charge : reservation.charge_key
+                                           },function(err,refund){
+
+                                             if(err)
+                                             res.json({succes:false,message:err});
+                                             else{
+
+                                               NonRepeatableActivityReservation.remove({_id:reservation._id},function(err){
+                                                 if(err)
+                                                      res.json({succes:false,message:err});
+                                                 else{
+
+                                                      res.json({success:true ,message:"Reservation Deleted Successfuly"});
+                                                 }
+                                               });
+                                             }
+                                           });
+
+                                 }
+                            }
+
+                        });
+                      }
+                    });
+         }
+       }
 
 
 };

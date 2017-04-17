@@ -164,6 +164,8 @@ router.post('/createAdmin',administratorController.createAdmin);//done--
 router.post('/api/pay',reservationController.Pay);
 router.post('/reserve/:type/:activity_id',reservationController.reserveSlot);
 router.get('/reserve/activity/:activity_type/:activity_id',reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
+router.get('/api/getReservations/:client_id',reservationController.getAllReservations);
+router.get('/api/cancelReservation/:type/:reservation_id',reservationController.cancelReservation);
 
 //export router
 module.exports = router;

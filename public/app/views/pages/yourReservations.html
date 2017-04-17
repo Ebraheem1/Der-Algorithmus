@@ -1,0 +1,74 @@
+<br> <br>
+<h1 style="color: white; position: fixed;left:40%;">Your Reservations</h1>
+<br />
+<br />
+<br />
+<div class="container" ng-show="success">
+  <div class="row">
+
+  	<div class=".col-md-6 ">
+
+<br />
+<hr />
+  <ul class="list-group">
+<!-- for each -->
+<div ng-repeat= "x in NRReservations" >
+
+
+  		<li class="list-group-item">{{x.nonRepeatableActivity_id.type}} to {{x.nonRepeatableActivity_id.destination}}  on {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}}
+        for {{x.price/100}}$ <br />
+  			<div class="pull-right">
+  				<button class = "btn btn-primary" style = " position: relative;
+    top: -28px; " ng-click="Delete(1,x._id)">Cancel Reservation</button>
+  </div>
+
+
+  		</li>
+          <br />
+              <br />
+              <hr />
+</div>
+<div ng-repeat= "y in RReservations">
+<div ng-repeat = "z in y.repeatableActivity_id.slots">
+
+<div ng-if="z._id ==y.slot_id">
+
+
+  <li class="list-group-item">{{y.repeatableActivity_id.type}} on {{y.date| limitTo : 10 : 0}}
+  from {{z.startTime}} to {{z.endTime}} for {{y.price/100}}$ <br />
+  </div>
+  </div>
+    <div class="pull-right">
+
+      <button class = "btn btn-primary" style = " position: relative;
+top: -28px; " ng-click="Delete(0,y._id)">Cancel Reservation</button>
+
+          </div>
+
+
+
+  		</li>
+          <br />
+              <br />
+              <hr />
+</div>
+
+
+  </ul>
+
+  <hr>
+
+
+  	</div>
+  </div>
+
+  </div>
+  <div class="col-lg-10 col-md-push-1" ng-show="!success">
+      <div class="col-md-12">
+
+          <div class="alert alert-danger">
+              <span class="glyphicon glyphicon-remove"></span><strong> Sorry An Error Has Occured . Please try again later</strong>
+          </div>
+      </div>
+  </div>
+</div>
