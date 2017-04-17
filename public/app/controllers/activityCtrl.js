@@ -1,7 +1,7 @@
-angular.module('activityController', ['authServices', 'activityServices'])
+angular.module('activityController', ['authServices', 'activityServices', 'fileModelDirective', 'fileUploadService'])
 
 
-.controller('activityCtrl', function(Activity, Authentication, $scope, $routeParams){
+.controller('activityCtrl', function(Activity, Authentication, $scope, $routeParams, $timeout, fileUpload){
 
 	var app = this;
 	app.activityData = {};
@@ -153,5 +153,41 @@ angular.module('activityController', ['authServices', 'activityServices'])
 			}
 		});
 	};
+
+	$scope.file = {};
+    $scope.message = false;
+    $scope.alert = '';
+
+    $scope.Submit = function(activity_id) {
+        $scope.uploading = true;
+        fileUpload.upload($scope.file).then(function(data) {
+            if (data.data.success) {
+                $scope.file = {};
+                var imageData = {};
+                imageData.activity_id = activity_id
+                imageData.image = 'gallery/'+data.data.name;
+                Activity.changeActivityImage(imageData).then(function(data){
+	                if(data.data.success){
+	                	$scope.alert = 'alert alert-success';
+						$scope.message = data.data.message;
+						$scope.uploading = false;
+						app.activityData.image = imageData.image;
+						console.log(imageData.image);
+					}
+					else{
+						$scope.uploading = false;
+                		$scope.alert = 'alert alert-danger';
+                		$scope.message = data.data.message;
+                		$scope.file = {};
+					}
+                });
+            } else {
+                $scope.uploading = false;
+                $scope.alert = 'alert alert-danger';
+                $scope.message = data.data.message;
+                $scope.file = {};
+            }
+        });
+    };
 
 });

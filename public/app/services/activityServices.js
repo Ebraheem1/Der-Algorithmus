@@ -9,6 +9,10 @@ angular.module('activityServices',[])
 		return $http.post('/activity/editActivity/'+id, activityData);
 	}
 
+	activityFactory.changeActivityImage = function(activityData){
+		return $http.post('/activity/changeActivityImage', activityData);
+	}
+
 	activityFactory.getActivity = function(id){
 		console.log('activity id: '+id);
 		return $http.get('/activity/getActivity/'+id);

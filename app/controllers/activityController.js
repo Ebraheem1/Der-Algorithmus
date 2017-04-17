@@ -233,13 +233,13 @@ let activityController={
 	editActivityImage: function(req,res){
 
 		//common attributes between RepeatableActivity and NonRepeatableActivity
-		var activity_id =  req.params.id;
+		var activity_id =  req.body.activity_id;
 		var businessOwner_id = '58f13a6ef286e74e0ecdadcb';
 		var image = req.body.image;
 
-		var missingFields = businessOwner_id==null || businessOwner_id=='' || image==null || image=='';
+		var missingFields = businessOwner_id==null || businessOwner_id=='' || image==null || image=='' || activity_id=='' || activity_id==null;
 		if(missingFields){
-			res.json({success:false, message: 'The fields: (businessOwner_id, image) are required!'});
+			res.json({success:false, message: 'The fields: (activity_id, businessOwner_id, image) are required!'});
 			return;
 		}
 
@@ -315,7 +315,6 @@ let activityController={
 		var activity_id =  req.params.id;
 		console.log(activity_id);
 		var businessOwner_id = '58f13a6ef286e74e0ecdadcb';
-		var image = req.body.image;
 		var description = req.body.description;
 		var cancellationWindow = req.body.cancellationWindow;
 
@@ -366,7 +365,6 @@ let activityController={
 											}
 										}
 									});
-									repeatableActivity.image = (image==null||image=='')? repeatableActivity.image : image;
 									repeatableActivity.description = (description==null||description=='')? repeatableActivity.description : description;
 									repeatableActivity.cancellationWindow = (cancellationWindow==null||cancellationWindow=='')? repeatableActivity.cancellationWindow : cancellationWindow;
 									repeatableActivity.theme = (theme==null||theme=='')? repeatableActivity.theme : theme;
@@ -394,7 +392,6 @@ let activityController={
 							res.json({success:false, message: 'This activity is currently reserved by '+nonRepeatableActivity.currentParticipants+' person(s), You can only edit an ectivity when it is not reserved!'});
 							return;
 						}
-						nonRepeatableActivity.image = (image==null||image=='')? nonRepeatableActivity.image : image;
 						nonRepeatableActivity.description = (description==null||description=='')? nonRepeatableActivity.description : description;
 						nonRepeatableActivity.cancellationWindow = (cancellationWindow==null||cancellationWindow=='')? nonRepeatableActivity.cancellationWindow : cancellationWindow;
 						nonRepeatableActivity.travelingDate = (travelingDate==null||travelingDate=='')? nonRepeatableActivity.travelingDate : travelingDate;

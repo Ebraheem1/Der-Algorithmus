@@ -21,6 +21,39 @@ var multer = require('multer')
 
 require('./config/passport')(passport);
 
+//multer stuff, to upload a file
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/gallery/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now()+'_'+file.originalname);
+  }
+});
+
+var upload = multer({ 
+  storage: storage
+}).single('myfile');
+
+//uploading files route
+router.post('/upload', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      console.log(err);
+      res.json({success:false, message: 'File Upload Error!'});
+    }
+    else{
+      if(!req.file){
+        res.json({success:false, message: 'No file was selected!'});
+      }
+      else{
+        res.json({success:true, message: 'File was uploaded successfully.', path: req.file.path, name: req.file.filename});
+      }
+
+    }
+
+  });
+});
 
 //here we have username and password as an input parameters
 //we search if a client exists with in the Client table so we authenticate the client
@@ -163,6 +196,7 @@ router.post('/activity/addRepeatableActivityPricePackage/:id', activityControlle
 router.post('/activity/deleteRepeatableActivitySlot', activityController.deleteRepeatableActivitySlot);
 router.post('/activity/deleteRepeatableActivityPricePackage', activityController.deleteRepeatableActivityPricePackage);
 router.post('/activity/editActivity/:id', activityController.editActivity);//done--
+router.post('/activity/changeActivityImage', activityController.editActivityImage);
 
 router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
 router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--
