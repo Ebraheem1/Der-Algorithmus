@@ -6,6 +6,7 @@ angular.module('reservationController',['reservationServices'])
 
     Reservation.getActivity($routeParams.activity_id,1).then(function(data){
       $scope.Activity = data.data.activity;
+        console.log($scope.Activity.cancellationWindow);
       $scope.seatsLeft = data.data.activity.maxParticipants-data.data.activity.currentParticipants;
       $scope.travelDate = data.data.activity.travelingDate.substr(0,10);
       $scope.returnDate = data.data.activity.returnDate.substr(0,10);
@@ -24,9 +25,9 @@ angular.module('reservationController',['reservationServices'])
         }else{
           $scope.Output= true ;
             $scope.Successful = true ;
-            $timeout(function(){
-        $location.path('/');
-      }, 1500);
+          $scope.reservation = data.data.reservation;
+          $scope.price = data.data.reservation.price*100;
+          console.log($scope.price);
         }
       } );
     }
@@ -37,6 +38,8 @@ angular.module('reservationController',['reservationServices'])
 
 .controller('resCtrlR',function($http,$scope,$location,$timeout,Reservation,$routeParams){ //TODO : Logic of MAX day ;
   var app = this ;
+
+
   Reservation.getActivity($routeParams.activity_id,0).then(function(data){
     var d  = new Date();
     var today = new Date();
@@ -57,12 +60,9 @@ angular.module('reservationController',['reservationServices'])
 
 
   });
-  app.test=function(res){
-      console.log("2ml");
-  }
   app.ReserveR=function(res){
     var client_id = "58f24bf50a785f677525f8f1" // TODO : to be changed to authentication id
-    console.log("wnby");
+
 
     var package_id = res.selectedPackage;
     var activity_id = $routeParams.activity_id;
@@ -73,12 +73,17 @@ angular.module('reservationController',['reservationServices'])
         $scope.Output = true ;
         $scope.Successful = false ;
         $scope.errorMessage = data.data.message;
+
       }else{
         $scope.Output= true ;
           $scope.Successful = true ;
-          $timeout(function(){
-      $location.path('/');
-    }, 1500);
+          console.log(data.data.reservation);
+          $scope.reservation = data.data.reservation;
+          $scope.price =data.data.reservation.price*100;
+          console.log($scope.price);
+    //       $timeout(function(){
+    //   $location.path('/');
+    // }, 1500);
       }
     });
   }

@@ -76,7 +76,7 @@ router.post('/login', function(req, res) {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
         expiresIn: '24h' // in seconds
         });
-      return res.json({ success: true, token: 'JWT ' + token });
+      return res.json({ success: true, token: 'JWT' + token });
       //return done(null, businessOwner);
     }
     else{
@@ -161,7 +161,7 @@ router.get('/removeBusiness/:businessId',administratorController.removeBusiness)
 
 router.post('/createAdmin',administratorController.createAdmin);//done--
 // Reservation controller
-
+router.post('/api/pay',reservationController.Pay);
 router.post('/reserve/:type/:activity_id',reservationController.reserveSlot);
 router.get('/reserve/activity/:activity_type/:activity_id',reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
 

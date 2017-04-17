@@ -102,20 +102,8 @@ let ReservationController={
                     reservation.client_id = client_id;
                     reservation.participants= participants;
                     reservation.price = price ;
-                    reservation.save(function(err){
-                      if(err)
-                      res.json({success:false,status:0,message:err});
-                      else {
-                        NonRepeatableActivity.update({_id:nonRepeatableActivity_id},{$inc:{currentParticipants:participants}},function(err){
-                          if(err)
-                          res.json({success:false,status:0,message:err});
-                          else{
-                            ReservationController.Pay(req,res);
+                      res.json({success:true,status:1,message:"You Reserved Succesfuly",reservation:reservation});
 
-                          }
-                        } );
-                      }
-                    });
                 }
 
               }else{
@@ -163,30 +151,26 @@ let ReservationController={
     },
     FreeDayCheck:function(req,res,activity,date,reservation){
   var dat = new Date(date);
-  console.log(dat);
-  console.log(dat.getDay());
+
 var found = false ;
   for(var i =0 ; i<7;i++){
     if(activity.dayOffs[i]==dat.getDay()){
       found= true ;
     }
   }
-  console.log(found);
+
   if(!found){
-      reservation.save(function(err){
-        if(err)
-        res.json({success:false,status:0,message:err});
-        else {
-        ReservationController.Pay(req,res);
-        }
-      });}else{
+    res.json({success:true,status:1,message:"You reserved successfuly",reservation:reservation});
+    }else{
           res.json({success:false,status:0,message:"Sorry this day is a day Off. Please choose another"});
       }
     },
-    Pay:function(req,res){
-      var token = req.body.stripeToken;
-      var chargeAmount = req.body.chargeAmount;
-      var charge = stripe.charges.create ({
+    Pay:function(req,resp){
+      console.log(req.body.client_id);
+      if(req.body.type==0){
+          var token = req.body.stripeToken;
+				      var chargeAmount = req.body.chargeAmount;
+				var charge = stripe.charges.create ({
 					amount:chargeAmount,
 					currency:"gbp",
 					source: token
@@ -194,12 +178,66 @@ var found = false ;
 					if(err)
 					console.log(err);
           else{
+            var res = new   RepeatableActivityReservation();
+            res.repeatableActivity_id = req.body.repeatableActivity_id;
+            res.client_id = req.body.client_id;
+            res.slot_id = req.body.slot_id;
+            res.date=req.body.date;
+            res.participants= req.body.participants;
+            res.price=req.body.price;
 
-          }
+            res.save(function(err){
+              if(err){
+                console.log(err);
+              }else{
+                console.log("ok2");
+              resp.redirect("/login");
 
+              }
+            });
+}});
+
+
+
+
+      }else{
+        console.log(req.body);
+				var token = req.body.stripeToken;
+				var chargeAmount = req.body.chargeAmount;
+				var charge = stripe.charges.create ({
+					amount:chargeAmount,
+					currency:"gbp",
+					source: token
+				},function(err,charge){
+					if(err)
+					console.log(err);
+              else{
+                var   res = new NonRepeatableActivityReservation();
+                res.nonRepeatableActivity_id = req.body.nonRepeatableActivity_id;
+                res.client_id = req.body.client_id;
+                res.participants=req.body.participants;
+                res.price = req.body.price;
+                  res.save(function(err){
+                    if(err)
+                    resp.json({success:false,status:0,message:err});
+                    else {
+                      NonRepeatableActivity.update({_id:req.body.nonRepeatableActivity_id},{$inc:{currentParticipants:req.body.participants}},function(err){
+                        if(err)
+                        resp.json({success:false,status:0,message:err});
+                        else{
+
+                            resp.redirect('/');
+
+                        }
+                      } );
+                    }
+                  });
+
+              }
 
 				});
 
+      }
     }
 
 
