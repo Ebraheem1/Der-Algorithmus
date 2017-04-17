@@ -8,7 +8,6 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 
 	Authentication.getUser().then(function(data){
 		app.revData.user_id = data.data.user_id;
-		console.log(data.data.user_id);
 	});
 
 	if($routeParams.id){
@@ -30,10 +29,7 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 		app.errMsg = false;
 		app.loading = true;
 
-		console.log(app.revData);
-
 		Review.newReview(app.revData).then(function(data){
-			
 			if(data.data.success){
 				app.successMsg = data.data.message;
 				app.loading = false;
@@ -55,10 +51,6 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 		reviewData.comment = $scope.comment;
 		reviewData.user_id = app.revData.user_id;
 
-
-		console.log('revData: '+app.revData);
-		console.log('reviewData: '+reviewData);
-
 		Review.editReview($routeParams.id, reviewData).then(function(data){
 			if(data.data.success){
 				app.successMsg = data.data.message;
@@ -76,12 +68,8 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 		app.successMsg = false;
 		app.errMsg = false;
 		app.loading = true;
-		
-		console.log(app.revData);
 
 		Review.deleteReview($routeParams.id, app.revData).then(function(data){
-			
-			console.log( app.revData);
 			if(data.data.success){
 				app.successMsg = data.data.message;
 				app.loading = false;

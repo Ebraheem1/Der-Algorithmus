@@ -9,7 +9,6 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 
 	Authentication.getUser().then(function(data){
 		app.activityData.user_id = data.data.user_id;
-		console.log(data.data.user_id);
 	});
 
 
@@ -37,7 +36,6 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			//RepeatableActivity attributes
 
 			app.activityData.theme = data.data.activity.theme;
-			console.log(app.activityData.theme);
 			app.activityData.pricePackages = data.data.activity.pricePackages;
 			app.activityData.slots = data.data.activity.slots;
 			app.activityData.dayOffs = data.data.activity.dayOffs;
@@ -184,7 +182,6 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 						$scope.message = data.data.message;
 						$scope.uploading = false;
 						app.activityData.image = imageData.image;
-						console.log(imageData.image);
 					}
 					else{
 						$scope.uploading = false;

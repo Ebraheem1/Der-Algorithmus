@@ -46,7 +46,8 @@ let activityController={
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='' || participants==null || participants=='' || price==null || price=='';
 		if(missingFields){
-			res.json({success:false, message: 'The fields: (businessOwner_id, participants, price) are required!'});
+			//The fields: (businessOwner_id, participants, price) are required!
+			res.json({success:false, message: 'You should include participants and price in the price package!'});
 			return;
 		}
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
@@ -93,7 +94,8 @@ let activityController={
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='' || package_id==null || package_id=='' || activity_id==null || activity_id=='';
 		if(missingFields){
-			res.json({success:false, message: 'The fields: (businessOwner_id, activity_id, package_id) are required!'});
+			//The fields: (businessOwner_id, activity_id, package_id) are required!
+			res.json({success:false, message: 'Contact Development Team!'});
 			return;
 		}
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
@@ -134,15 +136,15 @@ let activityController={
 	},
 
 	addRepeatableActivitySlot: function(req,res){
-		console.log('yelo maaaaaaaateeeee');
 		var activity_id =  req.params.id;
 		var businessOwner_id = '58f13a6ef286e74e0ecdadcb';
 		var startTime = req.body.startTime;
 		var endTime = req.body.endTime;
-		console.log(startTime+" kaka"+endTime);
+
 		var missingFields = businessOwner_id==null || businessOwner_id=='' || startTime==null || startTime=='' || endTime==null || endTime=='';
 		if(missingFields){
-			res.json({success:false, message: 'The fields: (businessOwner_id, startTime, endTime) are required!'});
+			//The fields: (businessOwner_id, startTime, endTime) are required!
+			res.json({success:false, message: 'You should include start time and end time in the time slot!'});
 			return;
 		}
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
@@ -190,7 +192,8 @@ let activityController={
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='' || activity_id==null || activity_id=='' || slot_id==null || slot_id=='';
 		if(missingFields){
-			res.json({success:false, message: 'The fields: (businessOwner_id, activity_id, slot_id) are required!'});
+			//The fields: (businessOwner_id, activity_id, slot_id) are required!
+			res.json({success:false, message: 'Contact Development Team!'});
 			return;
 		}
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
@@ -239,7 +242,8 @@ let activityController={
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='' || image==null || image=='' || activity_id=='' || activity_id==null;
 		if(missingFields){
-			res.json({success:false, message: 'The fields: (activity_id, businessOwner_id, image) are required!'});
+			//The fields: (activity_id, businessOwner_id, image) are required!
+			res.json({success:false, message: 'Contact Development Team'});
 			return;
 		}
 
@@ -313,7 +317,6 @@ let activityController={
 
 		//common attributes between RepeatableActivity and NonRepeatableActivity
 		var activity_id =  req.params.id;
-		console.log(activity_id);
 		var businessOwner_id = '58f13a6ef286e74e0ecdadcb';
 		var description = req.body.description;
 		var cancellationWindow = req.body.cancellationWindow;
@@ -329,14 +332,14 @@ let activityController={
 		
 		//RepeatableActivity attributes
 		var theme = req.body.theme;
-		console.log(theme);
 		var pricePackages = req.body.pricePackages;
 		var slots = req.body.slots;
 		var dayOffs = req.body.dayOffs;
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='';
 		if(missingFields){
-			res.json({success:false, message: 'The field: (businessOwner_id) is required!'});
+			//The field: (businessOwner_id) is required!
+			res.json({success:false, message: 'Contact Development Team'});
 			return;
 		}
 
@@ -372,15 +375,11 @@ let activityController={
 									repeatableActivity.pricePackages = (pricePackages==null||pricePackages=='')? repeatableActivity.pricePackages : pricePackages;
 									repeatableActivity.slots = (slots==null||slots=='')? repeatableActivity.slots : slots;
 									repeatableActivity.dayOffs = (dayOffs==null||dayOffs=='')? repeatableActivity.dayOffs : dayOffs;
-									console.log(theme);
-									console.log("jdjd"+repeatableActivity.theme);
 									repeatableActivity.save(function(err) {
 						                if (err) {
-						                	console.log(repeatableActivity);
 						                	res.json({success:false, message: err});
 						                } 
 						                else {
-						                	console.log(repeatableActivity);
 						                	res.json({success:true, message: 'Activity has been updated successfully.'});
 						                }
 				            		});

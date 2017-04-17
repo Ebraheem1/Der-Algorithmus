@@ -10,7 +10,6 @@ angular.module('userControllers', ['userServices'])
 		app.loading = true;
 		
 		User.createUser(app.regData).then(function(data){
-			
 			if(data.data.success){
 				app.successMsg = data.data.message+' Redirecting to homepage...';
 				app.loading = false;

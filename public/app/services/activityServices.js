@@ -5,7 +5,6 @@ angular.module('activityServices',[])
 	activityFactory = {};
 
 	activityFactory.editActivity = function(id, activityData){
-		console.log('activityData: ' + activityData+', '+'id: '+id);
 		return $http.post('/api/activity/editActivity/'+id, activityData);
 	}
 
@@ -14,12 +13,10 @@ angular.module('activityServices',[])
 	}
 
 	activityFactory.getActivity = function(id){
-		console.log('activity id: '+id);
 		return $http.get('/api/activity/getActivity/'+id);
 	}
 
 	activityFactory.addTimeSlot = function(id, activityData){
-		console.log(activityData+"yoooooo");
 		return $http.post('/api/activity/addRepeatableActivitySlot/'+id, activityData);
 	}
 
@@ -35,7 +32,6 @@ angular.module('activityServices',[])
 		return $http.post('/api/activity/deleteRepeatableActivityPricePackage', activityData);
 	}
 
-	
 	return activityFactory;
 
 });

@@ -12,7 +12,6 @@ angular.module('mainController', ['authServices'])
 			Authentication.getUser().then(function(data){
 				app.username = data.data.username;
 				app.user_id = data.data.user_id;
-				console.log(data);
 				app.isLoggedIn = true;
 				app.dataReady = true;
 			});
@@ -31,7 +30,6 @@ angular.module('mainController', ['authServices'])
 		app.loading = true;
 		
 		Authentication.loginUser(app.loginData).then(function(data){
-			
 			if(data.data.success){
 				app.successMsg = data.data.message+' Redirecting to your profile...';
 				app.loading = false;
