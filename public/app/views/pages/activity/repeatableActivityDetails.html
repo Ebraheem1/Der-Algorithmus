@@ -1,0 +1,175 @@
+<head>
+  <style type="text/css">
+    .custom {
+        color: white;
+    }
+    .custom1 {
+        color: black;
+    }
+    .together: {
+      display: inline;
+    }
+
+  </style>
+</head>
+
+<div class="page-header custom">
+  <h1> Edit Activity </h1>
+</div>
+
+<form ng-submit="activity.editActivity(activityData);">
+
+  <div class="form-group custom">
+    <label>Theme</label>
+    <input type="text" class="form-control" name="theme"  ng-model="activity.activityData.theme">
+  </div>
+  <div class="form-group custom">
+    <label>Cancellation Window</label>
+    <input type="text" class="form-control" name="cancellationWindow" ng-model="activity.activityData.cancellationWindow">
+  </div>
+  <div class="form-group custom">
+    <label>Description</label>
+    <textarea class="form-control" name="description" rows="5" ng-model="activity.activityData.description"></textarea>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Days Off</strong>
+    </div>
+    <table class="table">
+        <tr ng-repeat="day in activity.activityData.dayOffs">
+            <td class="custom1"> <h5 class="custom1"> {{day}} </h5> </td>
+        </tr>
+    </table>
+  </div>
+
+  <div class="form-group custom">
+    <label> Edit Days Off</label>
+    <select multiple class="form-control" ng-model="activity.activityData.dayOffs">
+      <option>Sunday</option>
+      <option>Monday</option>
+      <option>Tuesday</option>
+      <option>Wednesday</option>
+      <option>Thursday</option>
+      <option>Friday</option>
+      <option>Saturday</option>
+    </select>
+  </div>
+
+  <br>
+
+  <button type="submit" class="btn btn-primary">Save Changes</button>
+
+</form>
+
+<br>
+
+</div>
+<div class="jumbotron text-center" ng-show="activity.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <h2>Loading...</h2>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.errMsg">
+  <div class="alert alert-danger"> {{activity.errMsg}} </div>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.successMsg">
+  <div class="alert alert-success"> {{activity.successMsg}} </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <strong>Time Slots</strong>
+  </div>
+  <table class="table">
+      <tr>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Delete Slot</th>
+      </tr>
+      <tr ng-repeat="slot in activity.activityData.slots">
+          <td class="custom1"> {{slot.startTime}} </td>
+          <td class="custom1"> <h5 class="custom1"> {{slot.endTime}} </h5> </td>
+          <td> <button type="button" ng-click="activity.deleteSlot(activity.activityData.activity_id, slot._id);" class="btn btn-danger">Delete</button> </td>
+      </tr>
+  </table>
+</div>
+
+<div class="together">
+    <div class="col-lg-6">
+        <div class="input-group">
+          <span class="input-group-addon">Start Time</span>
+          <input type="text" class="form-control" ng-model="startTime">
+          <span class="input-group-addon">End Time</span>
+          <input type="text" class="form-control" ng-model="endTime">
+        </div>
+        
+    </div>
+</div>
+<button type="button" ng-click="activity.addSlot(startTime, endTime);" class="btn btn-success">Add Time Slot</button>
+
+<br><br>
+
+<div class="jumbotron text-center" ng-show="activity.slotLoading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <h2>Loading...</h2>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.slotErrMsg">
+  <div class="alert alert-danger"> {{activity.slotErrMsg}} </div>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.slotSuccessMsg">
+  <div class="alert alert-success"> {{activity.slotSuccessMsg}} </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <strong>Price Packages</strong>
+  </div>
+  <table class="table">
+      <tr>
+        <th>Participants</th>
+        <th>Price</th>
+        <th>Delete Package</th>
+      </tr>
+      <tr ng-repeat="package in activity.activityData.pricePackages">
+        <td class="custom1"> <h5 class="custom1"> {{package.participants}} </h5> </td>
+        <td class="custom1"> <h5 class="custom1"> {{package.price}} </h5> </td>
+        <td> <button type="button" ng-click="activity.deletePackage(activity.activityData.activity_id , package._id);" class="btn btn-danger">Delete</button> </td>
+      </tr>
+  </table>
+</div>
+
+<div class="together">
+    <div class="col-lg-6">
+      <div class="input-group">
+          <span class="input-group-addon">Participants</span>
+          <input type="text" class="form-control" ng-model="participants">
+          <span class="input-group-addon">Price</span>
+          <input type="text" class="form-control" ng-model="price">
+      </div>
+        
+    </div>
+</div>
+<button type="button" ng-click="activity.addPackage(participants, price);" class="btn btn-success">Add Price Package</button>
+
+<br><br>
+
+<div class="jumbotron text-center" ng-show="activity.packageLoading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <h2>Loading...</h2>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.packageErrMsg">
+  <div class="alert alert-danger"> {{activity.packageErrMsg}} </div>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.packageSuccessMsg">
+  <div class="alert alert-success"> {{activity.packageSuccessMsg}} </div>
+</div>
+
+
+
+

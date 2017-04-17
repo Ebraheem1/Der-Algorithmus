@@ -36,11 +36,24 @@ var app = angular.module('appRoutes', ['ngRoute'])
 		loggedIn: true
 	})
 
-	.when('/activity/activity/:id',{
-		templateUrl: 'app/views/pages/activity/activity.html',
+	.when('/activity/nonRepeatableActivityDetails/:id',{
+		templateUrl: 'app/views/pages/activity/nonRepeatableActivityDetails.html',
 		controller: 'activityCtrl',
 		controllerAs: 'activity',
 		loggedIn: true
+	})
+
+	.when('/activity/repeatableActivityDetails/:id',{
+		templateUrl: 'app/views/pages/activity/repeatableActivityDetails.html',
+		controller: 'activityCtrl',
+		controllerAs: 'activity',
+		loggedIn: true
+	})
+
+	.when('/search/search/:keyword',{
+		templateUrl: 'app/views/pages/searchResults.html',
+		controller: 'searchCtrl',
+		controllerAs: 'search',
 	})
 
 	.otherwise({

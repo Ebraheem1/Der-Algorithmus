@@ -24,7 +24,7 @@ var RepeatableActivitySchema = new Schema({
 	description: {type: String, required:true},
 	pricePackages: [PricePackage],
 	slots: [Slot],
-	dayOffs: [Number],
+	dayOffs: [String],
 	cancellationWindow: Number //client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
 	
 		

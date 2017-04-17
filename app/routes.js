@@ -157,7 +157,11 @@ router.get('/review/view/:businessownerID', reviewController.viewBusinessReviews
 router.post('/business/rate', clientController.rateBusiness );//done--
 
 router.get('/activity/getActivity/:id', activityController.getActivity);
-router.post('/activity/newActivity', activityController.newActivity);
+router.post('/activity/editActivityImage/:id', activityController.editActivityImage);
+router.post('/activity/addRepeatableActivitySlot/:id', activityController.addRepeatableActivitySlot);
+router.post('/activity/addRepeatableActivityPricePackage/:id', activityController.addRepeatableActivityPricePackage);
+router.post('/activity/deleteRepeatableActivitySlot', activityController.deleteRepeatableActivitySlot);
+router.post('/activity/deleteRepeatableActivityPricePackage', activityController.deleteRepeatableActivityPricePackage);
 router.post('/activity/editActivity/:id', activityController.editActivity);//done--
 
 router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --

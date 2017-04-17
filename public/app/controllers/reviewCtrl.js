@@ -44,12 +44,20 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 	};
 
 
-	app.editReview = function(revData){
+	app.editReview = function(revData, comment){
 		app.successMsg = false;
 		app.errMsg = false;
 		app.loading = true;
 
-		Review.editReview($routeParams.id, app.revData).then(function(data){
+		var reviewData = {};
+		reviewData.comment = $scope.comment;
+		reviewData.user_id = app.revData.user_id;
+
+
+		console.log('revData: '+app.revData);
+		console.log('reviewData: '+reviewData);
+
+		Review.editReview($routeParams.id, reviewData).then(function(data){
 			if(data.data.success){
 				app.successMsg = data.data.message;
 				app.loading = false;

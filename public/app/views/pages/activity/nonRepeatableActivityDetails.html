@@ -1,0 +1,81 @@
+<head>
+  <style type="text/css">
+    .custom {
+        color: white;
+    }
+  </style>
+</head>
+
+<div class="page-header custom">
+  <h1> Edit Activity </h1>
+</div>
+
+<form ng-submit="activity.editActivity(activityData);">
+
+  <div class="form-group custom">
+    <label>Destination</label>
+    <input type="text" class="form-control" name="destination"  ng-model="activity.activityData.destination">
+  </div>
+  <div class="form-group custom">
+    <label>Transportation</label>
+    <select class="form-control" name="transportation" ng-model="activity.activityData.transportation">
+      <option>Airplane</option>
+      <option>Bus</option>
+      <option>Car</option>
+      <option>Train</option>
+    </select>
+  </div>
+  <div class="form-group custom">
+
+    <label>Traveling Date</label>
+    <div class="col-10">
+      <input class="form-control" type="datetime-local" name="travelingDate" ng-model="activity.activityData.travelingDate">
+    </div>
+  </div>
+  <div class="form-group custom">
+    <label>Return Date</label>
+    <div class="col-10">
+      <input class="form-control" type="datetime-local" name="returnDate" ng-model="activity.activityData.travelingDate">
+    </div>
+  </div>
+  <div class="form-group custom">
+    <label>Accommodation</label>
+    <textarea class="form-control" name="Accommodation" rows="5" ng-model="activity.activityData.Accommodation"></textarea>
+  </div>
+  <div class="form-group custom">
+    <label>Description</label>
+    <textarea class="form-control" name="description" rows="5" ng-model="activity.activityData.description"></textarea>
+  </div>
+  <div class="form-group custom">
+    <label>Maximum Number of Participants</label>
+    <input type="text" class="form-control" name="maxParticipants" ng-model="activity.activityData.maxParticipants">
+  </div>
+  <div class="form-group custom">
+    <label>Price Per Person</label>
+    <input type="text" class="form-control" name="pricePerPerson" ng-model="activity.activityData.pricePerPerson">
+  </div>
+  <div class="form-group custom">
+    <label>Cancellation Window</label>
+    <input type="text" class="form-control" name="cancellationWindow" ng-model="activity.activityData.cancellationWindow">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save Changes</button>
+
+</form>
+
+<br>
+
+</div>
+<div class="jumbotron text-center" ng-show="activity.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <h2>Loading...</h2>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.errMsg">
+  <div class="alert alert-danger"> {{activity.errMsg}} </div>
+</div>
+
+<div class="row show-hide-message" ng-show="activity.successMsg">
+  <div class="alert alert-success"> {{activity.successMsg}} </div>
+</div>
+
