@@ -11,16 +11,18 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 		console.log(data.data.user_id);
 	});
 
-	Review.getReview($routeParams.id).then(function(data){
-		if(data.data.success){
-			$scope.comment =data.data.review.comment;
-			app.reviewExists = true;
-		}
-		else{
-			app.errMsg = data.data.message;
-			app.reviewExists = false;
-		}
-	});
+	if($routeParams.id){
+		Review.getReview($routeParams.id).then(function(data){
+				if(data.data.success){
+					$scope.comment =data.data.review.comment;
+					app.reviewExists = true;
+				}
+				else{
+					app.errMsg = data.data.message;
+					app.reviewExists = false;
+				}
+		});
+	}
 
 
 	app.addReview = function(revData){
@@ -83,6 +85,16 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 			if(data.data.success){
 				app.successMsg = data.data.message;
 				app.loading = false;
+				Review.getReview($routeParams.id).then(function(data){
+					if(data.data.success){
+						$scope.comment =data.data.review.comment;
+						app.reviewExists = true;
+					}
+					else{
+						app.errMsg = data.data.message;
+						app.reviewExists = false;
+					}
+				});
 			}
 			else{
 				app.errMsg = data.data.message;

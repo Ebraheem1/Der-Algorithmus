@@ -5,7 +5,7 @@ angular.module('authServices', [])
 	authFactory = {};
 
 	authFactory.loginUser = function(loginData){
-		return $http.post('/authenticate', loginData).then(function(data){
+		return $http.post('/api/authenticate', loginData).then(function(data){
 			AuthenticationToken.setToken(data.data.token);
 			return data;
 		});
@@ -22,7 +22,7 @@ angular.module('authServices', [])
 
 	authFactory.getUser = function(){
 		if(AuthenticationToken.getToken()){
-			return $http.post('/loggedIn');
+			return $http.post('/api/loggedIn');
 		}
 		else{
 			$q.reject({message:'User has no token!'});

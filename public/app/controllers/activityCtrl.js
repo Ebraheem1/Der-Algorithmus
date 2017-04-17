@@ -26,8 +26,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 
 			//NonRepeatableActivity attributes 
 
-			app.activityData.travelingDate = (travelingDateNotAvailable)? data.data.activity.travelingDate : data.data.activity.travelingDate.substring(0, 19);
-			app.activityData.returnDate = (returnDateNotAvailable)? data.data.activity.returnDate : data.data.activity.returnDate.substring(0, 19);
+			app.activityData.travelingDate = (travelingDateNotAvailable)? new Date(data.data.activity.travelingDate) : new Date(data.data.activity.travelingDate.substring(0, 10));
+			app.activityData.returnDate = (returnDateNotAvailable)? new Date(data.data.activity.returnDate) : new Date(data.data.activity.returnDate.substring(0, 10));
 			app.activityData.destination = data.data.activity.destination;
 			app.activityData.Accommodation = data.data.activity.Accommodation;
 			app.activityData.transportation = data.data.activity.transportation;
@@ -37,6 +37,7 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			//RepeatableActivity attributes
 
 			app.activityData.theme = data.data.activity.theme;
+			console.log(app.activityData.theme);
 			app.activityData.pricePackages = data.data.activity.pricePackages;
 			app.activityData.slots = data.data.activity.slots;
 			app.activityData.dayOffs = data.data.activity.dayOffs;
@@ -72,9 +73,15 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 		app.slotErrMsg = false;
 		app.slotLoading = true;
 		var slotData = {};
+		var timeFormat = /^([0-9]{2})\:([0-9]{2})$/;
 		slotData.startTime = startTime;
 		slotData.endTime = endTime;
 
+		if(timeFormat.test(startTime) == false || timeFormat.test(endTime) == false){
+    		app.slotErrMsg = 'Time should be provided in the form HH:MM!'
+			app.slotLoading = false;
+			return;
+		}
 
 		Activity.addTimeSlot($routeParams.id,slotData).then(function(data){
 			if(data.data.success){
@@ -119,6 +126,11 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 		packageData.participants = participants;
 		packageData.price = price;
 
+		if(isNaN(participants) || isNaN(price)){
+    		app.packageErrMsg = 'Participants and Price should be numbers!'
+			app.packageLoading = false;
+			return;
+		}
 
 		Activity.addPricePackage($routeParams.id,packageData).then(function(data){
 			if(data.data.success){

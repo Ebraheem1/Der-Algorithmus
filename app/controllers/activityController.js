@@ -329,6 +329,7 @@ let activityController={
 		
 		//RepeatableActivity attributes
 		var theme = req.body.theme;
+		console.log(theme);
 		var pricePackages = req.body.pricePackages;
 		var slots = req.body.slots;
 		var dayOffs = req.body.dayOffs;
@@ -371,11 +372,15 @@ let activityController={
 									repeatableActivity.pricePackages = (pricePackages==null||pricePackages=='')? repeatableActivity.pricePackages : pricePackages;
 									repeatableActivity.slots = (slots==null||slots=='')? repeatableActivity.slots : slots;
 									repeatableActivity.dayOffs = (dayOffs==null||dayOffs=='')? repeatableActivity.dayOffs : dayOffs;
+									console.log(theme);
+									console.log("jdjd"+repeatableActivity.theme);
 									repeatableActivity.save(function(err) {
 						                if (err) {
+						                	console.log(repeatableActivity);
 						                	res.json({success:false, message: err});
 						                } 
 						                else {
+						                	console.log(repeatableActivity);
 						                	res.json({success:true, message: 'Activity has been updated successfully.'});
 						                }
 				            		});

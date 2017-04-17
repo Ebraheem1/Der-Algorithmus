@@ -27,7 +27,13 @@ var storage = multer.diskStorage({
     cb(null, './public/gallery/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now()+'_'+file.originalname);
+    if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
+      var err = new Error();
+      err.code = 'notAnImage';
+      return cb(err);
+    } else {
+      cb(null, Date.now()+'_'+file.originalname);
+    }
   }
 });
 
@@ -39,7 +45,10 @@ var upload = multer({
 router.post('/upload', function (req, res) {
   upload(req, res, function (err) {
     if (err) {
-      console.log(err);
+      if(err.code=='notAnImage'){
+        res.json({success:false, message: 'File should be an image of one of these extension (png, jpeg, jpg)!'});
+        return;
+      }
       res.json({success:false, message: 'File Upload Error!'});
     }
     else{
