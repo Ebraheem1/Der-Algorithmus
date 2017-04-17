@@ -7,6 +7,7 @@ angular.module('userControllers', ['userServices','businessOwnerServices'])
 	var app = this;
 	BusinessOwner.getResults().then(function(data)
 	{
+		
 		app.errMsg = false;
 		app.venues=[];
 		if(data.data.success)

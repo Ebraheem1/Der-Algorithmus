@@ -4,6 +4,7 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 
 	var app = this;
 
+
 	app.addReview = function(revData){
 		app.successMsg = false;
 		app.errMsg = false;
