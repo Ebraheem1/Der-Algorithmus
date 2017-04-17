@@ -12,11 +12,15 @@ templateUrl: 'app/views/pages/home.html'
   templateUrl: 'app/views/pages/BusinessOwnerHomePage.html'
 })
 
-.when('/Register',{
-  templateUrl:'app/views/pages/RegisterationPage.html'
+.when('/register',{
+  templateUrl:'app/views/pages/RegisterationPage.html',
+  controller:'regCtrl',
+  controllerAs:'register'
 })
 .when('/updateInfo',{
-  templateUrl:'app/views/pages/UpdateInfo.html'
+  templateUrl:'app/views/pages/UpdateInfo.html',
+  controller:'updateCtrl',
+  controllerAs:'update'
 })
 
 

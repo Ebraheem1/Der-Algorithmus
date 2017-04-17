@@ -40,26 +40,25 @@ let userController={
       var errors=req.validationErrors();
       if(errors)
       {
-        res.send(errors);
-        return;
+        res.json({success:false,message:errors});
       }
       else {
         if(req.body.username.toLowerCase() == 'admin'){
-          res.send('Username Unavailable');
+          res.json({success:false,message:'Username Unavailable'});
         }else{
 
             Application.findOne({username:req.body.username},function(err,application)
             {
               if(err)
               {
-                res.send(err);
+                res.json({success:false,message:err});
               }
               else
               {
                 if(application){
-                  res.send('Username Unavailable');
+                  res.json({success:false,message:'Username Unavailable'});
                 }else{
-                  
+
             var user=new User({
             username:req.body.username,
             password:req.body.password,
@@ -67,11 +66,11 @@ let userController={
             email:req.body.email
           });
            UserId=user._id;
-      
+
     user.save(function(err){
       if(err){
 
-              res.json(err);
+              res.json({success:false,message:err});
         }
       else {
                 var client=new Client({
@@ -82,10 +81,10 @@ let userController={
               });
               client.save(function(err){
                   if(err){
-                    res.send(err);
+                    res.json({success:false,message:err});
                   }
                   else {
-                    res.send('Client saved !');
+                    res.json({success:true,message:'Client Saved '});
                   }
               });
           }
@@ -105,86 +104,87 @@ let userController={
 
   changeUsername:function(req,res){
 
-    var newUsername=req.body.username;
-    if(req.body.oldUsername == newUsername){
+      var newUsername=req.body.username;
+      if(req.body.oldUsername == newUsername){
 
-      res.send('This is your current username!');
+        res.send('This is your current username!');
 
-    }else{
-          
-          Application.findOne({username:newUsername},function(err,application)
-        {
-              if(err)
-              {
-                res.send(err);
-              }
-              else
-              {
-                if(application){
+      }else{
 
-                res.send('Username Unavailable11');
-                }else{
-                  
-                  User.findOne({username:newUsername},function(err,user){
+            Application.findOne({username:newUsername},function(err,application)
+          {
+                if(err)
+                {
+                  res.send(err);
+                }
+                else
+                {
+                  if(application){
 
-                    if(err){
-                res.send(err);
-              }
-                    else {
-                      if(!user)
-                      {
+                  res.send('Username Unavailable11');
+                  }else{
 
-                        User.findOne({username:req.body.oldUsername}, function(err, currentUser){
+                    User.findOne({username:newUsername},function(err,user){
 
-                          if(err){
+                      if(err){
+                  res.send(err);
+                }
+                      else {
+                        if(!user)
+                        {
 
-                            res.send(err);
+                          User.findOne({username:req.body.oldUsername}, function(err, currentUser){
 
-                          }else{
+                            if(err){
 
-                            if(currentUser){
-
-                                currentUser.username = newUsername;
-                                currentUser.save(function(err){
-
-                                  if(err){
-
-                                    res.send(err);
-
-                                  }else{
-
-                                    res.send('Account Updated Successfully!');
-
-                                  }
-
-                                });
+                              res.send(err);
 
                             }else{
 
-                              res.send('user not found');
+                              if(currentUser){
+
+                                  currentUser.username = newUsername;
+                                  currentUser.save(function(err){
+
+                                    if(err){
+
+                                      res.send(err);
+
+                                    }else{
+
+                                      res.send('Account Updated Successfully!');
+
+                                    }
+
+                                  });
+
+                              }else{
+
+                                res.send('user not found');
+
+                              }
 
                             }
 
-                          }
+                          });
 
-                        });
-
+                      }
+                      else {
+                        res.send('username is Unavailable');
+                      }
                     }
-                    else {
-                      res.send('username is Unavailable');
+
+                  });
+                      }
                     }
-                  }
-
-                });
-                    }
-                  }
-            });
-      }
-
-    
+              });
+        }
 
 
-  },
+
+
+    },
+
 
   // This function is used in case of the user forgetting the password . we go search for the user by the username
   //then we check that the email inserted is equal to the mail of the user you want to change the password for .
@@ -228,7 +228,7 @@ let userController={
       var list=[];
 
       BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}, {types:{"$in": [new RegExp(".*"+keyword+".*")]}}]},function(err,businesses){
-        
+
         if(err){
 
           res.send(err);
@@ -236,9 +236,9 @@ let userController={
 
         }
           if(businesses.length > 0){
-            
+
             res.send(businesses);
-              
+
           }else{
 
             res.send('no records to show');
@@ -273,7 +273,7 @@ let userController={
     //Function for sending email . we set the mail options to send a mail with certain format to the email of the user
     sendMail: function(user, pass) {
 
-      
+
       //Setting up the mail options .
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', // sender address
@@ -330,5 +330,5 @@ let userController={
 };
 
 
-//Exporting the module 
+//Exporting the module
 module.exports = userController;

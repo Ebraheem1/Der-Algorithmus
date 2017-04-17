@@ -52,13 +52,13 @@ updateInfo:function(req,res){
        user.phoneNumber=(phoneNumber==null | phoneNumber=="")?user.phoneNumber:phoneNumber;
        user.save(function(err){
          if(err){
-            res.send(err);
+            res.json({success:false,message:err});
           }
         else {
           Client.findOne({user_id:user.id},function(err,client){
             if(err)
             {
-              res.send(err);
+              res.json({success:false,message:err});
             }
             else {
                   client.firstName=(firstName==null | firstName=="")?client.firstName:firstName;
@@ -66,10 +66,10 @@ updateInfo:function(req,res){
                     client.gender=(gender==null | gender=="")?client.gender:gender;
                     client.save(function(err){
                       if(err){
-                        res.send(err);
+                        res.json({success:false,message:err});
                       }
                       else {
-                        res.send('Account Succesfully Updated');
+                        res.json({success:true,message:'Account Updated Succesfully'});
                       }
                     });
                   }
@@ -146,7 +146,7 @@ updateInfo:function(req,res){
                             else{
                             callback(null,null);
                             }
-                            });   
+                            });
                         }
                         else{
                             callback(null,null);
@@ -204,7 +204,7 @@ updateInfo:function(req,res){
                     res.send("Error");
                     return;
                 } else {
-                    
+
                     //update average rate
                     BusinessOwner.findOne(condition, function (err, business) {
                       if(err)
