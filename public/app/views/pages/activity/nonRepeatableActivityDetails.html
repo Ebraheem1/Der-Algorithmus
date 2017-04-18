@@ -44,8 +44,9 @@
       </div>
     </div>
 
-    <div ng-show="message">
-        <div ng-class="alert">{{ message }}</div>
+    <div ng-class="alert" ng-show="message">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+      <strong>{{message}}</strong>
     </div>
 
   </div>
@@ -112,11 +113,13 @@
   <h2>Loading...</h2>
 </div>
 
-<div class="row show-hide-message" ng-show="activity.errMsg">
-  <div class="alert alert-danger"> {{activity.errMsg}} </div>
+<div class="alert alert-success fade in alert-dismissable" ng-show="activity.successMsg">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+  <strong>{{activity.successMsg}}</strong>
 </div>
 
-<div class="row show-hide-message" ng-show="activity.successMsg">
-  <div class="alert alert-success"> {{activity.successMsg}} </div>
+<div class="alert alert-danger fade in alert-dismissable" ng-show="activity.errMsg">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+  <strong>{{activity.errMsg}}</strong>
 </div>
 

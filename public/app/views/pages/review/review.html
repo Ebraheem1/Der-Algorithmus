@@ -24,10 +24,12 @@
 	<h2>Loading...</h2>
 </div>
 
-<div class="row show-hide-message" ng-show="review.errMsg">
-	<div class="alert alert-danger"> {{review.errMsg}} </div>
+<div class="alert alert-success fade in alert-dismissable" ng-show="review.successMsg">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+  <strong>{{review.successMsg}}</strong>
 </div>
 
-<div class="row show-hide-message" ng-show="review.successMsg">
-	<div class="alert alert-success"> {{review.successMsg}} </div>
+<div class="alert alert-danger fade in alert-dismissable" ng-show="review.errMsg">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+  <strong>{{review.errMsg}}</strong>
 </div>

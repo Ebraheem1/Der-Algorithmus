@@ -178,14 +178,14 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
                 imageData.image = 'gallery/'+data.data.name;
                 Activity.changeActivityImage(imageData).then(function(data){
 	                if(data.data.success){
-	                	$scope.alert = 'alert alert-success';
+	                	$scope.alert = 'alert alert-success fade in alert-dismissable';
 						$scope.message = data.data.message;
 						$scope.uploading = false;
 						app.activityData.image = imageData.image;
 					}
 					else{
 						$scope.uploading = false;
-                		$scope.alert = 'alert alert-danger';
+                		$scope.alert = 'alert alert-danger fade in alert-dismissable';
                 		$scope.message = data.data.message;
                 		$scope.file = {};
 					}

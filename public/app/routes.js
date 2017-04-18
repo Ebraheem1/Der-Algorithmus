@@ -50,14 +50,15 @@ var app = angular.module('appRoutes', ['ngRoute'])
 		loggedIn: true
 	})
 
-	.when('/search/search/:keyword',{
-		templateUrl: 'app/views/pages/searchResults.html',
-		controller: 'searchCtrl',
-		controllerAs: 'search',
+	.when('/error404',{
+		templateUrl: 'app/views/pages/error404.html',
+		controller: 'activityCtrl',
+		controllerAs: 'activity',
+		loggedIn: true
 	})
-
+	
 	.otherwise({
-		redirectTo: '/'
+		redirectTo: '/error404'
 	})
 
 
