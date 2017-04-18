@@ -318,12 +318,12 @@ var found = false ;
                           if(err)
                             res.json({succes:false,message:err});
                             else{
-                              console.log(activity);
+
                               var window = activity.cancellationWindow;
                               var now = new Date();
                               var date = activity.travelingDate;
                                 var diff = (((Math.abs(date-now)/1000)/60)/60)/24;
-                                console.log(diff);
+                              
                                 if(diff<=window){
                                    res.json({succes:false,message:"Sorry,The deadline for cancelling this reservation has passed!"});
                                  }else{
@@ -339,7 +339,7 @@ var found = false ;
                                                NonRepeatableActivityReservation.remove({_id:reservation._id},function(err){
                                                  if(err)
                                                       res.json({succes:false,message:err});
-                                                 else{
+                                                  else{
 
                                                       res.json({success:true ,message:"Reservation Deleted Successfuly"});
                                                  }

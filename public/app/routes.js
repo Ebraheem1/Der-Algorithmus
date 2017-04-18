@@ -27,6 +27,11 @@
                controllerAs:"yrCtrl"
 
              })
+             .when('/login/forgotPassword',{
+               templateUrl:'app/views/pages/forgotPasswordPage.html',
+               controller:"passwordController",
+               controllerAs:"Ctrl"
+             })
              .otherwise({
                  redirectTo: '/'
              });

@@ -93,7 +93,7 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
         var client_id = "58f24bf50a785f677525f8f1" // TODO : to be changed to authentication id
 
         $scope.currentPage = 1;
-        $scope.itemsPerPage = 1;
+        $scope.itemsPerPage = 6;
 
 
 
