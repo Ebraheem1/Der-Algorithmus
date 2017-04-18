@@ -25,11 +25,11 @@ let administratorController={
 
 			if(err){
         
-        	res.send(err);
+        	res.json({success: false, message:err});
         
       		}else{
         	// should be replaced with page rendering in sprint 2
-			res.send(BusinessesArray);
+			res.json({success: true, message:"All Businesses retrieved successfully", business:BusinessesArray});
        
       		}
 		});
@@ -37,41 +37,42 @@ let administratorController={
 
 	// Administrator removes business from the directory
 	removeBusiness: function(req,res){
+		console.log(req.params.businessId);
 
-		BusinessOwner.findById( req.params.businessId, function(err,BusinessOwner){
+		BusinessOwner.find( {user_id:req.params.businessId}, function(err,bus){ //edited conditions
 
 			if(err){
-				res.send(err);
+				res.json({success: false, message:err});
 				return;
 			}
-			if(!BusinessOwner){
-				res.send('wrong ID for business owner');
+			if(!bus){
+				res.json({success: false, message:err});
 				return;
 			}
 			// remove activities of the deleted business owner
 			Activity.remove({BusinessOwner_id:req.params.businessId},function(err){
 
 				if(err){
-					res.send(err);
+					res.json({success: false, message:err});
 					return;
 				}
 				// remove the business owner
-				BusinessOwner.remove({_id:req.params.businessId},function(err){
+				BusinessOwner.remove({user_id:req.params.businessId},function(err){
 
 					if(err){
-						res.send(err);
+						res.json({success: false, message:err});
 						return;
 					}
 
 					//remove the user referenced by the deleted business owner
-					User.remove({_id:BusinessOwner.user_id},function(err){
+					User.remove({_id:req.params.businessId},function(err){
 
 						if(err){
-							res.send(err);
+							res.json({success: false, message:err});
 							return;
 						}
-
-						res.send('Business owner deleted successfully !');
+						console.log("Deleted user !!");
+						res.json({success:true, message:"Business deleted successfully"});
 					});
 
 				});
