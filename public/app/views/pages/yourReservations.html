@@ -4,71 +4,100 @@
 <br />
 <br />
 <div class="container" ng-show="success">
-  <div class="row">
+    <div class="row">
 
-  	<div class=".col-md-6 ">
+        <div class=".col-md-6 ">
 
-<br />
-<hr />
-  <ul class="list-group">
-<!-- for each -->
-<div ng-repeat= "x in NRReservations" >
-
-
-  		<li class="list-group-item">{{x.nonRepeatableActivity_id.type}} to {{x.nonRepeatableActivity_id.destination}}  on {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}}
-        for {{x.price/100}}$ <br />
-  			<div class="pull-right">
-  				<button class = "btn btn-primary" style = " position: relative;
-    top: -28px; " ng-click="Delete(1,x._id)">Cancel Reservation</button>
-  </div>
+            <br />
+            <hr />
+            <ul class="list-group">
+                <!-- for each -->
+                <div ng-if= "items.length>0" ng-repeat="x in items">
+                    <div ng-if = "x.nonRepeatableActivity_id">
 
 
-  		</li>
-          <br />
-              <br />
-              <hr />
+
+                    <li class="list-group-item">{{x.nonRepeatableActivity_id.type}} to {{x.nonRepeatableActivity_id.destination}} on {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}} for {{x.price/100}}$ <br />
+                        <div class="pull-right">
+                          <button class="btn btn-primary" style=" position: relative;
+        top: -27px; left:16px " ng-click="Delete(0,x._id)">Cancel Reservation</button>
+                        </div>
+
+
+                    </li>
+                <br />
+                <br />
+                <br />
+                <hr />
+                              </div>
+
+
+                          <div ng-if ="x.repeatableActivity_id">
+
+                            <div ng-repeat="z in x.repeatableActivity_id.slots">
+
+                                <div ng-if="z._id ==x.slot_id">
+
+
+                                    <li class="list-group-item">{{x.repeatableActivity_id.type}} on {{x.date| limitTo : 10 : 0}} from {{z.startTime}} to {{z.endTime}} for {{x.price/100}}$ <br />
+                                </div>
+                            </div>
+                            <div class="pull-right">
+
+                                <button class="btn btn-primary" style=" position: relative;
+              top: -37px; " ng-click="Delete(0,x._id)">Cancel Reservation</button>
+
+                            </div>
+
+
+
+                            </li>
+                              <br />
+                              <br />
+                              <br />
+                              <hr />
+                                </div>
+                </div>
+
+
+
+
+
+            </ul>
+
+            <hr>
+
+
+        </div>
+    </div>
+
+    <ul ng-if="yrCtrl.pager.pages.length" class="pagination">
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
+               <a ng-click="yrCtrl.setPage(1)">First</a>
+           </li>
+
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
+               <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage - 1)">Previous</a>
+           </li>
+           <li ng-repeat="page in yrCtrl.pager.pages" ng-class="{active:yrCtrl.pager.currentPage === page}">
+               <a ng-click="yrCtrl.setPage(page)">{{page}}</a>
+           </li>
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
+               <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage + 1)">Next</a>
+           </li>
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
+               <a ng-click="yrCtrl.setPage(yrCtrl.pager.totalPages)">Last</a>
+           </li>
+       </ul>
+
 </div>
-<div ng-repeat= "y in RReservations">
-<div ng-repeat = "z in y.repeatableActivity_id.slots">
 
-<div ng-if="z._id ==y.slot_id">
+<div class="col-lg-10 col-md-push-1" ng-show="!success">
+    <div class="col-md-12">
 
-
-  <li class="list-group-item">{{y.repeatableActivity_id.type}} on {{y.date| limitTo : 10 : 0}}
-  from {{z.startTime}} to {{z.endTime}} for {{y.price/100}}$ <br />
-  </div>
-  </div>
-    <div class="pull-right">
-
-      <button class = "btn btn-primary" style = " position: relative;
-top: -28px; " ng-click="Delete(0,y._id)">Cancel Reservation</button>
-
-          </div>
-
-
-
-  		</li>
-          <br />
-              <br />
-              <hr />
+        <div class="alert alert-danger">
+            <span ></span><strong> You have no reservations currently !</strong>
+        </div>
+    </div>
 </div>
-
-
-  </ul>
-
-  <hr>
-
-
-  	</div>
-  </div>
-
-  </div>
-  <div class="col-lg-10 col-md-push-1" ng-show="!success">
-      <div class="col-md-12">
-
-          <div class="alert alert-danger">
-              <span class="glyphicon glyphicon-remove"></span><strong> Sorry An Error Has Occured . Please try again later</strong>
-          </div>
-      </div>
-  </div>
 </div>

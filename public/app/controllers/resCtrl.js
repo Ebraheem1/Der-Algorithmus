@@ -1,4 +1,4 @@
-angular.module('reservationController',['reservationServices'])
+angular.module('reservationController',['reservationServices','pagingServices'])
 
 .controller( 'resCtrlNR',function($http,$scope,$location,$timeout,Reservation,$routeParams){
   var app=this; //TODO : handle negative number for participants // ADD cancelation window warning // Display to USer the price
@@ -87,21 +87,50 @@ angular.module('reservationController',['reservationServices'])
 
 
 //Your Reservations controller
-.controller('yourReservations',function($http,$scope,$location,$timeout,Reservation,$routeParams,$window){
+.controller('yourReservations',function(Pager,$http,$scope,$location,$timeout,Reservation,$routeParams,$window){
 var app = this ;
 $scope.success=true;
 var client_id = "58f24bf50a785f677525f8f1" // TODO : to be changed to authentication id
+
+  $scope.currentPage = 1;
+  $scope.itemsPerPage = 1;
+
+
+
 Reservation.getAllReservation(client_id).then(function(data){
-  if(data.data.success){
+
+  if(data.data.success&&(data.data.repeatable.length>0||data.data.nonRepeatable.length>0)){
     $scope.success = true ;
-      $scope.NRReservations = data.data.nonRepeatable;
-      $scope.RReservations = data.data.repeatable;
-      console.log($scope.RReservations);
-    
+      $scope.allReservations = data.data.repeatable.concat(data.data.nonRepeatable);
+      $scope.Items = $scope.allReservations;
+      app.pager = {};
+          app.setPage = function(page){
+
+              if(page < 1 || page > app.pager.totalPages){
+
+                  return;
+
+              }
+
+
+              // get pager object from service
+              app.pager = Pager.getPager($scope.Items.length, page,$scope.itemsPerPage);
+              // get current page of items
+
+              $scope.items = $scope.Items.slice(app.pager.startIndex, app.pager.endIndex + 1);
+
+          };
+          // initialize to page 1
+          app.setPage(1);
+          //end of pagination logic for controller
   }else{
     $scope.success=false;
+
   }
 });
+
+
+
 
 $scope.Delete = function(type,reservation_id){
  var cancelReservation = $window.confirm('Are you sure you want to cancel this Reservation ? ');

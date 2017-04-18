@@ -15,7 +15,7 @@
                 <div class="form-group">
                     <label style="color: white">Choose Appropriate Slot</label>
                     <div class="input-group">
-                        <select ng-model="res.selectedSlot" class="form-control" placeholder="Choose">
+                        <select ng-model="res.selectedSlot" class="form-control" placeholder="Choose" required>
                         <option ng-repeat="x in Activity.slots" value="{{x._id}}">From {{x.startTime}} To {{x.endTime}}</option>
                           </select>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label style="color: white">Choose Appropriate Package</label>
                     <div class="input-group">
-                        <select ng-model="res.selectedPackage" class="form-control" placeholder="Choose">
+                        <select ng-model="res.selectedPackage" class="form-control" placeholder="Choose" required>
                     <option ng-repeat="x in Activity.pricePackages" value="{{x._id}}">Number Of Participants: {{x.participants}}  For: {{x.price}}</option>
                       </select>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
