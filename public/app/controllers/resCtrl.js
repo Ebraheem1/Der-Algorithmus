@@ -1,4 +1,4 @@
-angular.module('reservationController', ['reservationServices', 'pagingServices'])
+angular.module('reservationController', ['reservationServices', 'pagingServices','modalDialog'])
 
     .controller('resCtrlNR', function($http, $scope, $location, $timeout, Reservation, $routeParams) {
         var app = this; //TODO : handle negative number for participants // ADD cancelation window warning // Display to USer the price
@@ -95,7 +95,10 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
         $scope.currentPage = 1;
         $scope.itemsPerPage = 6;
 
-
+        $scope.modalShown = false ;
+        $scope.toggleModal = function (){
+          $scope.modalShown = !$scope.modalShown;
+        }
 
         Reservation.getAllReservation(client_id).then(function(data) {
 
@@ -139,6 +142,7 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
                 if (type == 0) {
 
                     Reservation.cancelReservationR(reservation_id).then(function(data) {
+
                         if (data.data.success) {
                             $window.alert(data.data.message);
                             $timeout(function() {
@@ -146,6 +150,7 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
                                 $location.path('/profile/reservations/');
                             }, 1000)
                         } else {
+
                             $window.alert(data.data.message);
                         }
 

@@ -51,7 +51,7 @@ let AuthenticationController = {
         });
       }
 },
-  //For general purpose authentication to be used in methods that require general 
+  //For general purpose authentication to be used in methods that require general
   //authentication not only for a specific type system user like logout method
   ensureAuthenticated:function(req,res,next)
   {
@@ -65,11 +65,12 @@ let AuthenticationController = {
   //Logout Function to end the session
   generalLogOut: function(req,res)
   {
+      if(!req.user)
+      {
+        return res.json({success:false, message:'You are not authroized to logout'});
+      }
       req.logout();
-
-      req.flash('success_msg', 'You are logged out');
-      console.log(req.iat);
-      res.json('Logout Created Successfully');
+      return res.json({success:true, message:'You are logged Out Correctly'});
 
   }
 

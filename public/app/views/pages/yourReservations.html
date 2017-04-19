@@ -1,7 +1,7 @@
 <br> <br>
 <br />
 <br />
-<h1 style="color: white; position: fixed;left:40%;">Your Reservations</h1>
+<h1 style="color: white; position: fixed;left:40%;"><i><u><strong>Your Reservations</strong></u></i></h1>
 <br />
 <br />
 <br />
@@ -15,11 +15,14 @@
             <ul class="list-group">
                 <!-- for each -->
                 <div ng-if= "items.length>0" ng-repeat="x in items">
+                  <br />
+
                     <div ng-if = "x.nonRepeatableActivity_id">
 
 
 
-                    <li class="list-group-item"><strong>{{x.nonRepeatableActivity_id.type}} to {{x.nonRepeatableActivity_id.destination}} on {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}} for {{x.price/100}}$</strong> <br />
+                    <li class="list-group-item"><strong>{{x.nonRepeatableActivity_id.type}}|| {{x.nonRepeatableActivity_id.destination}} ||
+                       {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}} ||  {{x.price/100}}$</strong> <br />
                         <div class="pull-right">
                           <button class="btn btn-primary" style=" position: relative;
         top: -27px; left:16px " ng-click="Delete(1,x._id)">Cancel Reservation</button>
@@ -27,10 +30,7 @@
 
 
                     </li>
-                <br />
-                <br />
-                <br />
-                <hr />
+
                               </div>
 
 
@@ -41,28 +41,29 @@
                                 <div ng-if="z._id ==x.slot_id">
 
 
-                                    <li class="list-group-item"><strong>{{x.repeatableActivity_id.type}} on {{x.date| limitTo : 10 : 0}} from {{z.startTime}} to {{z.endTime}} for {{x.price/100}}$</strong> <br />
+                                    <li class="list-group-item"><strong>{{x.repeatableActivity_id.type}}  ||  {{x.date| limitTo : 10 : 0}}      ||      {{z.startTime}}
+                                      || {{z.endTime}}  ||  {{x.price/100}}$</strong> <br />
                                 </div>
                             </div>
                             <div class="pull-right">
 
                                 <button class="btn btn-primary" style=" position: relative;
-              top: -37px; " ng-click="Delete(0,x._id)">Cancel Reservation</button>
+              top: -37px; " ng-click="Delete(0,x._id) ">Cancel Reservation</button>
 
                             </div>
 
 
 
                             </li>
-                              <br />
-                              <br />
-                              <br />
-                              <hr />
+
                                 </div>
+                                <br />
+
+                                <hr />
                 </div>
 
 
-
+            
 
 
             </ul>
@@ -94,6 +95,7 @@
 
 </div>
 
+
 <div class="col-lg-10 col-md-push-1" ng-show="!success">
     <div class="col-md-12">
 
@@ -103,3 +105,6 @@
     </div>
 </div>
 </div>
+<!-- <modal-dialog show='modalShown' width='740px  ' height='40%'>
+
+</modal-dialog> -->

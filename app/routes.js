@@ -135,7 +135,7 @@ router.post('/business/locations/remove', businessOwnerController.removeLocation
 //routing for security
 router.post('/security/change-password', businessOwnerController.changePassword);//done --
 
-router.get('/logout', authController.generalLogOut);
+router.get('/logout',passport.authenticate('generalLogin', { session: false }),authController.generalLogOut);
 
 router.get('/search/:keyword',userController.search);//done--
 

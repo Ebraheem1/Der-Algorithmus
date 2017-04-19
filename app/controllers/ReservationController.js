@@ -270,6 +270,7 @@ var found = false ;
               if(err)
                 res.json({succes:false,message:err});
                 else{
+
                   RepeatableActivity.findOne({_id:reservation.repeatableActivity_id},function(err,activity){
                     if(err)
                        res.json({succes:false,message:err});
@@ -323,7 +324,7 @@ var found = false ;
                               var now = new Date();
                               var date = activity.travelingDate;
                                 var diff = (((Math.abs(date-now)/1000)/60)/60)/24;
-                              
+
                                 if(diff<=window){
                                    res.json({succes:false,message:"Sorry,The deadline for cancelling this reservation has passed!"});
                                  }else{

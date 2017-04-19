@@ -41,6 +41,6 @@ angular.module('reservationServices', [])
         reservationFactory.cancelReservationNR = function(reservation_id) {
             return $http.get('api/cancelReservation/1/' + reservation_id);
         }
-  
+
         return reservationFactory;
     })

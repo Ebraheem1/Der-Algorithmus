@@ -1,5 +1,5 @@
-angular.module('userApp', ['appRoutes','reservationController','reservationServices','pagingServices','passwordController'])
+angular.module('userApp', ['appRoutes','reservationController','reservationServices','authServices','pagingServices','passwordController','modalDialog'])
 
-.config(function($httpProvider) {
-
+.config(function($httpProvider){
+	$httpProvider.interceptors.push('AuthInterceptors');
 });
