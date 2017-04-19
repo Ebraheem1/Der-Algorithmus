@@ -1,4 +1,4 @@
-<div ng-hide="view.errMsg" ng-repeat="activity in viewDetailed.activities">
+<div ng-hide="viewDetailed.errMsg" ng-repeat="activity in viewDetailed.activities">
 <figure class="snip1336">
     <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample87.jpg" alt="sample87" />
     <figcaption>
@@ -9,6 +9,6 @@
 </figure>
 </div>
 <br><br>
-<div class="alert alert-danger" ng-show="view.errMsg">
-    <span class="glyphicon glyphicon-remove"></span><strong> Error! {{view.errMsg}}</strong>
+<div class="alert alert-danger" ng-show="viewDetailed.errMsg">
+    <span class="glyphicon glyphicon-remove"></span><strong> Error! {{viewDetailed.errMsg}}</strong>
 </div>
