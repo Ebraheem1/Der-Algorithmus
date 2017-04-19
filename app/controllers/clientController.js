@@ -1,5 +1,6 @@
 let Client = require('../models/Client');
-let Activity = require('../models/Activity');
+let RActivity = require('../models/RepeatableActivity');
+let NRActivity = require('../models/NonRepeatableActivity');
 let BusinessOwner = require('../models/BusinessOwner');
 var bcrypt = require('bcryptjs');
 var User = require('../models/User');
@@ -96,7 +97,7 @@ updateInfo:function(req,res){
         if(!BusinessOwner){
           res.json({success:false,message:'404 Not Found'});
         }else{
-        Activity.find({BusinessOwner_id: req.params.id}, function(err, activities){
+        NRActivity.find({BusinessOwner_id: req.params.id}, function(err, NRactivities){
 
           if(err){
 
@@ -104,8 +105,15 @@ updateInfo:function(req,res){
 
           }else{
 
-            res.json({success:true,businessOwner:BusinessOwner,activities:activities});
-
+            RActivity.find({BusinessOwner_id:req.params.id},function(err,Ractivities){
+              if(err){
+                res.json({success:false,message:err});
+              }
+              else {
+                var activities=NRactivities.concat(Ractivities);
+                res.json({success:true,activities:activities});
+              }
+            });
           }
 
         });

@@ -32,7 +32,11 @@ templateUrl: 'app/views/pages/home.html'
   controller:'viewDetailedCtrl',
   controllerAs:'viewDetailed'
 })
-
+.when('/viewDetailedActivities/:id',{
+  templateUrl:'app/views/pages/activities.html',
+  controller:'viewDetailedCtrl',
+  controllerAs:'viewDetailed'
+})
 
 .otherwise({redirectTo :'/'});
 $locationProvider.html5Mode({
