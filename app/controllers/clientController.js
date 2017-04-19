@@ -15,13 +15,13 @@ viewSummaries:function(req,res){
   BusinessOwner.find(function(err,businessOwners)
 {
   if(err){
-    res.send(err);
+    res.json({success:false,message:err});
   }else {
 
     if(businessOwners.length==0){
-      res.send('There exist no Venues');
+      res.json({success:false,message:'there exist no venues'});
     }else{
-      res.send(businessOwners);
+      res.json({success:true,message:'Loading',BusinessOwners:businessOwners});
     }
 
   }
@@ -45,7 +45,7 @@ updateInfo:function(req,res){
   var gender=req.body.gender;
   User.findOne({username:req.body.username},function(err,user){
     if(err){
-      res.json(err);
+      res.json({success:false,message:err});
     }
     else {
        user.email=(email==null | email=="")?user.email:email;
@@ -90,21 +90,21 @@ updateInfo:function(req,res){
     {
       if(err)
       {
-        res.send(err);
+        res.json({success:false,message:err});
       }
       else {
         if(!BusinessOwner){
-          res.send('404 Not Found');
+          res.json({success:false,message:'404 Not Found'});
         }else{
         Activity.find({BusinessOwner_id: req.params.id}, function(err, activities){
 
           if(err){
 
-            res.send(err);
+            res.json({success:false,message:err});
 
           }else{
 
-            res.send({BusinessOwner, activities});
+            res.json({success:true,businessOwner:BusinessOwner,activities:activities});
 
           }
 

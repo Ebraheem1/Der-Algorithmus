@@ -1,5 +1,4 @@
-angular.module('userControllers', ['userServices'])
-
+angular.module('userControllers', ['userServices','clientServices'])
 .controller('regCtrl', function($http, $location, $timeout, User){
 
 	var app = this;
@@ -34,8 +33,7 @@ angular.module('userControllers', ['userServices'])
 	app.updateUser=function(updateData){
 		app.successMsg = false;
 		app.errMsg = false;
-		console.log('ss');
-		User.updateInfo(app.updateData).then(function(data){
+				User.updateInfo(app.updateData).then(function(data){
 			if(data.data.success){
 				app.successMsg=data.data.message;
 				console.log(data.data.message);
@@ -78,7 +76,7 @@ angular.module('userControllers', ['userServices'])
 		app.successMsg = false;
 		app.errMsg = false;
 
-		User.updatePassword(Edata).then(function(data){
+		User.updatePassword(app.Edata).then(function(data){
 			if(data.data.success){
 				app.successMsg=data.data.message;
 				$timeout(function () {
@@ -94,4 +92,33 @@ angular.module('userControllers', ['userServices'])
 	}
 
 
+})
+
+.controller('viewCtrl',function($http,$location,$timeout,Client){
+		var app=this;
+		app.BusinessOwners=[];
+		app.errMsg=false;
+		Client.viewSummaries().then(function(data){
+			if(data.data.success){
+				app.BusinessOwners=data.data.BusinessOwners;
+			}
+			else {
+					app.errMsg=data.data.message;
+			}
+		});
+})
+.controller('viewDetailedCtrl',function($http,$location,$timeout,Client,$routeParams){
+	var app=this;
+	app.errMsg=false;
+	app.activities=[];
+	app.id=$routeParams.id;
+	Client.viewDetailed(app.id).then(function(data){
+		if(data.data.success){
+			app.businessOwner=data.data.businessOwner;
+			app.activities=data.data.activities;
+		}
+		else {
+			app.errMsg=data.data.message;
+		}
+	});
 })

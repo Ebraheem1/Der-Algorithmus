@@ -22,7 +22,16 @@ templateUrl: 'app/views/pages/home.html'
   controller:'updateCtrl',
   controllerAs:'update'
 })
-
+.when('/viewSummaries',{
+  templateUrl:'app/views/pages/BOsummaries.html',
+  controller:'viewCtrl',
+  controllerAs:'view'
+})
+.when('/viewDetailed/:id',{
+  templateUrl:'app/views/pages/detailedBO.html',
+  controller:'viewDetailedCtrl',
+  controllerAs:'viewDetailed'
+})
 
 
 .otherwise({redirectTo :'/'});

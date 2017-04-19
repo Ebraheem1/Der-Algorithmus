@@ -107,7 +107,7 @@ let userController={
       var newUsername=req.body.username;
       if(req.body.oldUsername == newUsername){
 
-        res.send('This is your current username!');
+        res.json({success:false,message:'this is your current username'});
 
       }else{
 
@@ -115,19 +115,19 @@ let userController={
           {
                 if(err)
                 {
-                  res.send(err);
+                  res.json({success:false,message:err});
                 }
                 else
                 {
                   if(application){
 
-                  res.send('Username Unavailable11');
+                  res.json({success:false,message:'username Unavailable'});
                   }else{
 
                     User.findOne({username:newUsername},function(err,user){
 
                       if(err){
-                  res.send(err);
+                  res.json({success:false,message:err});
                 }
                       else {
                         if(!user)
@@ -137,7 +137,7 @@ let userController={
 
                             if(err){
 
-                              res.send(err);
+                              res.json({success:false,message:err});
 
                             }else{
 
@@ -148,11 +148,11 @@ let userController={
 
                                     if(err){
 
-                                      res.send(err);
+                                      res.json({success:false,message:err});
 
                                     }else{
 
-                                      res.send('Account Updated Successfully!');
+                                      res.json({success:true,message:'Account Updated Successfully'});
 
                                     }
 
@@ -160,7 +160,7 @@ let userController={
 
                               }else{
 
-                                res.send('user not found');
+                                res.json({success:false,message:'user not found'});
 
                               }
 
@@ -170,7 +170,7 @@ let userController={
 
                       }
                       else {
-                        res.send('username is Unavailable');
+                        res.json({success:false,message:'username Unavailable'});
                       }
                     }
 

@@ -26,8 +26,8 @@ var storage = multer.diskStorage({
             //should be replaced when session is used
             var businessownerID=req.body.BusinessOwnerId;
             BusinessOwner.findById(businessownerID,function(err,businessowner){
-                if (err) 
-                    return ; 
+                if (err)
+                    return ;
                 else {
                     if(!businessowner){
                         return ;
@@ -39,13 +39,13 @@ var storage = multer.diskStorage({
                      checkUpload = 1;
                     }
 
-                    
-                
-            
+
+
+
                 }
 
             });
-       
+
         }
 
     }
@@ -56,11 +56,11 @@ let businessownerController={
 
 // this function for uploading pictures and videos to the gallery of the businessOwner
     addMedia:function(req,res){
-        
+
 
             upload(req,res,function(err){
             if(err){
-                res.send(err); 
+                res.send(err);
             }
             else if (checkUpload ==1)
             {
@@ -71,39 +71,39 @@ let businessownerController={
                 res.send('No Data entered');
             }
         });
-         }, 
-   
+         },
+
 // this function for adding any offer (discount or bounse) by the businessOwner
     addOffer : function(req,res){
-    
+
         var offer = req.body.offer ;
         var businessownerID = req.body.businessownerID;
         BusinessOwner.findById(businessownerID,function(err,businessowner){
-            if (err) 
-                res.send(err) ; 
+            if (err)
+                res.send(err) ;
             else {
-             
+
                 if(!businessowner){
                     res.send('No businessowner');
                     return ;
                                   }
                 businessowner.offers.push(offer);
-                businessowner.save();   
+                businessowner.save();
                 res.send('Your offer has been posted successfully');
             }
 
         });
 
     },
- 
+
 
 // this function for showing reviews of the logged-in businessOwner
     showReview : function(req,res){
 
         var businessownerID=req.params.businessownerID;
         Review.find({business_id:businessownerID},function(err,reviews){
-        if (err) 
-            res.send(err) ; 
+        if (err)
+            res.send(err) ;
         else {
                 if(!reviews){
                     res.send('No reviews found');
@@ -122,7 +122,7 @@ let businessownerController={
 
         var reviewID=req.params.reviewID;
         Review.findById(reviewID,function(err,review){
-            if (err) res.send(err) ; 
+            if (err) res.send(err) ;
             else{
                 if(!review){
                     res.send('No review found');
@@ -130,7 +130,7 @@ let businessownerController={
                 }
 
                 review.reply = reply;
-                review.save(); 
+                review.save();
                 res.send('your reply has been posted successfully');
             }
 
@@ -157,9 +157,9 @@ let businessownerController={
 
     addActivity:function(req,res){
 
-        
+
         var type=req.body.type;
-        
+
         req.body.businessOwner_id=req.params.BusinessOwnerId;
 
         BusinessOwner.findById(req.params.BusinessOwnerId,function(err,businessOwner){
@@ -196,7 +196,7 @@ let businessownerController={
                     {
 
                         repeatableActivity.pricePackages.push(
-                            { 
+                            {
                                 participants: req.body['participant' + i],
                                 price: req.body['price'+ i]
                             });
@@ -220,7 +220,7 @@ let businessownerController={
                         if(err)
                             return res.send(err);
                     });
-                    
+
                     businessownerController.updateBusinessTypes(businessOwner,type);
                     return res.send('Activity has been created successfully!');
 
@@ -231,13 +231,13 @@ let businessownerController={
 
 
         });
-       
+
     },
 
    // business owner deletes an activity
     deleteActivity: function(req,res){
 
-        // should be replaced with req.user._id later 
+        // should be replaced with req.user._id later
         var BusinessOwnerId=req.params.BusinessOwnerId;
 
         BusinessOwner.findById(BusinessOwnerId,function(err,businessOwner){
@@ -283,8 +283,8 @@ let businessownerController={
 
                                 }
 
-                            }); 
-   
+                            });
+
                         }
 
                     }
@@ -292,7 +292,7 @@ let businessownerController={
                     res.send('Activity has been deleted successfully');
 
                 });
-            
+
             }
 
             });
@@ -310,15 +310,15 @@ let businessownerController={
         var phoneNumber = req.body.phoneNumber;
         var name = req.body.name;
         var description = req.body.description;
-        
+
         var conditions = {username: req.body.username};
 
         User.findOne(conditions, function(err, user){
-            
+
             if(err){
-            
+
               res.json(err);
-            
+
             }else{
 
                 if(!(email == null | email == "")){
@@ -358,50 +358,50 @@ let businessownerController={
                     }
 
                 }
-            
+
                 user.save(function(err){
-            
+
                     if(err){
-            
+
                         res.send(err);
-            
+
                     }else{
-            
+
                         BusinessOwner.findOne({user_id: user.id}, function(err, businessOwner){
-            
+
                             if(err){
-            
+
                                 res.send(err);
-            
+
                             }else{
-            
+
                                 businessOwner.name = (name == null | name == "")? businessOwner.name: name;
                                 businessOwner.description = (description == null | description ==" ")? businessOwner.description: description;
-            
+
                                 businessOwner.save(function(err){
-            
+
                                     if(err){
-            
+
                                         res.send(err);
-            
+
                                     }else{
-            
+
                                         res.send('Account Updated Succesfully!');
-            
+
                                     }
-            
+
                                 });
-            
+
                             }
-            
+
                         });
-            
+
                     }
-            
+
                 });
-            
+
             }
-        
+
         });
 
     },
@@ -417,7 +417,7 @@ let businessownerController={
         if(!errors){
 
             var loginUsername = req.body.username;
-            
+
             var conditions = { username: loginUsername };
 
             User.findOne(conditions, function(err, user){
@@ -431,13 +431,13 @@ let businessownerController={
                     if(user){
 
                         conditions = {user_id: user._id};
-        
+
                         BusinessOwner.findOne(conditions, function(err, businessOwner){
-        
+
                             if(err){
-        
+
                                 res.send(err);
-        
+
                             }else{
 
                                 if(businessOwner){
@@ -456,23 +456,23 @@ let businessownerController={
 
                                     }
 
-                                    if(!exists){                            
+                                    if(!exists){
 
                                         businessOwner.locations.push(req.body.location);
-                
+
                                         businessOwner.save(function(err){
-                
+
                                             if(err){
-                
+
                                                 res.json(err);
-                
+
                                             }else{
-                
+
                                                 res.send('location added successfully');
-                
+
                                             }
-                
-                                        }); 
+
+                                        });
 
                                     }else{
 
@@ -480,10 +480,10 @@ let businessownerController={
 
                                     }
 
-                                }    
-                            
+                                }
+
                             }
-        
+
                         });
 
                     }else{
@@ -509,7 +509,7 @@ let businessownerController={
     removeLocation: function (req, res){
 
         var loginUsername = req.body.username;
-        
+
         var conditions = { username: loginUsername };
 
         User.findOne(conditions, function(err, user){
@@ -531,33 +531,33 @@ let businessownerController={
                     }else{
 
                         if(businessOwner){
-                        
+
                             if(businessOwner.locations.length>1){
 
                                 var i = businessOwner.locations.indexOf(req.body.location);
-                                
+
                                 if(i == -1){
-        
+
                                     res.send('location not found');
-        
+
                                 }else{
-        
+
                                     businessOwner.locations.pull(req.body.location);
-        
+
                                     businessOwner.save(function(err){
-        
+
                                         if(err){
-        
+
                                             res.json(err);
-        
+
                                         }else{
-        
+
                                             res.send('location removed from list')
-        
+
                                         }
-        
+
                                     });
-        
+
                                 }
 
                             }else{
@@ -584,17 +584,18 @@ let businessownerController={
     },
 
 
-    //this function changes the user password to a new one that satisfies the security criteria 
+    //this function changes the user password to a new one that satisfies the security criteria
 
     changePassword: function(req, res){
 
         var loginUsername = req.body.username;
-        
+        console.log(req.body.password);
+        console.log(req.body.confirmPassword);
         var conditions = { username: loginUsername };
 
         req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
-        req.checkBody('password-confirm', 'Passwords do not match').equals(req.body.password);
-        req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i");     
+        req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
+        req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i");
 
         var errors = req.validationErrors();
 
@@ -604,52 +605,52 @@ let businessownerController={
 
                 if(err){
 
-                    res.json(err);
+                    res.json({success:false,message:err});
 
                 }else{
 
                     if(user){
-                    
+
                         bcrypt.compare(req.body.oldPassword, user.password, function(err, isMatch){
 
-                        
+
                             if(err){
 
-                                res.json(err);
+                                res.json({success:false,message:err});
 
                             }else{
 
                                 if(isMatch){
 
                                     user.password = req.body.password;
-                                    
-                                    user.save(function(err){        
+
+                                    user.save(function(err){
 
                                         if(err){
-                                            
-                                            res.send(err);
-                                        
+
+                                            res.json({success:false,message:err});
+
                                         }else{
 
-                                            res.send('Your password has been changed successfully!');
+                                            res.json({success:true,message:'your Password changed successfully'});
 
                                         }
 
-                                    });                                        
+                                    });
 
                                 }else{
 
-                                    res.send('wrong password');
+                                    res.json({success:false,message:'wrong password'});
 
                                 }
 
                             }
-                                                        
-                        });             
-                    
+
+                        });
+
                     }else{
 
-                        res.send('user not found!');
+                        res.json({success:false,message:'user not found'});
 
                     }
                 }
@@ -658,7 +659,7 @@ let businessownerController={
 
         }else{
 
-            res.send(errors);
+            res.json({success:false,message:errors});
 
         }
 
@@ -686,7 +687,7 @@ getOwner:function(username,password,callback)
                         {
                            callback(null,null);
                         }
-                        
+
                         if(businessOwner)
                         {
                         bcrypt.compare(password,user.password,function(err,isMatch)

@@ -63,13 +63,69 @@
                 <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
             </div>
         </form>
+
+<form role="form" ng-submit="update.updateUsername(Edata)">
+<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Change Username</button>
+<div id="demo" class="collapse">
+    <br>
+    <label style="color: white">username</label>
+    <div class="input-group">
+        <input type="text" class="form-control" name="oldUsername" placeholder="user Name" ng-model="update.Edata.oldUsername" required>
+        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+    </div>
+    <br>
+    <label style="color: white">Enter new Username</label>
+    <div class="input-group">
+        <input type="text" class="form-control" name="username" placeholder="Enter new username" required  ng-model="update.Edata.username">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+    </div>
+    <br>
+    <input type="submit" class="btn btn-info" value="Update">
+    <br>
+    <br>
+</div>
+</form>
+
+<form role="form" ng-submit="update.updatePassword(Edata)">
+<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#changePassword">Change Password</button>
+<div id="changePassword" class="collapse">
+  <br>
+  <label style="color: white">username</label>
+  <div class="input-group">
+      <input type="text" class="form-control" name="username" placeholder="user Name" ng-model="update.Edata.username" required="">
+      <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+  </div>
+    <br>
+    <label style="color: white">Enter oldPassword</label>
+    <div class="input-group">
+        <input type="password" class="form-control" name="oldPassword" placeholder="Enter old Password" required ng-model="update.Edata.oldPassword">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+    </div>
+    <br>
+    <label style="color: white">Enter Password</label>
+    <div class="input-group">
+        <input type="password" class="form-control" name="password" placeholder="Enter new Password" required ng-model="update.Edata.password">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+    </div>
+
+    <br>
+    <label style="color: white">Confirm Password</label>
+    <div class="input-group">
+        <input type="password" class="form-control" name="confirmPassword" placeholder="Retype Password" required ng-model="update.Edata.confirmPassword">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+    </div>
+    <br>
+    <input type="submit" class="btn btn-info" value="Update">
+</div>
+</form>
+
         <div class="col-lg-5 col-md-push-1">
             <div class="col-md-12">
                 <div class="alert alert-success" ng-show="update.successMsg">
-                    <strong><span class="glyphicon glyphicon-ok"></span> Success!{{update.successMsg}}</strong>
+                    <strong><span class="glyphicon glyphicon-ok"></span> Success! {{update.successMsg}}</strong>
                 </div>
                 <div class="alert alert-danger" ng-show="update.errMsg">
-                    <span class="glyphicon glyphicon-remove"></span><strong> Error!{{update.errMsg}}</strong>
+                    <span class="glyphicon glyphicon-remove"></span><strong> Error! {{update.errMsg}}</strong>
                 </div>
             </div>
         </div>
