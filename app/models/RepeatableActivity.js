@@ -10,7 +10,7 @@ var PricePackage= new Schema({
 
 var Slot= new Schema({
 
-	startTime: String
+	startTime: String,
 	endTime: String
 
 });
