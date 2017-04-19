@@ -5,28 +5,29 @@
 <div class="login-container">
 <div id="output"></div>
 <div class="form-box">
-   <!--  <form  ng-submit="submit();">
-        <input name="myfile" type="file"  file-model="file.upload" ng-disabled="uploading" style="display: none;">
-        <button class="btn btn-primary" type="submit" ng-disabled="uploading">Add To Gallery</button>
-    </form> -->
-  
-   <form ng-submit="Submit();">
+  <!--   <form  ng-submit="business.addOffer(offerData);">
+        <input name="offer" type="text" placeholder="Write Your Offer Here!" ng-required="true" ng-model="business.offerData.offer">
+    </form>
+<br> -->
+     <form ng-submit="Submit(offerData);">
+     <input name="offer" type="text" placeholder="Write Your Offer Here!" ng-required="true" ng-model="offerData"><br><br>
         <label class="btn btn-success">
             browse
             <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" style="display: none;">
         </label>
-        <button ng-disabled="uploading" type="submit" class="btn btn-info btn-block login">Add To Gallery</button>
+        <button ng-disabled="uploading" type="submit" class="btn btn-info btn-block login">Add Offer</button>
     </form>
+  
 </div>
 </div>
 
 <div class="row show-hide-message text-center bg-grey" ng-show="errMsg">
 <div class="alert alert-danger"> {{errMsg}} </div>
 </div>
-
 <div class="row show-hide-message text-center bg-grey" ng-show="successMsg">
 <div class="alert alert-success"> {{successMsg}} </div>
 </div>
+
 
 
 </div>

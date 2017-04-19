@@ -1,4 +1,6 @@
 let BusinessOwner = require('../models/BusinessOwner');
+/*let NonRepeatableActivity = require('../models/NonRepeatableActivity');
+let RepeatableActivity = require('/../models/RepeatableActivity');*/
 let Review = require('../models/Review');
 var bcrypt = require('bcryptjs');
 var path = require('path');
@@ -14,7 +16,7 @@ let Activity = require('../models/Activity');
 let RepeatableActivity = require('../models/RepeatableActivity');
 let NonRepeatableActivity = require('../models/NonRepeatableActivity');
 
-var storage = multer.diskStorage({
+/*var storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, './public/gallery');
     },
@@ -57,48 +59,94 @@ var storage = multer.diskStorage({
         }
 
     }
-});
-var upload = multer({ storage: storage}).single('fileToUpload');
+});*/
+// var upload = multer({ storage: storage}).single('fileToUpload');
 
 let businessownerController={
 
 // this function for uploading pictures and videos to the gallery of the businessOwner
-    addMedia:function(req,res){
+   /* addMedia:function(req,res){
         
-
+            
             upload(req,res,function(err){
             if(err){
               return res.json({ success: false, message: 'Error Uploading Files .' }); 
             }
             else if (checkUpload ==1)
             {
-               
                 checkUpload = 0;
                 return res.json({ success: true, message: 'Your gallery updated successfully' });
             }
             else{
-            return res.json({ success: false, message: 'No Data Entered.' });
-            }
+                
+                return res.json({ success: false, message: 'No Data Entered.' });
+                }
         });
          }, 
-   
+   */
+
+   addMedia:function(req,res){
+    BusinessOwner.findById(req.params.id,function(err,businessowner){
+                if (err) 
+                    res.json({success:false , message:'error'}) ; 
+                else {
+                    if(!businessowner || businessowner.length == 0){
+                        res.json({success:false , message :'Not found '});
+                    }else{
+                        res.json({success:true , message:'Your gallery updated successfully'});
+                        if(req.body.image.match(/\.(mp4|mov|avi|flv|wmv)$/)){
+                     businessowner.videos.push(req.body.image);
+                     businessowner.save();
+                     
+                 }
+                 else {
+                     businessowner.images.push(req.body.image);
+                     businessowner.save();
+                     checkUpload = 1;
+                 }
+
+                        }
+                        }
+                        });
+                        },   
 // this function for adding any offer (discount or bounse) by the businessOwner
     addOffer : function(req,res){
     
-        var offer = req.body.offer ;
-        var businessownerID = req.body.businessownerID;
-        BusinessOwner.findById(businessownerID,function(err,businessowner){
+      
+        if(req.file != undefined)
+                req.body.image=req.file.filename;
+
+        var activityID = req.params.activityID;
+        NonRepeatableActivity.findById(activityID,function(err,nonrepeatableactivity){
             if (err) 
-                res.send(err) ; 
+                res.json({success:false , message:'Error occurred .. Try again'}) ; 
             else {
              
-                if(!businessowner){
-                    res.send('No businessowner');
-                    return ;
+                if(!nonrepeatableactivity || nonrepeatableactivity.length==0){
+
+                RepeatableActivity.findById(activityID,function(err,repeatableactivity){
+            if (err) 
+                res.json({success:false , message:'Error occurred .. Try again'}) ; 
+            else {
+             
+                if(!repeatableactivity || repeatableactivity.length==0){
+                 res.json({success:false , message:'No activity found'});   
+                    
                                   }
-                businessowner.offers.push(offer);
-                businessowner.save();   
-                res.send('Your offer has been posted successfully');
+                                  else{
+                repeatableactivity.offers.push({offer: req.body.offer , image: req.body.image});
+                repeatableactivity.save();   
+                res.json({success:true , message:'Your offer has been posted successfully'});
+            }
+            }
+
+        });
+                                  }
+                                  else{
+                nonrepeatableactivity.offers.push(offer);
+                nonrepeatableactivity.save();   
+                res.json({success:true , message:'Your offer has been posted successfully'});
+            }
             }
 
         });
@@ -112,14 +160,15 @@ let businessownerController={
         var businessownerID=req.params.businessownerID;
         Review.find({business_id:businessownerID},function(err,reviews){
         if (err) 
-            res.send(err) ; 
+            res.json({success:false , message : 'An Error occurred .. Try again later'}); 
         else {
-                if(!reviews){
-                    res.send('No reviews found');
-                    return ;
+                if(!reviews || reviews.length == 0){
+                    res.json({success:false , message:'No reviews found'});
+                    
                 }
-                res.send(reviews);
-
+                else{
+                res.json({success:true , reviews:reviews});
+                    }
             }
 
         });
@@ -131,17 +180,18 @@ let businessownerController={
 
         var reviewID=req.params.reviewID;
         Review.findById(reviewID,function(err,review){
-            if (err) res.send(err) ; 
+            if (err) res.json({success:false , message:'Error occurred ..try again'}) ; 
             else{
-                if(!review){
-                    res.send('No review found');
-                    return ;
+                if(!review ){
+                    res.json({success:false, message:'No review found'});
+                    
                 }
-
+                else{
+                console.log('Wslt');
                 review.reply = reply;
                 review.save(); 
-                res.send('your reply has been posted successfully');
-            }
+                res.json({success:true , message:'your reply has been posted successfully'});
+            }}
 
         });
 

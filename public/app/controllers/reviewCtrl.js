@@ -1,6 +1,6 @@
-angular.module('reviewController', ['reviewServices', 'authServices'])
+angular.module('reviewController', ['reviewServices', 'authServices','businessOwnerServices'])
 
-.controller('reviewCtrl', function($http, $location, $timeout, Review, Authentication,$scope){
+.controller('reviewCtrl', function($http, $location, $timeout, Review, Authentication,$scope,BusinessOwner){
 
 	var app = this;
 
@@ -50,5 +50,22 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 			}
 		});
 	};
+
+/*
+	BusinessOwner.getReviews().then(function(data)
+	{
+		app.errMsg = false;
+		app.reviews=[];
+		if(data.data.success)
+		{
+
+			reviews = data.data.reviews;
+
+		}
+		else{
+			app.errMsg = data.data.message;
+		}
+	});*/
+	
 
 });

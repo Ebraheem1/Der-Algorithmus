@@ -13,7 +13,52 @@ var authController = require('./controllers/AuthenticationController');
 
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
-var multer = require('multer')
+var multer = require('multer');
+
+
+//multer stuff, to upload a file
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/gallery/');
+  },
+  filename: function (req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpeg|jpg|mp4|mov|avi|flv|wmv)$/)) {
+      var err = new Error();
+      err.code = 'notAnImage';
+      return cb(err);
+    } else {
+      cb(null, Date.now()+'_'+file.originalname);
+    }
+  }
+});
+
+var upload = multer({ 
+  storage: storage
+}).single('myfile');
+
+//uploading files route
+router.post('/upload', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      if(err.code=='notAnImage'){
+        res.json({success:false, message: 'File should be an image of one of these extension (png, jpeg, jpg)!'});
+        return;
+      }
+      res.json({success:false, message: 'File Upload Error!'});
+    }
+    else{
+      if(!req.file){
+        res.json({success:false, message: 'No file was selected!'});
+      }
+      else{
+        res.json({success:true, message: 'File was uploaded successfully.', name: req.file.filename });
+      }
+
+    }
+
+  });
+});
+
 
 require('./config/passport')(passport);
 
@@ -141,7 +186,7 @@ router.get('/logout', authController.generalLogOut);
 router.get('/search/:keyword',userController.search);//done--
 
 router.post('/gallery/:id', businessOwnerController.addMedia);//done--
-router.post('/offer', businessOwnerController.addOffer);//done--
+router.post('/offer/:activityID', multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addOffer);//done--
 router.get('/showReview/:businessownerID', businessOwnerController.showReview);//done--
 router.post('/reply/:reviewID', businessOwnerController.reply);//done--
 

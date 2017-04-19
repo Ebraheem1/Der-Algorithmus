@@ -15,15 +15,21 @@ var Slot= new Schema({
 
 });
 
+var Offer = new Schema({
+	offer : String,
+	image : String,
+});
+
 var RepeatableActivitySchema = new Schema({
 
 	businessOwner_id: {type: mongoose.Schema.Types.ObjectId, ref: 'BusinessOwner', required: true},
-	type: {type: String, required:true}, //Room-Escaping, Paintball Fight, Battlefield, Playground
-	image: {type: String, required:true},
-	theme: {type: String, required:true},
-	description: {type: String, required:true},
+	type: {type: String/*, required:true*/}, //Room-Escaping, Paintball Fight, Battlefield, Playground
+	image: {type: String/*, required:true*/},
+	theme: {type: String/*, required:true*/},
+	description: {type: String/*, required:true*/},
 	pricePackages: [PricePackage],
 	slots: [Slot],
+	offers:[Offer],
 	dayOffs: [Number],
 	cancellationWindow: Number //client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
 	

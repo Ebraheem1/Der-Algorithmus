@@ -31,7 +31,7 @@ angular.module('appRoutes', ['ngRoute'])
 		controllerAs: 'main'
 	})
 
-	.when('/gallery/gallery/:keyword',{
+	.when('/gallery/gallery',{
 		templateUrl:'app/views/pages/gallery.html',
 		controller: 'businessCtrl',
 		controllerAs : 'business'
@@ -42,6 +42,18 @@ angular.module('appRoutes', ['ngRoute'])
 		controller: 'reviewCtrl',
 		controllerAs: 'review'
 	})
+	 .when('/reviews',{
+		templateUrl:'app/views/pages/reviews.html',
+		controller: 'commentCtrl',
+		controllerAs : 'comment'
+	})
+
+	  .when('/offers',{
+		templateUrl:'app/views/pages/offer.html',
+		controller: 'businessCtrl',
+		controllerAs : 'business'
+	})
+
 
 	.otherwise({
 		redirectTo: '/'
