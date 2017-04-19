@@ -37,6 +37,11 @@ templateUrl: 'app/views/pages/home.html'
   controller:'viewDetailedCtrl',
   controllerAs:'viewDetailed'
 })
+.when('/BOhomepage',{
+  templateUrl:'app/views/pages/BusinessOwnerHomePage.html',
+  controller:'ViewBOhomepageCtrl',
+  controllerAs:'ViewBOhomepage'
+})
 
 .otherwise({redirectTo :'/'});
 $locationProvider.html5Mode({

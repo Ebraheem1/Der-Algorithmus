@@ -2,6 +2,7 @@ let Client = require('../models/Client');
 let RActivity = require('../models/RepeatableActivity');
 let NRActivity = require('../models/NonRepeatableActivity');
 let BusinessOwner = require('../models/BusinessOwner');
+let Reviews=require('../models/Review');
 var bcrypt = require('bcryptjs');
 var User = require('../models/User');
 var ObjectId = require('mongodb').ObjectID;
@@ -111,7 +112,16 @@ updateInfo:function(req,res){
               }
               else {
                 var activities=NRactivities.concat(Ractivities);
-                res.json({success:true,activities:activities});
+                Reviews.find({business_id:req.params.id},function(err,reviews){
+
+                  if(err){
+                    res.json({success:false,message:err});
+                  }
+                  else {
+                    res.json({success:true,activities:activities,reviews:reviews});
+                  }
+                });
+
               }
             });
           }

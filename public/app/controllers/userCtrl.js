@@ -122,3 +122,20 @@ angular.module('userControllers', ['userServices','clientServices'])
 		}
 	});
 })
+.controller('ViewBOhomepageCtrl',function($http,Client,AuthenticationToken){
+	var app=this;
+	app.id=AuthenticationToken.getId();
+
+	Client.viewDetailed(app.id).then(function(data){
+		if(data.data.success){
+			app.businessOwner=data.data.businessOwner;
+			app.activities=data.data.activities;
+			app.reviews=data.data.reviews;
+		}
+		else {
+			app.errMsg=data.data.message;
+		}
+	});
+
+
+})
