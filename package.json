@@ -1,0 +1,41 @@
+{
+  "name": "der-algorithmus",
+  "version": "1.0.0",
+  "description": "SE term Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ebraheem1/Der-Algorithmus.git"
+  },
+  "author": "MSN",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ebraheem1/Der-Algorithmus/issues"
+  },
+  "homepage": "https://github.com/Ebraheem1/Der-Algorithmus#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.1",
+    "connect-flash": "^0.1.1",
+    "express": "^4.15.2",
+    "express-messages": "^1.0.1",
+    "express-paginate": "^0.2.2",
+    "express-session": "^1.15.2",
+    "express-validator": "^3.1.2",
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "^4.9.2",
+    "mongoose-unique-validator": "^1.0.5",
+    "multer": "^1.3.0",
+    "node-mailer": "^0.1.1",
+    "nodemailer": "^3.1.8",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
+    "underscore": "^1.8.3",
+    "xoauth2": "^1.2.0"
+  }
+}

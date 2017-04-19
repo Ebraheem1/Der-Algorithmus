@@ -1,0 +1,87 @@
+<style type="text/css">
+	div.div-centered {
+	  	padding-left: 250px;
+	}
+	input.input-red{
+		border-color: red;
+	}
+</style>
+<br>
+<hr>
+<div class = "div-centered" ng-show = "business._id" ng-controller = "businessOwnerInfoCtrl as businessOwnerInfo">
+	
+	<div class = "div-centered">
+		<form class = "form-horizontal" role = "form" name = "data" ng-submit="businessOwnerInfo.updateInfo();">
+			
+			<div class="form-group">
+                <div class="col-md-6">
+                	<label for="name" style="color: #ffffff">
+                		name: {{business.name}}
+                	</label>
+					<input class="form-control" type="text" name="name" placeholder = "{{business.name}}" ng-model = "businessOwnerInfo.info.name" ng-show = "editName">
+					<a href="" ng-click = "editName = !editName">{{editName? "cancel": "edit";}}</a>		 
+                </div>
+            </div>
+            <br>
+            
+            <div class="form-group">
+                <div class="col-md-6">
+                    <label for="email" style="color: #ffffff">
+                		email: {{user.email}}
+                	</label>
+					<input class="form-control" type="email" name="email" ng-model = "businessOwnerInfo.info.email" placeholder = "{{user.email}}" ng-show = "editEmail" ng-change = "editEmail && !(businessOwnerInfo.isOldEmail()) && data.email.$dirty && businessOwnerInfo.isEmail() && businessOwnerInfo.checkEmail()" value = "(!editEmail)? '';">
+
+					<label for="email" style="color: #ffffff" ng-show = "editEmail && data.email!=user.email && data.email!=user.email && businessOwnerInfo.isEmail() && !(businessOwnerInfo.isOldEmail()) && data.email.$dirty">{{(emailAvailable)?"✔":"email not available!"}}</label>
+					
+					<label for="email" style="color: #ffffff" ng-show = "editEmail && data.email!=user.email && !businessOwnerInfo.isEmail() && data.email.$dirty">{{"not a valid email address!"}}</label>
+					
+					<label for="email" style="color: #ffffff" ng-show = "editEmail && data.email!=user.email && data.email!=user.email && businessOwnerInfo.isEmail() && businessOwnerInfo.isOldEmail() && data.email.$dirty">{{"New email must be different from current one or why the change!"}}</label>
+					
+					<a href="" ng-click = "editEmail = !editEmail;">{{editEmail? "cancel": "edit";}}</a>
+					
+                </div>
+            </div>
+			<br>
+			
+			<div class="form-group">
+                <div class="col-md-6">
+                    <label for="phoneNumber" style="color: #ffffff">
+                		phone number: {{user.phoneNumber}}
+                	</label>
+					<input class="form-control" type="number" name="phoneNumber" placeholder = "{{user.phoneNumber}}" ng-show = "editNumber" ng-model = "businessOwnerInfo.info.phoneNumber">
+					<a href="" ng-click = "editNumber = !editNumber">{{editNumber? "cancel": "edit";}}</a> 
+                </div>
+            </div>
+			<br>
+
+			<div class="form-group">
+                <div class="col-md-6">
+                    <label for="description" style="color: #ffffff">
+                		description: {{business.description}}
+                	</label>
+					<input class="form-control" type="text" name="description" placeholder = "{{business.description}}" ng-show = "editDescription" ng-model = "businessOwnerInfo.info.description">
+					<a href="" ng-click = "editDescription = !editDescription">{{editDescription? "cancel": "edit";}}</a>
+                </div>
+            </div>			
+			<br>
+
+			<button class="btn btn-primary" ng-disabled = "data.$invalid || (!emailAvailable && editEmail) || !(editEmail || editDescription || editNumber || editName)" type="submit">Update Info</button>
+		</form>
+
+		<div>
+			<a href="/business/{{business._id}}/manage-locations">manage locations</a>
+		</div>
+	</div>
+
+
+
+</div>
+<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+    <strong>{{errMsg}}</strong>
+</div>
+
+<div class="alert alert-success fade in alert-dismissable" ng-show = "successMsg">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+    {{successMsg}}
+</div>

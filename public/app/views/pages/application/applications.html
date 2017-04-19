@@ -1,0 +1,60 @@
+<br>
+<h1 class = "h1-centered">Pending Applications ...</h1>
+<hr>
+<!--<div ng-controller = "applicationsCtrl as application">
+
+	<ul class = "list-centered" ng-show = "applications.length>0">
+		<li ng-repeat = "application in applications">
+			<a href="/application/applications/{{application._id}}">	
+				<h3>
+					{{application.username}}
+				</h3>
+				<p>
+					{{application.description}}
+				</p>
+				<hr>
+			</a>
+		</li>			
+	</ul>
+	
+	<div ng-hide = "applications.length>0">
+		<h3 class = "h3-centered">No applications to show!</h3>
+	</div>
+</div>-->
+<div ng-controller="applicationsCtrl as application" class="container">
+    <div class="text-center">
+        <h1>Applications</h1>
+ 
+        <!-- items: use for whatever items you want to page-->
+        <div class="text-left" ng-repeat="item in application.items">
+        	<a href="/application/applications/{{item._id}}">	
+				<h3>
+					{{item.username}}
+				</h3>
+				<p>
+					{{item.description}}
+				</p>
+				<hr>
+			</a>
+        </div>
+         
+        <!-- pager: keep it as it is -->
+        <ul ng-if="application.pager.pages.length" class="pagination">
+            <li ng-class="{disabled:application.pager.currentPage === 1}">
+                <a ng-click="application.setPage(1)">First</a>
+            </li>
+            <li ng-class="{disabled:application.pager.currentPage === 1}">
+                <a ng-click="application.setPage(application.pager.currentPage - 1)">Previous</a>
+            </li>
+            <li ng-repeat="page in application.pager.pages" ng-class="{active:application.pager.currentPage === page}">
+                <a ng-click="application.setPage(page)">{{page}}</a>
+            </li>               
+            <li ng-class="{disabled:application.pager.currentPage === application.pager.totalPages}">
+                <a ng-click="application.setPage(application.pager.currentPage + 1)">Next</a>
+            </li>
+            <li ng-class="{disabled:application.pager.currentPage === application.pager.totalPages}">
+                <a ng-click="application.setPage(application.pager.totalPages)">Last</a>
+            </li>
+        </ul>
+    </div>
+</div>

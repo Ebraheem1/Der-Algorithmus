@@ -1,0 +1,47 @@
+<style type="text/css">
+	div.div-centered {
+	  	padding-left: 350px;
+	}
+	input.input-red{
+		border-color: red;
+	}
+</style>
+<br>
+<div ng-controller = "locationsCtrl as locations">
+	<div class="page-header">
+		<h1>Manage Locations</h1>
+	</div>
+
+	<div class = "div-centered">
+		<div>	
+			<div  data-ng-repeat="location in business.locations">
+		      	<label style="color: #ffffff">{{location}}
+		      		<a href="" class="remove" ng-show="business.locations.length>1" ng-click="locations.removeLocation(location)">-</a>
+		      	</label>	
+		    </div>
+	    </div> 
+
+		<form class = "form-horizontal" role = "form" name = "data" ng-submit="locations.addLocation(locations.location)">
+			<div class="form-group">
+                <div class="col-md-6">
+                    <input class="form-control" type = "text" name="location" placeholder="location" ng-model="locations.location" ng-change = "data.location.$dirty && locations.checkLocation()"
+					required>
+                </div>
+                <label for="location" style="color: #ffffff" ng-show = "data.location.$dirty && !locations.isEmpty()">{{(locationExists)? "location already exists!": "✔";}}</label>
+            </div>
+            <br>
+
+			<button class="btn btn-primary" ng-disabled = "data.$invalid || locationExists" type="submit">Add Location</button>
+		</form>
+	</div>	
+
+	<br>
+
+	<div class="row show-hide-message" ng-show="errMsg">
+		<div class="alert alert-danger"> {{errMsg}} </div>
+	</div>
+
+	<div class="row show-hide-message alert alert-success" ng-show="successMsg">
+		<div class="alert alert-success"> {{successMsg}} </div>
+	</div>
+</div>	

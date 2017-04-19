@@ -1,0 +1,246 @@
+//Dependencies
+var express = require('express');
+var router = express.Router();
+var reviewController=require('./controllers/reviewController');
+var activityController=require('./controllers/activityController');
+var administratorController = require('./controllers/administratorController');
+var applicationController = require('./controllers/applicationController');
+var businessOwnerController = require('./controllers/businessownerController');
+var User = require('./models/User');
+var passport=require('passport');
+var clientController = require('./controllers/clientController');
+var userController = require('./controllers/userController');
+var authController = require('./controllers/AuthenticationController');
+var jwt = require('jsonwebtoken');
+var secret = 'DerAlgorithmus'
+
+
+var jwt = require('jsonwebtoken');
+var secret = 'Der-Algorithmus-Team';
+var multer = require('multer')
+
+require('./config/passport')(passport);
+
+
+//here we have username and password as an input parameters
+//we search if a client exists with in the Client table so we authenticate the client
+//If we couldn't find a client with matching username and password, so we search if
+//the data passed from the front-end is matching admin credentials, thus, the
+//authentication would be done for admins.
+//If the data didn't match also the admin credentials, so we search in the BusinessOwner
+//table, if we found a matched tuple then the authentication would be done for 
+//BusinessOwner, if not found then the data entered doesn't exist in my system
+//an error message is displayed accordingly.
+router.post('/login', function(req, res) {
+  //These extra checks to maintain the code secure 
+  req.checkBody('username',' Username Required').notEmpty();
+  req.checkBody('password',' Password Required').notEmpty();
+  var errors=req.validationErrors();
+  if(errors)
+  {
+    return res.json({success:false, message: 'Username and Password are required'});
+  }
+  var username = req.body.username;
+  var password = req.body.password;
+  clientController.getClient(username,password, function(err, client){
+  if(err) {
+    return res.json({ success: false, message: 'Authentication failed.' });
+  }
+  if(client){
+    var token = jwt.sign({user:client,type:1}, secret, {
+        expiresIn: '24h' 
+        });
+    return res.json({ success: true,id:client._id ,username:username ,type: 1 ,token: 'JWT ' + token });
+ }
+ else{
+ administratorController.comparePassword(password,function(err, isAdmin){
+    if(err){
+      return res.json({ success: false, message: 'Authentication failed.' });
+    } 
+    if(isAdmin && username=="admin"){
+      administratorController.getAdmin(function(err,admin)
+      {
+        if(err)
+        {
+          return res.json({ success: false, message: 'Authentication failed.' });
+        }
+        var token = jwt.sign({user:admin[0],type:0}, secret, {
+        expiresIn: '24h' 
+        });
+        return res.json({ success: true,id:admin[0]._id , username:username ,type: 0 ,token: 'JWT ' + token });
+      });
+    }
+  else{
+  businessOwnerController.getOwner(username,password,function(err,businessOwner)
+  {
+    if(err)
+    {
+      return res.json({ success: false, message: 'Authentication failed.' });
+    }
+    if(businessOwner)
+    {
+      var token = jwt.sign({user:businessOwner,type:2}, secret, {
+        expiresIn: '24h' 
+        });
+      return res.json({ success: true,id:businessOwner._id ,username:username , type:2 ,token: 'JWT ' + token });
+    }
+    else{
+      return res.json({ success: false, message: 'Authentication failed. Invalid username or password' });
+    }
+
+  });
+  }
+  });
+}
+ });
+    
+  });//done--
+
+
+
+router.get('/dashboard', passport.authenticate('generalLogin', { session: false }), function(req, res) {
+  return res.json('It worked! User id is: ' + req.user._id + '.');
+});
+
+//Routes
+
+//routing for creating a new Cient
+router.post('/register',userController.createUser); //done --
+
+//routing for viewing the summary of venues of the Business owners
+router.get('/view-summary',clientController.viewSummaries);//done --
+
+//routing for updating client accont information(firstname,lastname,gender,email,phonenumber)
+router.post('/update-Info',clientController.updateInfo);//done --
+
+//routing for viewing detailed venue page for a specific Business Owner
+router.get('/businessOwner/:id', clientController.viewBusiness);//done --
+
+//routing for changing the username of the User
+router.post('/change-username',userController.changeUsername);//done --
+
+//
+router.get('/application/:id/reject', applicationController.reject);//done --
+router.get('/application/:id/accept',applicationController.accept);//done --
+router.post('/user/forgotPassword',userController.forgotPassword);//done --
+
+//routing for viewing applications
+//router.get('/applications/:page', administratorController.viewApplicationsIndex);//done --
+router.get('/applications/:id', administratorController.viewApplication);//done --
+router.get('/applications', administratorController.viewApplicationsIndex);//done --
+
+//routing for creating application
+router.post('/applications/check/username', applicationController.checkUsername);//done --
+router.post('/applications/check/email', applicationController.checkEmail);//done --
+router.post('/business/apply', applicationController.createApplication);//done --
+
+//routing for updating basic info
+router.post('/business/:id/update-info', businessOwnerController.updateInfo);//done --
+router.get('/business/:id', businessOwnerController.getBusinessInfo);//done --
+
+//routing for locations operations
+router.post('/business/:id/locations/add', businessOwnerController.addLocation);//done --
+router.post('/business/:id/locations/remove', businessOwnerController.removeLocation);//done --
+
+//routing for security
+router.post('/security/change-password', businessOwnerController.changePassword);//done --
+
+router.get('/logout',passport.authenticate('generalLogin', { session: false }),authController.generalLogOut);
+
+router.get('/search/:keyword',userController.search);//done--
+
+router.post('/gallery', businessOwnerController.addMedia);//done--
+router.post('/offer', businessOwnerController.addOffer);//done--
+router.get('/showReview/:businessownerID', businessOwnerController.showReview);//done--
+router.post('/reply/:reviewID', businessOwnerController.reply);//done--
+
+router.get('/review/getReview/:id', reviewController.getReview);//done--
+router.post('/review/newReview', reviewController.newReview);//done--
+router.post('/review/editReview/:id', reviewController.editReview);//done--
+router.post('/review/deleteReview/:id', reviewController.deleteReview);//done--
+
+router.get('/review/view/:businessownerID', reviewController.viewBusinessReviews );//done--
+router.post('/business/rate', clientController.rateBusiness );//done--
+
+router.get('/activity/getActivity/:id', activityController.getActivity);
+router.post('/activity/newActivity', activityController.newActivity);
+router.post('/activity/editActivity/:id', activityController.editActivity);//done--
+
+router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
+router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--
+
+router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
+router.get('/removeBusiness/:businessId',administratorController.removeBusiness);//done--
+
+router.post('/createAdmin',administratorController.createAdmin);//done--
+
+
+
+
+router.post('/authenticate', function(req, res) {
+  var missingFields = req.body.username==null || req.body.username=='' || req.body.password==null || req.body.password=='';
+  if(missingFields){
+    res.json({ success: false, message: 'The fields (username, password) are required!' });
+    return;
+  }
+  User.findOne({ username: req.body.username }, function(err, user) {
+      if (err) {
+        res.json({ success: false, message: err });
+      }else {
+        if (!user) {
+            res.json({ success: false, message: 'No account with this username exists!' });
+            return;
+        } 
+        var validPassword = user.comparePassword(req.body.password);
+        if (!validPassword) {
+            res.json({ success: false, message: 'The password you entered is incorrect!' });
+        } else {
+          var token = jwt.sign({username: user.username, user_id:user._id}, secret, { expiresIn: '24h'});
+          res.json({ success: true, message: 'Successfully logged in.', token: token});
+        }
+        
+      }
+  });
+});﻿
+
+
+// router.use(function(req, res, next){
+//   var token = req.body.token || req.body.query || req.headers['x-access-token'];
+//   if(token){
+//     jwt.verify(token, secret, function(err, loggedInUser){
+//         if(err){
+//             res.json({success: false, message: 'Invalid Token!'});
+//         } else{
+//             req.loggedInUser = loggedInUser;
+//             next();
+//         }
+//     });
+//   } 
+//   else{
+//     res.json({success: false, message: 'No token exists!'});
+//   }
+// });
+
+router.post('/loggedIn', function(req, res, next){
+    var token = req.body.token || req.body.query || req.headers['x-access-token'];
+    if(token){
+      jwt.verify(token, secret, function(err, loggedInUser){
+          if(err){
+              res.json({success: false, message: 'Invalid Token!'});
+          } else{
+              req.loggedInUser = loggedInUser;
+              res.send(req.loggedInUser);
+
+          }
+      });
+    } 
+    else{
+      res.json({success: false, message: 'No token exists!'});
+    }
+});
+
+
+//export router
+module.exports = router;
+
+
