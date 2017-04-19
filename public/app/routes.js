@@ -5,11 +5,11 @@ angular.module('appRoutes', ['ngRoute'])
 .config(function($routeProvider, $locationProvider){
 
 	$routeProvider
-	.when('/', {
+/*	.when('/', {
 		templateUrl: 'app/views/pages/home.html',
 		controller:'mainCtrl',
 		controllerAs:'main'
-	})
+	}) */
 	
 	.when('/register', {
 		templateUrl: 'app/views/pages/users/register.html',
@@ -35,6 +35,38 @@ angular.module('appRoutes', ['ngRoute'])
 		templateUrl: 'app/views/pages/review/newReview.html',
 		controller: 'reviewCtrl',
 		controllerAs: 'review'
+	})
+
+//	.when('/viewBusinessActivities', {
+	.when('/', {	
+		templateUrl: 'app/views/pages/businessActivities.html',
+		controller: 'businessActivitiesCtrl',
+		controllerAs: 'businessActivities'
+	})
+
+	.when('/repeatableActivityForm', {	
+		templateUrl: 'app/views/pages/repeatableActivityForm.html',
+		controller: 'repeatableActivityFormCtrl'
+	})
+
+	.when('/nonRepeatableActivityForm', {	
+		templateUrl: 'app/views/pages/nonRepeatableActivityForm.html',
+		controller: 'nonRepeatableActivityFormCtrl'
+
+	})
+
+	.when('/viewNonRepeatableReservations/:activityId', {
+
+		templateUrl: 'app/views/pages/nonRepeatableReservations.html',
+		controller: 'nonRepeatableReservationsCtrl'
+
+	})
+
+	.when('/viewRepeatableReservations/:activityId', {
+
+		templateUrl: 'app/views/pages/repeatableReservations.html',
+		controller: 'repeatableReservationsCtrl'
+
 	})
 
 	.otherwise({

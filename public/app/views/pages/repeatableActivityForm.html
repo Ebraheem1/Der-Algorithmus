@@ -1,0 +1,67 @@
+<head>
+  <style type="text/css">
+    .custom {
+        color: white;
+    }
+  </style>
+</head>
+
+<div class="container theme-showcase" role="main">
+
+  <br><br><br>
+  <div class="page-header custom">
+    <h1> Add Activity </h1>
+  </div>
+
+  <form>
+
+
+    <div class="form-group custom">
+      <label>Type</label>
+      <select class="form-control" name="type" ng-model="activityData.type" required="required">
+        <option>Room-Escaping</option>
+        <option>Paintball Fight</option>
+        <option>Battlefield</option>
+        <option>Playground</option>
+      </select>
+    </div>
+
+    <label class="custom">Slots</label> 
+    <div class="form-group " data-ng-repeat="choice in choices">
+      <button class="btn btn-success" ng-show="showAddChoice(choice)" ng-click="addNewChoice()">Add Choice</button>
+      <button class="btn btn-danger" ng-click="removeNewChoice()">Remove Choice</button>
+      <input type="time" ng-model="choice.value" placeholder="slot" required>
+    </div>
+      
+  
+
+    <button type="submit" class="btn btn-primary" ng-click="addActivity()">Submit</button>
+
+  </form>
+
+   <br>
+
+  <div class="jumbotron text-center" ng-show="loading">
+    <span class="glyphicon glyphicon-repeat spinner">
+      <p>Loading...</p>
+    </span>
+  </div>
+
+  <br>
+
+  <div class="row show-hide-message" ng-show="successMsg">
+    <div class="alert alert-success">
+      {{successMsg}}
+    </div>
+  </div>
+
+  <div class="row show-hide-message" ng-show="errorMsg">
+    <div class="alert alert-danger">
+      {{errorMsg}}
+    </div>
+  </div>
+
+</div>
+
+
+

@@ -1,0 +1,107 @@
+<head>
+  <style type="text/css">
+    .custom {
+        color: white;
+    }
+  </style>
+
+</head>
+
+<div class="container theme-showcase" role="main">
+
+  <br><br><br>
+  <div class="page-header custom">
+    <h1> Add Activity </h1>
+  </div>
+
+  <form >
+
+    <div class="form-group custom">
+      <label>Type</label>
+      <select class="form-control" name="type" ng-model="activityData.type">
+        <option>Trip</option>
+        <option>Safari</option>
+      </select>
+    </div>
+
+    <div class="form-group custom">
+      <label>Destination</label>
+      <input type="text" class="form-control" placeholder="Where will this activity take place?" name="destination" ng-model="activityData.destination">
+    </div>
+
+    <div class="form-group custom">
+      <label>Transportation</label>
+      <select class="form-control" name="transportation" ng-model="activityData.transportation">
+        <option>Airplane</option>
+        <option>Bus</option>
+        <option>Car</option>
+        <option>Train</option>
+      </select>
+    </div>
+
+    <div class="form-group custom">
+      <label>Traveling Date</label>
+      <div class="col-10">
+        <input class="form-control" type="date" name="travelingDate" ng-model="activityData.travelingDate">
+      </div>
+    </div>
+
+    <div class="form-group custom">
+      <label>Return Date</label>
+      <div class="col-10">
+        <input class="form-control" type="date" name="returnDate" ng-model="activityData.returnDate">
+      </div>
+      
+    </div>
+    <div class="form-group custom">
+      <label>Accommodation</label>
+      <textarea class="form-control" name="Accommodation" rows="5" placeholder="Write about the accommodations provided throughout the activity." ng-model="activityData.Accommodation"></textarea>
+    </div>
+
+    <div class="form-group custom">
+      <label>Description</label>
+      <textarea class="form-control" name="description" rows="5" placeholder="Write about the activity you are offering." ng-model="activityData.description"></textarea>
+    </div>
+
+    <div class="form-group custom">
+      <label>Maximum Number of Participants</label>
+      <input type="text" class="form-control" placeholder="This is the maximum number of participants allowed in this activity." name="maxParticipants" ng-model="activityData.maxParticipants">
+    </div>
+
+    <div class="form-group custom">
+      <label>Price Per Person</label>
+      <input type="text" class="form-control" placeholder="This is the price to be paid by each person participating in the activity." name="pricePerPerson" ng-model="activityData.pricePerPerson">
+    </div>
+
+    <div class="form-group custom">
+      <label>Cancellation Window</label>
+      <input type="text" class="form-control" placeholder="This is the number of days allowed for participants to cancel their reservations." name="cancellationWindow" ng-model="activityData.cancellationWindow">
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-click="addActivity()">Submit</button>
+
+  </form>
+
+  <br>
+
+  <div class="jumbotron text-center" ng-show="loading">
+    <span class="glyphicon glyphicon-repeat spinner">
+      <p>Loading...</p>
+    </span>
+  </div>
+
+  <br>
+
+  <div class="row show-hide-message" ng-show="successMsg">
+    <div class="alert alert-success">
+      {{successMsg}}
+    </div>
+  </div>
+
+  <div class="row show-hide-message" ng-show="errorMsg">
+    <div class="alert alert-danger">
+      {{errorMsg}}
+    </div>
+  </div>
+  
+</div>

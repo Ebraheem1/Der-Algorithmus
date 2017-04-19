@@ -154,8 +154,16 @@ router.post('/business/rate', clientController.rateBusiness );//done--
 
 router.put('/activity/editActivity/:id', activityController.editActivity);//done--
 
-router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
-router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--
+router.post('/api/addActivity',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);
+router.get('/api/deleteNonRepeatableActivity/:activityId',businessOwnerController.deleteNonRepeatableActivity);
+router.get('/api/deleteRepeatableActivity/:activityId',businessOwnerController.deleteRepeatableActivity);
+router.get('/api/viewBusinessActivities', businessOwnerController.viewBusinessActivities);
+router.get('/api/viewNonRepeatableReservations/:activityId', businessOwnerController.viewNonRepeatableReservations);
+router.get('/api/viewRepeatableReservations/:activityId', businessOwnerController.viewRepeatableReservations);
+
+
+router.post('/nonRepeatableReservation',businessOwnerController.nonRepeatableReservation);
+router.post('/repeatableReservation',businessOwnerController.repeatableReservation);
 
 router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
 router.get('/removeBusiness/:businessId',administratorController.removeBusiness);//done--
