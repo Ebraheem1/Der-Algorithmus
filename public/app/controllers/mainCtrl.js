@@ -1,13 +1,13 @@
 //the main controller is responsible for logged-in users, so it will be in the index page, not the routes
-angular.module('mainController', ['authServices','businessOwnerServices'])
+var app = angular.module('mainController', ['authServices','businessOwnerServices'])
 
 .controller('mainCtrl', function(Authentication, AuthenticationToken,$location, $rootScope,BusinessOwner){
 
 	var app = this;
 	
 	app.dataReady = false;
-	// AuthenticationToken.setToken();
-	// AuthenticationToken.setType();
+	//AuthenticationToken.setToken();
+	//AuthenticationToken.setType();
 	app.isClient = Authentication.isClient();
 	app.isBusinessOwner = Authentication.isBusinessOwner();
 	app.isAdmin = Authentication.isAdmin();
@@ -24,17 +24,19 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 		
 		app.errMsg = false;
 		Authentication.loginUser(app.loginData).then(function(data){
-			AuthenticationToken.setToken(data.data.token);
-			AuthenticationToken.setUsername(data.data.username);
+
 			if(data.data.success){
 				AuthenticationToken.setType(data.data.type);
-				
+				AuthenticationToken.setToken(data.data.token);
+				AuthenticationToken.setUsername(data.data.username);
+				AuthenticationToken.setId(data.data.id);
 				if(data.data.type == 1){
 					$location.path('/');
 					location.reload();
 				}
 				app.loginData = {};
 			}
+
 			else{
 				app.errMsg = data.data.message;
 			}
@@ -48,7 +50,21 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 			{
 				$location.path('/');
 				location.reload();
+			}else{	
+				location.reload();
 			}
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+		},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
 		});
 		
 	};
@@ -76,3 +92,39 @@ angular.module('mainController', ['authServices','businessOwnerServices'])
 
 
 });
+
+//to prevent logged in user from going to register or login pages
+app.run(['$rootScope', 'Authentication','$location', function($rootScope, Authentication, $location){
+
+	$rootScope.$on('$routeChangeStart', function(event, next, current){
+		if (next.$$route !== undefined) {
+			if(next.$$route.clientAuthenticated == true){	
+				if(!Authentication.isClient()){
+					event.preventDefault();
+					$location.path('/');
+				}
+			}
+			else if (next.$$route.businessAuthenticated == true)
+			{
+				if(!Authentication.isBusinessOwner()){
+					event.preventDefault();
+					$location.path('/');
+				}
+			}
+			else if(next.$$route.adminAuthenticated == true)
+			{
+				if(!Authentication.isAdmin()){
+					event.preventDefault();
+					$location.path('/');
+				}
+			}
+			else if(next.$$route.authenticated == false){
+				if(Authentication.isLoggedIn()){
+					event.preventDefault();
+					$location.path('/');
+				}
+			}
+		}
+	});
+
+}]);

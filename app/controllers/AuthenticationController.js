@@ -67,10 +67,10 @@ let AuthenticationController = {
   {
       if(!req.user)
       {
-        res.json({success:false, message:'You are not authroized to logout'});
+        return res.json({success:false, message:'You are not authroized to logout'});
       }
       req.logout();
-      res.json({success:true, message:'You are logged Out Correctly'});
+      return res.json({success:true, message:'You are logged Out Correctly'});
 
   }
 

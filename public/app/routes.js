@@ -28,7 +28,8 @@ angular.module('appRoutes', ['ngRoute'])
 	.when('/loginPage',{
 		templateUrl:'app/views/pages/clientorbusinesslogin.html',
 		controller: 'mainCtrl',
-		controllerAs: 'main'
+		controllerAs: 'main',
+		authenticated: false
 	})
 
 	.when('/review/newReview', {

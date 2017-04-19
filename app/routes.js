@@ -46,7 +46,7 @@ router.post('/login', function(req, res) {
     var token = jwt.sign({user:client,type:1}, secret, {
         expiresIn: '24h' 
         });
-    return res.json({ success: true,username:username ,type: 1 ,token: 'JWT ' + token });
+    return res.json({ success: true,id:client._id ,username:username ,type: 1 ,token: 'JWT ' + token });
  }
  else{
  administratorController.comparePassword(password,function(err, isAdmin){
@@ -63,7 +63,7 @@ router.post('/login', function(req, res) {
         var token = jwt.sign({user:admin[0],type:0}, secret, {
         expiresIn: '24h' 
         });
-        return res.json({ success: true, username:username ,type: 0 ,token: 'JWT ' + token });
+        return res.json({ success: true,id:admin[0]._id , username:username ,type: 0 ,token: 'JWT ' + token });
       });
     }
   else{
@@ -78,7 +78,7 @@ router.post('/login', function(req, res) {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
         expiresIn: '24h' 
         });
-      return res.json({ success: true,username:username , type:2 ,token: 'JWT ' + token });
+      return res.json({ success: true,id:businessOwner._id ,username:username , type:2 ,token: 'JWT ' + token });
     }
     else{
       return res.json({ success: false, message: 'Authentication failed. Invalid username or password' });
@@ -92,10 +92,6 @@ router.post('/login', function(req, res) {
     
   });//done--
 
-
-router.get('/dashboard', passport.authenticate('generalLogin', { session: false }), function(req, res) {
-  return res.json('It worked! User id is: ' + req.user._id + '.');
-});
 
 //Routes
 
@@ -136,7 +132,7 @@ router.post('/business/locations/remove', businessOwnerController.removeLocation
 //routing for security
 router.post('/security/change-password', businessOwnerController.changePassword);//done --
 
-router.get('/logout',passport.authenticate('generalLogin', { session: false }) ,authController.generalLogOut);
+router.get('/logout',passport.authenticate('generalLogin', { session: false }),authController.generalLogOut);
 
 router.get('/search/:keyword',userController.search);//done--
 
