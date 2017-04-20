@@ -7,12 +7,12 @@ var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 
 module.exports = function(passport) {
-	var secret = 'Der-Algorithmus-Team';
-	var opts = {};
-	opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-	opts.secretOrKey = secret;
+  var secret = 'Der-Algorithmus-Team';
+  var opts = {};
+  opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+  opts.secretOrKey = secret;
 
-	//Passport authentication
+  //Passport authentication
 passport.use('clientLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 1)
@@ -61,6 +61,7 @@ passport.use('adminLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 0)
     {
+
       Administrator.findById(jwt_payload.user._id,function(err,admin)
       {
         if(err)
@@ -86,6 +87,7 @@ passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
         if(err)
         {
           return done(err,false);
+          
         }
         if(user)
         {
@@ -108,7 +110,7 @@ passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
           });
         }
       });
-
+    
   }));
 
 };

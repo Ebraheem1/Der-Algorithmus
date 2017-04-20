@@ -25,11 +25,11 @@ let administratorController={
 
 			if(err){
         
-        	res.json({success: false, message:err});
+        	res.send(err);
         
       		}else{
         	// should be replaced with page rendering in sprint 2
-			res.json({success: true, message:"All Businesses retrieved successfully", business:BusinessesArray});
+			res.send(BusinessesArray);
        
       		}
 		});
@@ -37,43 +37,41 @@ let administratorController={
 
 	// Administrator removes business from the directory
 	removeBusiness: function(req,res){
-		console.log(req.params.businessId);
 
-		BusinessOwner.find( {user_id:req.params.businessId}, function(err,bus){ //edited conditions
+		BusinessOwner.findById( req.params.businessId, function(err,BusinessOwner){
 
 			if(err){
-				res.json({success: false, message:err});
+				res.send(err);
 				return;
 			}
-			if(!bus){
-				res.json({success: false, message:err});
+			if(!BusinessOwner){
+				res.send('wrong ID for business owner');
 				return;
 			}
 			// remove activities of the deleted business owner
 			Activity.remove({BusinessOwner_id:req.params.businessId},function(err){
 
 				if(err){
-					res.json({success: false, message:err});
+					res.send(err);
 					return;
 				}
 				// remove the business owner
-				BusinessOwner.remove({user_id:req.params.businessId},function(err){
+				BusinessOwner.remove({_id:req.params.businessId},function(err){
 
 					if(err){
-						res.json({success: false, message:err});
+						res.send(err);
 						return;
 					}
 
 					//remove the user referenced by the deleted business owner
-					User.remove({_id:new mongoose.mongo.ObjectID(req.params.businessId)},function(err){
+					User.remove({_id:BusinessOwner.user_id},function(err){
 
-						// console.log("Deleted user : "+user);
 						if(err){
-							res.json({success: false, message:err});
+							res.send(err);
 							return;
 						}
-						console.log("Deleted user !!");
-						res.json({success:true, message:"Business deleted successfully"});
+
+						res.send('Business owner deleted successfully !');
 					});
 
 				});
@@ -84,65 +82,75 @@ let administratorController={
 	},
 
 	//the admin views all pending applications
-	viewApplications: function(req, res){
+	/*viewApplications: function(req, res){
 
 		res.redirect('/applications/1');
 
-	},
+	},*/
 
 	//paging for the pending applications
 
 	viewApplicationsIndex: function(req, res){
 
-		Application.count(function(err, c){
+		Application.find(function(err, applications){
+			
+            
+            if(err){
 
-		if(c == 0){
+                res.json({authenticated: true, success: false, message: err.message});	
+            
+            }else{
 
-			res.send('No Applications to Show');
+            	if(!applications){
 
-		}else{
-		
-				var maxPages = Math.ceil(c/10);
-	
-				var page = Math.max(1, req.params.page);
+            		res.json({authenticated: true, success: false, message: 'error retrieving applications!'});
 
-				Application.find(function(err, applications){
-					
-		            
-		            if(err){
+            	}else{
 
-		                res.json(err.message);	
-		            
-		            }else{
+            		if(applications.length>0){
 
-		   				if(page > maxPages){
+            			res.json({authenticated: true, success: true, applications});
 
-		   					res.redirect('/applications/'+maxPages);
-		   				
-		   				}else{
+            		}else{
 
-		   					if(page < 1){
+            			res.send({authenticated: true, success: false, message: 'No applications Pending!'});
 
-		   						res.redirect('/applications/1');
+            		}
 
-		   					}else{
+            	}
+           		
+            }
 
-		   						res.send(applications);
-		   						
-		   					}	
-
-		   				}
-		           		
-		            }
-	
-		        }).skip((page-1)*10).limit(10);
-	
-			}
-
-	    });
+        });  
 
 	},
-//check the entered password against the entered one
+
+	viewApplication: function(req, res){
+
+		Application.findOne({_id: req.params.id}, function(err, application){
+
+			if(err){
+
+				res.json({success: false, message: err.message});
+
+			}else{
+
+				if(!application){
+
+					res.json({success: false, message: 'Error retrieving application!'});
+
+				}else{
+
+					res.json({success: true, application});
+
+				}
+
+			}
+
+		});
+
+	},
+//check the entered password against the stored one
 comparePassword:function(candidatePassword, callback){
 	Administrator.find(function(err,admins)
 	{

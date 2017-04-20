@@ -1,5 +1,4 @@
 
-
 //the frontend routes is an angular module, the config contains the directing
 
 angular.module('appRoutes', ['ngRoute'])
@@ -195,6 +194,42 @@ angular.module('appRoutes', ['ngRoute'])
 
 	.when('/error404',{
 		templateUrl: 'app/views/pages/error404.html'
+	})
+  
+  .when('/applications/:id',{
+	
+		templateUrl: 'app/views/pages/application/application.html',
+		controller: 'applicationCtrl'
+	
+	})
+
+	.when('/applications',{
+	
+		templateUrl: 'app/views/pages/application/applications.html',
+		controller: 'applicationsCtrl'
+	
+	})
+
+	.when('/apply',{
+	
+		templateUrl: 'app/views/pages/application/applicationForm.html',
+		controller: 'applicationFormCtrl',
+		As: 'applicationForm'
+	
+	})
+
+	.when('/business/update-info',{
+	
+		templateUrl: 'app/views/pages/businessOwner/edit-info.html',
+		controller: 'businessOwnerInfoCtrl'
+	
+	})
+
+	.when('/business/:id/manage-locations',{
+	
+		templateUrl: 'app/views/pages/businessOwner/manage-locations.html',
+		controller: 'locationsCtrl'
+	
 	})
 	
 	.otherwise({
