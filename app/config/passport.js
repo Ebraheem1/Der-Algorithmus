@@ -87,7 +87,6 @@ passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
         if(err)
         {
           return done(err,false);
-          
         }
         if(user)
         {
@@ -110,7 +109,7 @@ passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
           });
         }
       });
-    
+
   }));
 
 };

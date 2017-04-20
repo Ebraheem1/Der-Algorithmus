@@ -59,7 +59,7 @@ let userController={
                 if(application){
                   res.send('Username Unavailable');
                 }else{
-                  
+
             var user=new User({
             username:req.body.username,
             password:req.body.password,
@@ -67,7 +67,7 @@ let userController={
             email:req.body.email
           });
            UserId=user._id;
-      
+
     user.save(function(err){
       if(err){
 
@@ -111,7 +111,7 @@ let userController={
       res.send('This is your current username!');
 
     }else{
-          
+
           Application.findOne({username:newUsername},function(err,application)
         {
               if(err)
@@ -124,7 +124,7 @@ let userController={
 
                 res.send('Username Unavailable11');
                 }else{
-                  
+
                   User.findOne({username:newUsername},function(err,user){
 
                     if(err){
@@ -181,7 +181,7 @@ let userController={
             });
       }
 
-    
+
 
 
   },
@@ -191,27 +191,41 @@ let userController={
     forgotPassword: function(req, res) {
         var email = req.body.email;
         var username = req.body.username;
+
         req.checkBody('email', 'Email Required').notEmpty();
         req.checkBody('username', 'Username Required').notEmpty();
           var errors = req.validationErrors();
+          var missingFields = email==null ||email=='' ||
+           username==null || username=='';
+           if(missingFields)
+           {
+             res.json({succes:false,message:"Please enter an email and a username."});
+             return;
+           }
+
           if(!errors){
         User.findOne({
             username: username
         }, function(err, user) {
             if (user) {
                 if (user.email == email) {
-                    userController.changePassword(user,res);
+                  var response =  userController.changePassword(user,res);
+                    res.json({success:true,message:"A new password have been sent to your email!"});
+  
+
                 } else {
-                    res.send("You entered a wrong email ");
+
+                    res.json({success:false,message:"You entered a wrong email "});
                     return;
                 }
             } else {
-                res.send("Could not find user!");
+
+                  res.json({success:false,message:"Could not find user!"});
                 return;
             }
         });}
         else{
-          res.send(errors);
+          res.json({success:false,message:"Sorry ! An error occured .Please try again later"});
         }
 
     },
@@ -226,16 +240,18 @@ let userController={
       var keyword = req.params.keyword;
       var list=[];
       BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}, {types:{"$in": [new RegExp(".*"+keyword+".*")]}}]},function(err,businesses){
-        
+
         if(err){
           res.json({success:false, message: 'The search fails, try it again :)'})
         }
+
         if(businesses.length > 0){
           
           res.json({success:true,businesses:businesses});
             
         }else{
           res.json({success:true,businesses:businesses,message:'No matched Venues found'});
+
 
         }
 
@@ -267,7 +283,7 @@ let userController={
     //Function for sending email . we set the mail options to send a mail with certain format to the email of the user
     sendMail: function(user, pass) {
 
-      
+
       //Setting up the mail options .
         let mailOptions = {
             from: 'Youssef@Dev.Team👻👻👻 <joexDev3999@gmail.com>', // sender address
@@ -304,14 +320,16 @@ let userController={
             _id: user._id
         }, function(err) {
             if (err) {
-                res.send(err);
-                return;
+
+                return false ;
             }
             user2.save(function(err) {
                 if (err) {
-                    res.send("error");
+                  return false
                 } else {
-                    res.send("Password changed Successfully");
+
+                  return true ;
+
                 }
             });
         });
@@ -324,5 +342,5 @@ let userController={
 };
 
 
-//Exporting the module 
+//Exporting the module
 module.exports = userController;

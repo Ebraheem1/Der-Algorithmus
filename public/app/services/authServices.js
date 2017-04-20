@@ -12,7 +12,7 @@ angular.module('authServices', [])
 	//the session
 	authFactory.isLoggedIn = function(){
 		if(AuthenticationToken.getToken()){
-			
+
 			return true;
 		}
 		else{
@@ -68,7 +68,7 @@ angular.module('authServices', [])
 		else{
 			$window.localStorage.removeItem('token');
 		}
-		
+
 	};
 
 //This functions sets/remove the username in/from a variable in the windowLocalStorage
@@ -94,6 +94,7 @@ angular.module('authServices', [])
 		if(type==0)
 		{
 			$window.localStorage.setItem('type', type);
+
 			
 		}else if(type == 1){
 			
@@ -108,6 +109,7 @@ angular.module('authServices', [])
 			
 		}
 		
+
 	};
 //This function gets the Username item stored in the window LocalStorage
 	authTokenFactory.getUsername = function(){
@@ -137,7 +139,7 @@ angular.module('authServices', [])
 
 	authInterceptorsFactory.request = function(config){
 		var token = AuthenticationToken.getToken();
-		
+
 		if(token){
 			config.headers['Authorization'] = token;
 		}
@@ -146,4 +148,6 @@ angular.module('authServices', [])
 	};
 
 	return authInterceptorsFactory;
+
 });
+

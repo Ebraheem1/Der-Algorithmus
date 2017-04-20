@@ -17,7 +17,7 @@ var businessownerSchema = mongoose.Schema({
 var BusinessOwner = mongoose.model("BusinessOwner", businessownerSchema);
 module.exports.createBusinessOwner = function(newBusinessOwner, callback){
 	        newBusinessOwner.save(callback);
-	    
+
 	}
 
 module.exports = BusinessOwner;
