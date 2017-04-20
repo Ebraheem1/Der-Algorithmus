@@ -16,8 +16,8 @@ var reservationController = require("./controllers/ReservationController");
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
 var multer = require('multer');
-
 require('./config/passport')(passport);
+
 
 //multer stuff, to upload a file
 var storage = multer.diskStorage({
@@ -25,7 +25,7 @@ var storage = multer.diskStorage({
     cb(null, './public/gallery/');
   },
   filename: function (req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
+    if (!file.originalname.match(/\.(png|jpeg|jpg|mp4|mov|avi|flv|wmv)$/)) {
       var err = new Error();
       err.code = 'notAnImage';
       return cb(err);
@@ -54,13 +54,17 @@ router.post('/upload', function (req, res) {
         res.json({success:false, message: 'No file was selected!'});
       }
       else{
-        res.json({success:true, message: 'File was uploaded successfully.', path: req.file.path, name: req.file.filename});
+        res.json({success:true, message: 'File was uploaded successfully.', name: req.file.filename });
       }
 
     }
 
   });
 });
+
+
+
+
 
 //here we have username and password as an input parameters
 //we search if a client exists with in the Client table so we authenticate the client
@@ -191,8 +195,8 @@ router.get('/logout',passport.authenticate('generalLogin', { session: false }),a
 
 router.get('/search/:keyword',userController.search);//done--
 
-router.post('/gallery', businessOwnerController.addMedia);//done--
-router.post('/offer', businessOwnerController.addOffer);//done--
+router.post('/gallery/:id', businessOwnerController.addMedia);//done--
+router.post('/offer/:activityID', multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addOffer);//done--
 router.get('/showReview/:businessownerID', businessOwnerController.showReview);//done--
 router.post('/reply/:reviewID', businessOwnerController.reply);//done--
 

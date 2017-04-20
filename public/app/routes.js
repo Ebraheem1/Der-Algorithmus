@@ -94,6 +94,12 @@ angular.module('appRoutes', ['ngRoute'])
 		authenticated: false
 	})
 
+	.when('/gallery/gallery',{
+		templateUrl:'app/views/pages/gallery.html',
+		controller: 'businessCtrl',
+		controllerAs : 'business'
+	})
+
 	.when('/review/newReview', {
 		templateUrl: 'app/views/pages/review/newReview.html',
 		controller: 'reviewCtrl',
@@ -121,6 +127,18 @@ angular.module('appRoutes', ['ngRoute'])
 		controllerAs: 'activity',
 		businessAuthenticated: true
 	})
+	 .when('/reviews',{
+		templateUrl:'app/views/pages/reviews.html',
+		controller: 'commentCtrl',
+		controllerAs : 'comment'
+	})
+
+	  .when('/offers',{
+		templateUrl:'app/views/pages/offer.html',
+		controller: 'businessCtrl',
+		controllerAs : 'business'
+	})
+
   
   .when('/public/client/review/view/:businessownerID', {
   templateUrl: 'app/views/pages/review/clientViewReviews.html',
