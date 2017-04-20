@@ -8,7 +8,9 @@ angular.module('fileUploadService', [])
 
 		fd.append('myfile', file.upload);
 
+
 		return $http.post('/api/upload', fd, {
+
 			transformRequest: angular.identity,
 			headers: {'Content-Type': undefined}
 		});
