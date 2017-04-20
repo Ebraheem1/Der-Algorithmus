@@ -7,12 +7,12 @@ var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 
 module.exports = function(passport) {
-	var secret = 'Der-Algorithmus-Team';
-	var opts = {};
-	opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-	opts.secretOrKey = secret;
+  var secret = 'Der-Algorithmus-Team';
+  var opts = {};
+  opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+  opts.secretOrKey = secret;
 
-	//Passport authentication
+  //Passport authentication
 passport.use('clientLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 1)

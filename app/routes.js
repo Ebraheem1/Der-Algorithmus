@@ -6,10 +6,14 @@ var activityController=require('./controllers/activityController');
 var administratorController = require('./controllers/administratorController');
 var applicationController = require('./controllers/applicationController');
 var businessOwnerController = require('./controllers/businessownerController');
+var User = require('./models/User');
 var passport=require('passport');
 var clientController = require('./controllers/clientController');
 var userController = require('./controllers/userController');
 var authController = require('./controllers/AuthenticationController');
+var jwt = require('jsonwebtoken');
+var secret = 'DerAlgorithmus'
+
 
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
@@ -93,6 +97,11 @@ router.post('/login', function(req, res) {
   });//done--
 
 
+
+router.get('/dashboard', passport.authenticate('generalLogin', { session: false }), function(req, res) {
+  return res.json('It worked! User id is: ' + req.user._id + '.');
+});
+
 //Routes
 
 //routing for creating a new Cient
@@ -111,26 +120,30 @@ router.get('/businessOwner/:id', clientController.viewBusiness);//done --
 router.post('/change-username',userController.changeUsername);//done --
 
 //
-router.get('/application/:username/reject',applicationController.reject);//done --
-router.get('/application/:username/accept',applicationController.accept);//done --
+router.get('/application/:id/reject', passport.authenticate('adminLogin', { session: false }), applicationController.reject);//done --
+router.get('/application/:id/accept', passport.authenticate('adminLogin', { session: false }),applicationController.accept);//done --
 router.post('/user/forgotPassword',userController.forgotPassword);//done --
 
 //routing for viewing applications
-router.get('/applications/:page', administratorController.viewApplicationsIndex);//done --
-router.get('/applications', administratorController.viewApplications);//done --
+//router.get('/applications/:page', administratorController.viewApplicationsIndex);//done --
+router.get('/applications/:id', passport.authenticate('adminLogin', { session: false }), administratorController.viewApplication);//done --
+router.get('/applications', passport.authenticate('adminLogin', { session: false }), administratorController.viewApplicationsIndex);//done --
 
 //routing for creating application
+router.post('/applications/check/username', applicationController.checkUsername);//done --
+router.post('/applications/check/email', applicationController.checkEmail);//done --
 router.post('/business/apply', applicationController.createApplication);//done --
 
 //routing for updating basic info
-router.post('/business/update-info', businessOwnerController.updateInfo);//done
+router.post('/business/update-info', passport.authenticate('businessLogin', { session: false }), businessOwnerController.updateInfo);//done --
+router.get('/business', passport.authenticate('businessLogin', { session: false }), businessOwnerController.getBusinessInfo);//done --
 
 //routing for locations operations
-router.post('/business/locations/add', businessOwnerController.addLocation);//done --
-router.post('/business/locations/remove', businessOwnerController.removeLocation);//done --
+router.post('/business/:id/locations/add', passport.authenticate('businessLogin', { session: false }), businessOwnerController.addLocation);//done --
+router.post('/business/:id/locations/remove', passport.authenticate('businessLogin', { session: false }), businessOwnerController.removeLocation);//done --
 
 //routing for security
-router.post('/security/change-password', businessOwnerController.changePassword);//done --
+router.post('/security/change-password', passport.authenticate('businessLogin', { session: false }), businessOwnerController.changePassword);//done --
 
 router.get('/logout',passport.authenticate('generalLogin', { session: false }),authController.generalLogOut);
 
@@ -141,14 +154,17 @@ router.post('/offer', businessOwnerController.addOffer);//done--
 router.get('/showReview/:businessownerID', businessOwnerController.showReview);//done--
 router.post('/reply/:reviewID', businessOwnerController.reply);//done--
 
+router.get('/review/getReview/:id', reviewController.getReview);//done--
 router.post('/review/newReview', reviewController.newReview);//done--
-router.put('/review/editReview/:id', reviewController.editReview);//done--
-router.delete('/review/deleteReview/:id', reviewController.deleteReview);//done--
+router.post('/review/editReview/:id', reviewController.editReview);//done--
+router.post('/review/deleteReview/:id', reviewController.deleteReview);//done--
 
 router.get('/review/view/:businessownerID', reviewController.viewBusinessReviews );//done--
 router.post('/business/rate', clientController.rateBusiness );//done--
 
-router.put('/activity/editActivity/:id', activityController.editActivity);//done--
+router.get('/activity/getActivity/:id', activityController.getActivity);
+router.post('/activity/newActivity', activityController.newActivity);
+router.post('/activity/editActivity/:id', activityController.editActivity);//done--
 
 router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
 router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--
@@ -159,6 +175,69 @@ router.get('/removeBusiness/:businessId',administratorController.removeBusiness)
 router.post('/createAdmin',administratorController.createAdmin);//done--
 
 
+
+
+router.post('/authenticate', function(req, res) {
+  var missingFields = req.body.username==null || req.body.username=='' || req.body.password==null || req.body.password=='';
+  if(missingFields){
+    res.json({ success: false, message: 'The fields (username, password) are required!' });
+    return;
+  }
+  User.findOne({ username: req.body.username }, function(err, user) {
+      if (err) {
+        res.json({ success: false, message: err });
+      }else {
+        if (!user) {
+            res.json({ success: false, message: 'No account with this username exists!' });
+            return;
+        } 
+        var validPassword = user.comparePassword(req.body.password);
+        if (!validPassword) {
+            res.json({ success: false, message: 'The password you entered is incorrect!' });
+        } else {
+          var token = jwt.sign({username: user.username, user_id:user._id}, secret, { expiresIn: '24h'});
+          res.json({ success: true, message: 'Successfully logged in.', token: token});
+        }
+        
+      }
+  });
+});﻿
+
+
+// router.use(function(req, res, next){
+//   var token = req.body.token || req.body.query || req.headers['x-access-token'];
+//   if(token){
+//     jwt.verify(token, secret, function(err, loggedInUser){
+//         if(err){
+//             res.json({success: false, message: 'Invalid Token!'});
+//         } else{
+//             req.loggedInUser = loggedInUser;
+//             next();
+//         }
+//     });
+//   } 
+//   else{
+//     res.json({success: false, message: 'No token exists!'});
+//   }
+// });
+
+router.post('/loggedIn', function(req, res, next){
+    var token = req.body.token || req.body.query || req.headers['x-access-token'];
+    if(token){
+      jwt.verify(token, secret, function(err, loggedInUser){
+          if(err){
+              res.json({success: false, message: 'Invalid Token!'});
+          } else{
+              req.loggedInUser = loggedInUser;
+              res.send(req.loggedInUser);
+
+          }
+      });
+    } 
+    else{
+      res.json({success: false, message: 'No token exists!'});
+    }
+});
 
 
 //export router

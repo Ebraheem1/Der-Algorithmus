@@ -1,0 +1,31 @@
+<div class="page-header">
+	<h1> User Registration</h1>
+</div>
+
+<form ng-submit="register.regUser(regData);">
+	<input class="form-control" type="text" name="firstName" placeholder="First Name" ng-model="register.regData.firstName"> <br>
+	<input class="form-control" type="text" name="lastName" placeholder="Last Name" ng-model="register.regData.lastName"> <br>
+	<input class="form-control" type="text" name="username" placeholder="User Name" ng-model="register.regData.username"> <br>
+	<input class="form-control" type="text" name="gender" placeholder="Gender" ng-model="register.regData.gender"> <br>
+	<input class="form-control" type="text" name="email" placeholder="Email" ng-model="register.regData.email"> <br>
+	<input class="form-control" type="password" name="password" placeholder="Password" ng-model="register.regData.password"> <br>
+	<input class="form-control" type="password" name="confirmPassword" placeholder="Confirm Password" ng-model="register.regData.confirmPassword"> <br>
+	<input class="form-control" type="text" name="phoneNumber" placeholder="Phone Number" ng-model="register.regData.phoneNumber"> <br>
+
+	<button class="btn btn-primary" type="submit">Register</button>
+</form>
+
+<br>
+
+<div class="jumbotron text-center" ng-show="register.loading">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<h2>Loading...</h2>
+</div>
+
+<div class="row show-hide-message" ng-show="register.errMsg">
+	<div class="alert alert-danger"> {{register.errMsg}} </div>
+</div>
+
+<div class="row show-hide-message" ng-show="register.successMsg">
+	<div class="alert alert-success"> {{register.successMsg}} </div>
+</div>

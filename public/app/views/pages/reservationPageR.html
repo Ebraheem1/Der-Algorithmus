@@ -1,0 +1,103 @@
+<br> <br>
+<h1 style="color: white; position: relative;left:75px;">{{Activity.type}} Reservation </h1>
+<h4 style="color: white;position: relative;left:75px;"> {{Activity.description}}  </h4>
+
+<br><br><br>
+<div id="test" class="container">
+    <div class="row">
+        <form stripe-form="stripeCallBack" role="form" ng-submit="resCtrl.ReserveR(res)">
+
+            <div class="col-lg-6">
+                <br>
+
+
+                <br />
+                <div class="form-group">
+                    <label style="color: white">Choose Appropriate Slot</label>
+                    <div class="input-group">
+                        <select ng-model="res.selectedSlot" class="form-control" placeholder="Choose" required>
+                        <option ng-repeat="x in Activity.slots" value="{{x._id}}">From {{x.startTime}} To {{x.endTime}}</option>
+                          </select>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <label style="color: white">Choose Appropriate Package</label>
+                    <div class="input-group">
+                        <select ng-model="res.selectedPackage" class="form-control" placeholder="Choose" required>
+                    <option ng-repeat="x in Activity.pricePackages" value="{{x._id}}">Number Of Participants: {{x.participants}}  For: {{x.price}}</option>
+                      </select>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <label style="color: white">Choose Appropriate Date</label>
+                    <div class="input-group">
+                        <!--<input class="form-control" type="date" id="" name="input" ng-model="res.selectedDate" placeholder="yyyy-MM-dd" min={{today}} max="2030-12-31" required />-->
+
+
+
+                        <input type="date" ng-model="res.selectedDate" min={{today}} max="2030-12-31" required />
+
+
+                    </div>
+                </div>
+                <br>
+
+
+                <br>
+                <br> <br>
+
+
+
+                <h3 style="color: white" ng-if="res.selectedPackage == null">Price : 0 $</h3>
+
+                <div ng-repeat="x in Activity.pricePackages" style="">
+
+                    <h3 style="color: white" ng-model="res.price2" ng-if="res.selectedPackage ==x._id"> Price :{{x.price}} $</h3>
+                </div>
+                <input type="submit" name="submit" id="submitt" value="Reserve" class="btn btn-info pull-right">
+
+                      <h5 style="color: white"ng-show="Activity.cancellationWindow">Note: No refunds are available {{Activity.cancellationWindow}} days before the reservation </h5>
+
+            </div>
+        </form>
+
+        <div class="col-lg-5 col-md-push-1" ng-show="Output">
+            <div class="col-md-12">
+                <div class="alert alert-success" ng-show="Successful">
+                    <strong><span class="glyphicon glyphicon-ok"></span> Success ! Please pay to finalize your reservation</strong>
+
+                </div>
+                <div class="alert alert-danger" ng-hide="Successful">
+                    <span class="glyphicon glyphicon-remove"></span><strong>{{errorMessage}}</strong>
+                </div>
+            </div>
+            <div style = "position : relative; left:170px;">
+
+
+            <form action="/api/pay" method="post" ng-show="Successful && Output">
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Aa5qI8FtYYlEKwkWjwQ2pzTI" data-amount={{price}} data-name="Stripe Secure Payment" data-description="Pay for reservation" data-locale="auto" data-currency="gbp">
+                </script>
+                <input type="hidden" name="chargeAmount" value={{price}} />
+                  <input type="hidden" name="price" value={{price}} />
+                    <input type="hidden" name="date" value={{reservation.date}} />
+                      <input type="hidden" name="participants" value={{reservation.participants}} />
+                        <input type="hidden" name="repeatableActivity_id" value={{reservation.repeatableActivity_id}} />
+                          <input type="hidden" name="slot_id" value={{reservation.slot_id}} />
+                              <input type="hidden" name="client_id" value={{reservation.client_id}} />
+                            <input type="hidden" name="type" value="0" />
+            </form>
+              </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  webshims.setOptions('waitReady', false);
+  webshims.setOptions('forms-ext', {types: 'date'});
+  webshims.polyfill('forms forms-ext');
+</script>

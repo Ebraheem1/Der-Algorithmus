@@ -1,0 +1,67 @@
+<br> <br>
+<h1 style="color: white; position: relative;left:75px;">{{Activity.type}} Reservation </h1>
+<h4 style="color: white;position: relative;left:75px;">Destination : {{Activity.destination}}  </h4>
+<h4 style="color: white; position: relative;left:75px;">Traveling Date : {{travelDate}}  </h4>
+<h4 style="color: white; position: relative;left:75px; ">Return Date : {{returnDate}} </h4>
+<br><br><br>
+<div class="container">
+    <div class="row">
+        <form role="form" ng-submit="resCtrl.ReserveNR(participantsNo)">
+            <div class="col-lg-6">
+                <br>
+                <div class="form-group">
+                    <label style="color: white">Enter number of participants</label>
+                    <div class="input-group">
+                        <input ng-model="participantsNo" type="number" class="form-control" name="#partic" placeholder="Number of participants" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+
+
+
+
+                <br>
+
+                <br>
+                <br> <br>
+
+
+
+                <h3 style="color: white" ng-if="participantsNo != null"> Price :{{Activity.pricePerPerson * participantsNo}} $</h3>
+                <h3 style="color: white" ng-if="participantsNo == null"> Price : 0 $</h3>
+
+
+                <input type="submit" name="submit" id="submit" value="Reserve" class="btn btn-info pull-right">
+                <h5 style="color: white" ng-show="Activity.cancellationWindow">Note: No refunds are available {{Activity.cancellationWindow}} days before the reservation </h5>
+
+            </div>
+        </form>
+        <div class="col-lg-5 col-md-push-1" ng-show="Output">
+            <div class="col-md-12">
+                <div class="alert alert-success" ng-show="Successful">
+                    <strong><span class="glyphicon glyphicon-ok"></span> Success ! Please pay to finalize your reservation</strong>
+
+                </div>
+                <div class="alert alert-danger" ng-hide="Successful">
+                    <span class="glyphicon glyphicon-remove"></span><strong>{{errorMessage}}</strong>
+                </div>
+            </div>
+            <div style="position : relative; left:170px;">
+
+
+                <form action="/api/pay" method="post" ng-show="Successful && Output">
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Aa5qI8FtYYlEKwkWjwQ2pzTI" data-amount={{price}} data-name="Stripe Secure Payment" data-description="Pay for reservation" data-locale="auto" data-currency="gbp">
+                    </script>
+                    <input type="hidden" name="chargeAmount" value={{price}} />
+                    <input type="hidden" name="price" value={{price}} />
+
+                    <input type="hidden" name="participants" value={{reservation.participants}} />
+                    <input type="hidden" name="nonRepeatableActivity_id" value={{reservation.nonRepeatableActivity_id}} />
+
+                    <input type="hidden" name="client_id" value={{reservation.client_id}} />
+                    <input type="hidden" name="type" value="1" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

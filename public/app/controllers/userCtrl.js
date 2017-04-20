@@ -1,29 +1,26 @@
-angular.module('userControllers', ['userServices','businessOwnerServices'])
-.controller('searchCtrl',function($http,BusinessOwner)
-{	//This Contoller calles businessOwnerServices to perform the search query
-	//based on the keyword entered by the user which is now found in the url of the
-	//page then it takes the returned results and put them in properties of the 
-	//controller to be used in the HTML file accordingly.
+angular.module('userControllers', ['userServices'])
+
+.controller('regCtrl', function($http, $location, $timeout, User){
+
 	var app = this;
-	BusinessOwner.getResults().then(function(data)
-	{
-		
+
+	app.regUser = function(regData){
+		app.successMsg = false;
 		app.errMsg = false;
-		app.venues=[];
-		if(data.data.success)
-		{
-			if(data.data.businesses.length == 0)
-			{
-				app.errMsg = data.data.message;
+		app.loading = true;
+		
+		User.createUser(app.regData).then(function(data){
+			
+			if(data.data.success){
+				app.successMsg = data.data.message+' Redirecting to homepage...';
+				app.loading = false;
+				$location.path('/');
 			}
 			else{
-				app.venues = data.data.businesses;
+				app.errMsg = data.data.message;
+				app.loading = false;
 			}
-		}
-		else{
-			app.errMsg = data.data.message;
-		}
-	});
-	
+		});
+	};
 
 });

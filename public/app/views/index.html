@@ -1,172 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>Der Algorithmus</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<base href="/">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-<!--CSS files -->
-<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="assets/css/animate.css">
-<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-<link rel="stylesheet" type="text/css" href="assets/css/style1.css">
-<!--Main Angular files -->
-<script type="text/javascript" src="assets/js/angular.js"></script>
-<script type="text/javascript" src="assets/js/angular-route.js"></script>
-<script type="text/javascript" src="assets/js/angular-animate.js"></script>
-<script type="text/javascript" src="assets/js/ui-bootstrap-tpls-2.5.0.js"></script>
+    <title>Der Algorithmus</title>
 
-<!--Angular config/routes -->
-<script src="app/app.js"></script>
-<script src="app/routes.js"></script>
+    <base href="/">
 
-<!--Angular Controllers -->
-<script src="app/controllers/userCtrl.js"></script>
-<script src="app/controllers/mainCtrl.js"></script>
-<script src="app/controllers/reviewCtrl.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<!--Angular Services -->
-<script src="app/services/userServices.js"></script>
-<script src="app/services/authServices.js"></script>
-<script src="app/services/reviewServices.js"></script>
-<script src="app/services/businessOwnerServices.js"></script>
-<script src="app/services/pagingServices.js"></script>
+    <!-- JQuery and Bootstrap -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link href="assets/css/anotherFont.css" rel="stylesheet" type="text/css">
+
+    <!-- Cascade Style Sheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Css File -->
+    <link rel="stylesheet" type="text/css" href="assets/css/wholecss.css">
+      <link rel="stylesheet" type="text/css" href="assets/css/style1.css">
+
+
+    <!-- Main Angular Files -->
+    <script src="assets/js/angular.js">
+    </script>
+    <script src="assets/js/angular-route.js">
+    </script>
+    <script src=" assets/js/angular-animate.js"></script>
+
+    <!-- Angular config and router -->
+    <script src="app/app.js">
+    </script>
+    <script src="app/routes.js">
+    </script>
+     <!--Angular Controllers -->
+    <script src="app/controllers/userCtrl.js"></script>
+    <script src="app/controllers/mainCtrl.js"></script>
+    <script src="app/controllers/applicationsController.js"></script>
+    <script src="app/controllers/applicationController.js"></script>
+    <script src="app/controllers/applicationFormController.js"></script>
+    <script src="app/controllers/businessOwnerInfoController.js"></script>
+    <script src="app/controllers/locationsController.js"></script>
+
+
+    <!--Angular Services -->
+    <script src="app/services/userServices.js"></script>
+    <script src="app/services/authServices.js"></script>
+    <script src="app/services/applicationServices.js"></script>
+    <script src="app/services/pagingServices.js"></script>
+    <script src="app/services/businessOwnerServices.js"></script>
+
+    <!-- cdn for modernizr, if you haven't included it already -->
+    <script src="http://cdn.jsdelivr.net/webshim/1.12.4/extras/modernizr-custom.js"></script>
+    <!-- polyfiller file to detect and load polyfills -->
+    <script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+      <!-- angular  ui bootstrap for pagination -->
 
 </head>
 
 <body ng-app = "userApp" ng-controller="mainCtrl as main" ng-cloak>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 
-<div class="container">
-<!-- Brand and toggle get grouped for better mobile display -->
-<div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="/">Der Algorithmus</a>
-</div>
-<form class="navbar-form navbar-left" ng-submit="main.searchVenues(searchData)">
-<div class="input-group">
-    <input type="text" class="form-control" ng-model="main.searchData.keyword" placeholder="Search" >
-        <div class="input-group-btn">
-            <button class="btn btn-default" type="submit">
+                <a class="navbar-brand" href="index.html">Der Algorithmus</a>
+            </div>
+            <form class="navbar-form navbar-left">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
+                    </div>
+                </div>
+            </form>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/register">Register</a>
+                    </li>
+                    <li>
+                        <a href="/login">Login</a>
+                    </li>
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Client name <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Profile</a>
+                                <!--   it will include Update information             -->
+                            </li>
+                            <li>
+                                <a href="#">Reservations</a>
+                                <!-- contains the reservations of the client-->
+                            </li>
+                            <li>
+                                <a href="#">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">BusinessOwner name<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Profile</a>
+                            </li>
+                            <li>
+                                <a href="#">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-    </div>
-</form>
-<!-- Collect the nav links, forms, and other content for toggling -->
-<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-<ul class="nav navbar-nav navbar-right">
-<li>
-    <a href="#" ng-show="!main.isLoggedIn">Register</a>
-</li>
-<li>
-    <a href="/loginPage" ng-show="!main.isLoggedIn" >Login</a>
-</li>
+        <!-- /.container -->
+    </nav>
 
+    <div ng-view> </div>
 
-<li class="dropdown" ng-show="main.isClient" >
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><strong>Hello, {{main.username}}  </strong><b class="caret"></b></a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="#">Profile</a> <!--   it will include Update information             -->
-        </li>
-        <li>
-            <a href="#">Reservations</a> <!-- contains the reservations of the client-->
-        </li>
-        <li>
-            <a href="#" ng-click="main.doLogout()">Logout</a>
-        </li>
-    </ul>
-</li>
+    <footer class="footer-distributed">
 
+        <div class="footer-left">
 
-<li class="dropdown" ng-show = "main.isBusinessOwner">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ><strong>Hello, {{main.username}}  </strong><b class="caret"></b></a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="#">Profile</a>
-        </li>
-        <li>
-            <a href="#" ng-click="main.doLogout()">Logout</a>
-        </li>
-    </ul>
-</li>
+            <h3>Company<span>logo</span></h3>
 
-</ul>
-</div>
-<!-- /.navbar-collapse -->
-</div>
-<!-- /.container -->
-</nav>
+            <p class="footer-links">
+                <a href="#">Home</a> ·
+                <a href="#">FAQ</a> .
+                <a href="/apply">apply</a>
 
-<div ng-view> </div>
+            </p>
 
+            <p class="footer-company-name">Der Algorithmus &copy; 2017</p>
+        </div>
 
+        <div class="footer-center">
 
-<footer class="footer-distributed">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p> Cairo, Egypt</p>
+            </div>
 
-<div class="footer-left">
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p>der_algorithmus@gmail.com</p>
+            </div>
+            <div>
+                <i class="fa fa-building-o"></i>
+                <a href="#" style="color:white">Application</a>
+            </div>
 
-<h3>Company<span>logo</span></h3>
+        </div>
 
-<p class="footer-links">
-    <a href="#">Home</a>
-    ·
-    <a href="#">FAQ</a>
+        <div class="footer-right">
 
-</p>
+            <p class="footer-company-about">
+                <span>About the company</span> Entertainment Directory just Choose, Reserve and Enjoy!!
+            </p>
 
-<p class="footer-company-name">Der Algorithmus &copy; 2017</p>
-</div>
+            <div class="footer-icons">
 
-<div class="footer-center">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-github"></i></a>
 
-<div>
-    <i class="fa fa-map-marker"></i>
-    <p> Cairo, Egypt</p>
-</div>
+            </div>
 
-<div>
-    <i class="fa fa-envelope"></i>
-    <p>der_algorithmus@gmail.com</p>
-</div>
-<div>
-    <i class="fa fa-building-o"></i>
-    <a href="#" style="color:white">Application</a>
-</div>
+        </div>
 
-</div>
-
-<div class="footer-right">
-
-<p class="footer-company-about">
-    <span>About the company</span>
-    Entertainment Directory just Choose, Reserve and Enjoy!!
-</p>
-
-<div class="footer-icons">
-
-    <a href="#"><i class="fa fa-facebook"></i></a>
-    <a href="#"><i class="fa fa-twitter"></i></a>
-    <a href="#"><i class="fa fa-linkedin"></i></a>
-    <a href="#"><i class="fa fa-github"></i></a>
-
-</div>
-
-</div>
-
-</footer>
+    </footer>
 
 </body>
 

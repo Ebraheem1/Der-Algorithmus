@@ -5,8 +5,8 @@ var businessownerSchema = mongoose.Schema({
 	name: String,
 	description: String,
 	locations: [String],
-	images : [String],
-	videos : [String],
+
+	gallery : [String],
 	offers : [String],
 	ratings: [{ client_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: true} ,
 				rating: {type:Number,min:0, max:10} }],

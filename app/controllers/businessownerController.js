@@ -301,107 +301,174 @@ let businessownerController={
 
     },
 
+
+    getBusinessInfo: function(req, res){
+
+        console.log('a7a');
+
+        BusinessOwner.findOne({_id: req.user._id}, function(err, businessOwner){
+
+            if(err){
+
+                res.json({success: false, message: err.message});
+
+            }else{
+
+                if(!businessOwner){
+
+                    res.json({success: false, message: 'No business found'});
+
+                }else{
+
+                    User.findOne({_id: businessOwner.user_id}, function(err, user){
+
+                        if(err){
+
+                            res.json({success: false, message: err.message});
+
+                        }else{
+
+                            if(!user){
+
+                                res.json({success: false, message: 'No business found'});
+
+                            }else{
+
+                                delete user.password;
+                                res.json({success: true, businessOwner, user});
+
+                            }
+
+                        }
+
+                    })
+
+                }
+
+            }
+
+        });
+
+    },
     //this function updates the business owners info with that provided in the request
     //if a field has no specified value to update it with, it is not changed at all
 
     updateInfo: function (req,res) {
+
+        console.log(req.body);
 
         var email=req.body.email;
         var phoneNumber = req.body.phoneNumber;
         var name = req.body.name;
         var description = req.body.description;
         
-        var conditions = {username: req.body.username};
+        var conditions = {_id: req.user._id};
 
-        User.findOne(conditions, function(err, user){
-            
+        BusinessOwner.findOne(conditions, function(err, businessOwner){
+
             if(err){
-            
-              res.json(err);
-            
+
+                res.json({success: false, message: err.message});
+
             }else{
 
-                if(!(email == null | email == "")){
+                if(!businessOwner){
 
-                    req.checkBody('email', 'Not a valid email address').isEmail();
+                    res.json({success: false, message: 'No profile found'});
 
-                    var errors = req.validationErrors();
+                }else{
 
-                    if(errors){
+                    businessOwner.name = (name == null | name == "")? businessOwner.name: name;
+                    businessOwner.description = (description == null | description ==" ")? businessOwner.description: description;
 
-                        res.send(errors);
-                        return;
+                    businessOwner.save(function(err){
 
-                    }else{
+                        if(err){
 
-                        user.email = email;
+                            res.json({success: false, message: err.message});
 
-                    }
+                        }else{
 
-                }
+                            User.findOne({_id: businessOwner.user_id}, function(err, user){
+                                
+                                if(err){
+                                
+                                  res.json({success: false, message: err.message});
+                                
+                                }else{
 
-                if(!(phoneNumber == null | phoneNumber == "")){
+                                    if(!user){
 
-                    req.checkBody('phoneNumber', 'Not a valid phone number').isInt();
+                                        res.json({success: false, meassage: 'profile not found!'});
 
-                    var errors = req.validationErrors();
-
-                    if(errors){
-
-                        res.send(errors);
-                        return;
-
-                    }else{
-
-                        user.phoneNumber = phoneNumber;
-
-                    }
-
-                }
-            
-                user.save(function(err){
-            
-                    if(err){
-            
-                        res.send(err);
-            
-                    }else{
-            
-                        BusinessOwner.findOne({user_id: user.id}, function(err, businessOwner){
-            
-                            if(err){
-            
-                                res.send(err);
-            
-                            }else{
-            
-                                businessOwner.name = (name == null | name == "")? businessOwner.name: name;
-                                businessOwner.description = (description == null | description ==" ")? businessOwner.description: description;
-            
-                                businessOwner.save(function(err){
-            
-                                    if(err){
-            
-                                        res.send(err);
-            
                                     }else{
-            
-                                        res.send('Account Updated Succesfully!');
-            
+
+                                        if(!(email == null | email == "")){
+
+                                            req.checkBody('email', 'Not a valid email address').isEmail();
+
+                                            var errors = req.validationErrors();
+
+                                            if(errors){
+
+                                                res.json({success: false, message: errors});
+                                                return;
+
+                                            }else{
+
+                                                user.email = email;
+
+                                            }
+
+                                        }
+
+                                        if(!(phoneNumber == null | phoneNumber == "")){
+
+                                            req.checkBody('phoneNumber', 'Not a valid phone number').isInt();
+
+                                            var errors = req.validationErrors();
+
+                                            if(errors){
+
+                                                res.json({success: false, message: errors});
+                                                return;
+
+                                            }else{
+
+                                                user.phoneNumber = phoneNumber;
+
+                                            }
+
+                                        }
+                                    
+                                        user.save(function(err){
+                                    
+                                            if(err){
+                                    
+                                                res.json({success: false, message: err.message});
+                                    
+                                            }else{
+                                                
+                                                res.json({success: true, message: 'info updated!'})
+                                                
+                                            }
+                                    
+                                        });                    
+
                                     }
-            
-                                });
-            
-                            }
-            
-                        });
-            
-                    }
-            
-                });
-            
+
+                                }
+                            
+                            });
+
+                        }
+
+                    });
+
+                }
+
             }
-        
+
         });
 
     },
@@ -415,90 +482,66 @@ let businessownerController={
         var errors = req.validationErrors();
 
         if(!errors){
-
-            var loginUsername = req.body.username;
             
-            var conditions = { username: loginUsername };
+            var conditions = { _id: req.params.id };
 
-            User.findOne(conditions, function(err, user){
+            BusinessOwner.findOne(conditions, function(err, businessOwner){
 
                 if(err){
 
-                    res.json(err);
+                    res.json({success:false, message: err.message});
 
                 }else{
 
-                    if(user){
+                    if(businessOwner){
 
-                        conditions = {user_id: user._id};
-        
-                        BusinessOwner.findOne(conditions, function(err, businessOwner){
-        
-                            if(err){
-        
-                                res.send(err);
-        
-                            }else{
+                        var exists = false;
 
-                                if(businessOwner){
+                        for(var i = 0; i < businessOwner.locations.length; i++){
 
-                                    var exists = false;
+                            if(businessOwner.locations[i] == req.body.location){
 
-                                    for(var i = 0; i < businessOwner.locations.length; i++){
+                                exists = true;
 
-                                        if(businessOwner.locations[i] == req.body.location){
+                                break;
 
-                                            exists = true;
-
-                                            break;
-
-                                        }
-
-                                    }
-
-                                    if(!exists){                            
-
-                                        businessOwner.locations.push(req.body.location);
-                
-                                        businessOwner.save(function(err){
-                
-                                            if(err){
-                
-                                                res.json(err);
-                
-                                            }else{
-                
-                                                res.send('location added successfully');
-                
-                                            }
-                
-                                        }); 
-
-                                    }else{
-
-                                        res.send('location already exists!');
-
-                                    }
-
-                                }    
-                            
                             }
-        
-                        });
 
-                    }else{
+                        }
 
-                        res.send('user not found');
+                        if(!exists){                            
 
-                    }
+                            businessOwner.locations.push(req.body.location);
+    
+                            businessOwner.save(function(err){
+    
+                                if(err){
+    
+                                    res.json({success:false, message: err.message});
+    
+                                }else{
+    
+                                    res.json({success:true, message: 'location added!'});
+    
+                                }
+    
+                            }); 
 
+                        }else{
+
+                            res.json({success:false, message: 'location already exists'});
+
+                        }
+
+                    }    
+                
                 }
 
             });
 
         }else{
 
-            res.send('cannot use empty location!');
+            res.json({success:false, message: 'Cannot add an emty location'});
 
         }
 
@@ -507,75 +550,58 @@ let businessownerController={
     //the business owner adds a location to his set of locations
 
     removeLocation: function (req, res){
-
-        var loginUsername = req.body.username;
         
-        var conditions = { username: loginUsername };
+        var conditions = { _id: req.params.id };
 
-        User.findOne(conditions, function(err, user){
+        BusinessOwner.findOne(conditions, function(err, businessOwner){
 
             if(err){
 
-                res.json(err);
+                res.json({success: false, message: err.message});
 
             }else{
 
-                conditions = {user_id: user.id};
+                if(businessOwner){
+                
+                    if(businessOwner.locations.length>1){
 
-                BusinessOwner.findOne(conditions, function(err, businessOwner){
-
-                    if(err){
-
-                        res.json(err);
-
-                    }else{
-
-                        if(businessOwner){
+                        var i = businessOwner.locations.indexOf(req.body.location);
                         
-                            if(businessOwner.locations.length>1){
+                        if(i == -1){
 
-                                var i = businessOwner.locations.indexOf(req.body.location);
-                                
-                                if(i == -1){
-        
-                                    res.send('location not found');
-        
-                                }else{
-        
-                                    businessOwner.locations.pull(req.body.location);
-        
-                                    businessOwner.save(function(err){
-        
-                                        if(err){
-        
-                                            res.json(err);
-        
-                                        }else{
-        
-                                            res.send('location removed from list')
-        
-                                        }
-        
-                                    });
-        
-                                }
-
-                            }else{
-
-                                res.send('must have at least one location');
-
-                            }
-
+                            res.json({success: false, message: 'location not found!'});
 
                         }else{
 
-                            res.send('user not found');
+                            businessOwner.locations.pull(req.body.location);
+
+                            businessOwner.save(function(err){
+
+                                if(err){
+
+                                    res.json({success: false, message: err.message});
+
+                                }else{
+
+                                    res.json({success: true, message: 'location removed from list!'});
+
+                                }
+
+                            });
 
                         }
 
+                    }else{
+
+                        res.json({success: false, message: 'must have at least one location'});
                     }
 
-                });
+
+                }else{
+
+                    res.json({success: false, message: 'user not found!'});
+
+                }
 
             }
 

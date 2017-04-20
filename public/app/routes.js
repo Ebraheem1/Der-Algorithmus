@@ -1,41 +1,67 @@
 //the frontend routes is an angular module, the config contains the directing
-angular.module('appRoutes', ['ngRoute'])
+var app = angular.module('appRoutes', ['ngRoute'])
 
 
 .config(function($routeProvider, $locationProvider){
 
 	$routeProvider
+
 	.when('/', {
-		templateUrl: 'app/views/pages/home.html',
-		controller:'mainCtrl',
-		controllerAs:'main'
-	})
+
+		templateUrl: 'app/views/pages/home.html'
 	
-	.when('/register', {
-		templateUrl: 'app/views/pages/users/register.html',
-		controller: 'regCtrl',
-		controllerAs: 'register'
-	})
-	//This returns the page used for searchResults
-	//and assigns the controller to it
-	.when('/search/search/:keyword',{
-		templateUrl:'app/views/pages/search.html',
-		controller: 'searchCtrl',
-		controllerAs: 'search'
-	})
-	//This returns the page used for login
-	//and assigns the controller to it
-	.when('/loginPage',{
-		templateUrl:'app/views/pages/clientorbusinesslogin.html',
-		controller: 'mainCtrl',
-		controllerAs: 'main',
-		authenticated: false
 	})
 
-	.when('/review/newReview', {
-		templateUrl: 'app/views/pages/review/newReview.html',
-		controller: 'reviewCtrl',
-		controllerAs: 'review'
+	.when('/register', {
+	
+		templateUrl: 'app/views/pages/users/register.html',
+		controller: 'regCtrl',
+		controllerAs: 'register',
+		loggedIn: false
+	
+	})
+
+	.when('/login', {
+
+		templateUrl: 'app/views/pages/users/login.html',
+		loggedIn: false
+	
+	})
+
+	.when('/applications/:id',{
+	
+		templateUrl: 'app/views/pages/application/application.html',
+		controller: 'applicationCtrl'
+	
+	})
+
+	.when('/applications',{
+	
+		templateUrl: 'app/views/pages/application/applications.html',
+		controller: 'applicationsCtrl'
+	
+	})
+
+	.when('/apply',{
+	
+		templateUrl: 'app/views/pages/application/applicationForm.html',
+		controller: 'applicationFormCtrl',
+		As: 'applicationForm'
+	
+	})
+
+	.when('/business/update-info',{
+	
+		templateUrl: 'app/views/pages/businessOwner/edit-info.html',
+		controller: 'businessOwnerInfoCtrl'
+	
+	})
+
+	.when('/business/:id/manage-locations',{
+	
+		templateUrl: 'app/views/pages/businessOwner/manage-locations.html',
+		controller: 'locationsCtrl'
+	
 	})
 
 	.otherwise({
@@ -48,6 +74,5 @@ angular.module('appRoutes', ['ngRoute'])
         enabled: true,
         requiredBase: false
     });
-
 
 });
