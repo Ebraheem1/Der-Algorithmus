@@ -1,6 +1,6 @@
 angular.module('reviewController', ['reviewServices', 'authServices'])
 
-.controller('reviewCtrl', function($http, $location, $timeout, Review, Authentication, $scope, $routeParams){
+.controller('reviewCtrl', function($http, $location, $timeout, Review, Authentication, $scope, $routeParams, AuthenticationToken){
 
 	var app = this;
 	app.revData = {};
@@ -8,7 +8,17 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 
 	Authentication.getUser().then(function(data){
 		app.revData.user_id = data.data.user_id;
-	});
+	},
+	function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
+		}
+	);
 
 	if($routeParams.id){
 		Review.getReview($routeParams.id).then(function(data){
@@ -20,7 +30,17 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 					app.errMsg = data.data.message;
 					app.reviewExists = false;
 				}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	}
 
 
@@ -38,7 +58,17 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 				app.errMsg = data.data.message;
 				app.loading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 
@@ -60,7 +90,17 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 				app.errMsg = data.data.message;
 				app.loading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 
@@ -90,7 +130,17 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 				app.errMsg = data.data.message;
 				app.loading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 });
