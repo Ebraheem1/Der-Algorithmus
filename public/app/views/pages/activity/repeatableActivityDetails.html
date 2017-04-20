@@ -85,7 +85,7 @@
         <strong>Days Off</strong>
     </div>
     <table class="table">
-        <tr ng-repeat="day in activity.activityData.dayOffs">
+        <tr ng-repeat="day in activity.activityData.dayOffsNames">
             <td class="custom1"> <h5 class="custom1"> {{day}} </h5> </td>
         </tr>
     </table>
@@ -93,7 +93,7 @@
 
   <div class="form-group custom">
     <label> Edit Days Off</label>
-    <select multiple class="form-control" ng-model="activity.activityData.dayOffs">
+    <select multiple class="form-control" ng-model="activity.activityData.dayOffsNames">
       <option>Sunday</option>
       <option>Monday</option>
       <option>Tuesday</option>
