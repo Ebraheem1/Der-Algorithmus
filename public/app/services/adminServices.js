@@ -6,11 +6,11 @@ angular.module('adminServices', [])
         adminFactory = {};
 
         adminFactory.getBusiness= function(){
-            return $http.get('/viewBusinesses');
+            return $http.get('/api/viewBusinesses');
         };
 
         adminFactory.deleteBusiness= function(id){
-            return $http.get('/removeBusiness/'+id);
+            return $http.get('/api/removeBusiness/'+id);
         };
 
         return adminFactory;

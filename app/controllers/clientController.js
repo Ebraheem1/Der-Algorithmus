@@ -167,11 +167,9 @@ updateInfo:function(req,res){
       
 console.log("I arrived rateBusiness function in controller");
 
-        var client = ObjectId("58e387965084c1349b92693d");
+        var client = req.user.user_id;
         var currentBusiness = req.params.businessownerID;
         var newRating = req.body.rate;
-
-        console.log("new rating = "+ newRating);
 
         if(newRating > 10 || newRating < 0)
         {
