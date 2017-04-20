@@ -16,7 +16,7 @@ var secret = 'DerAlgorithmus'
 
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
-var multer = require('multer')
+var multer = require('multer');
 
 require('./config/passport')(passport);
 
@@ -69,7 +69,7 @@ router.post('/upload', function (req, res) {
 //the data passed from the front-end is matching admin credentials, thus, the
 //authentication would be done for admins.
 //If the data didn't match also the admin credentials, so we search in the BusinessOwner
-//table, if we found a matched tuple then the authentication would be done for 
+//table, if we found a matched tuple then the authentication would be done for
 //BusinessOwner, if not found then the data entered doesn't exist in my system
 //an error message is displayed accordingly.
 router.post('/login', function(req, res) {
@@ -98,6 +98,7 @@ router.post('/login', function(req, res) {
     if(err){
       return res.json({ success: false, message: 'Authentication failed.' });
     } 
+
     if(isAdmin && username=="admin"){
       administratorController.getAdmin(function(err,admin)
       {
@@ -134,7 +135,7 @@ router.post('/login', function(req, res) {
   });
 }
  });
-    
+
   });//done--
 
 //Routes
@@ -155,6 +156,8 @@ router.get('/businessOwner/:id', clientController.viewBusiness);//done --
 router.post('/change-username',userController.changeUsername);//done --
 
 //
+router.get('/view-activity/:id',clientController.getActivity);
+
 router.get('/application/:username/reject',applicationController.reject);//done --
 router.get('/application/:username/accept',applicationController.accept);//done --
 router.post('/user/forgotPassword',userController.forgotPassword);//done --
@@ -213,5 +216,3 @@ router.post('/createAdmin',administratorController.createAdmin);//done--
 
 //export router
 module.exports = router;
-
-

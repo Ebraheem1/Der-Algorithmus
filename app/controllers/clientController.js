@@ -1,6 +1,8 @@
 let Client = require('../models/Client');
-let Activity = require('../models/Activity');
+let RActivity = require('../models/RepeatableActivity');
+let NRActivity = require('../models/NonRepeatableActivity');
 let BusinessOwner = require('../models/BusinessOwner');
+let Reviews=require('../models/Review');
 var bcrypt = require('bcryptjs');
 var User = require('../models/User');
 var ObjectId = require('mongodb').ObjectID;
@@ -11,17 +13,47 @@ let clientController= {
   it checks in the data base if exists businessOwners if not it will respond with that There
   is no Venues else it will forward the array of businessOwners to the front end to be used
 */
+getActivity:function(req,res){
+  var id= req.params.id;
+  var date=new Date();
+  RActivity.findById(id,function(err,ractivity){
+    if(err){
+      res.json({success:false,message:err});
+    }
+    else if(!ractivity) {
+      NRActivity.findById(id,function(err,nactivity){
+        if(err){
+          res.json({success:false,message:err});
+        }
+        else if(!nactivity | nactivity.travelingDate<=date){
+          res.json({success:false,message:'404 Not found'});
+
+        }
+        else {
+
+          res.json({success:true,activity:nactivity,type:'N'});
+
+        }
+      });
+    }
+    else {
+      res.json({success:true,activity:ractivity,type:'R'});
+
+    }
+  });
+},
+
 viewSummaries:function(req,res){
   BusinessOwner.find(function(err,businessOwners)
 {
   if(err){
-    res.send(err);
+    res.json({success:false,message:err});
   }else {
 
     if(businessOwners.length==0){
-      res.send('There exist no Venues');
+      res.json({success:false,message:'there exist no venues'});
     }else{
-      res.send(businessOwners);
+      res.json({success:true,message:'Loading',BusinessOwners:businessOwners});
     }
 
   }
@@ -45,20 +77,20 @@ updateInfo:function(req,res){
   var gender=req.body.gender;
   User.findOne({username:req.body.username},function(err,user){
     if(err){
-      res.json(err);
+      res.json({success:false,message:err});
     }
     else {
        user.email=(email==null | email=="")?user.email:email;
        user.phoneNumber=(phoneNumber==null | phoneNumber=="")?user.phoneNumber:phoneNumber;
        user.save(function(err){
          if(err){
-            res.send(err);
+            res.json({success:false,message:err});
           }
         else {
           Client.findOne({user_id:user.id},function(err,client){
             if(err)
             {
-              res.send(err);
+              res.json({success:false,message:err});
             }
             else {
                   client.firstName=(firstName==null | firstName=="")?client.firstName:firstName;
@@ -66,10 +98,10 @@ updateInfo:function(req,res){
                     client.gender=(gender==null | gender=="")?client.gender:gender;
                     client.save(function(err){
                       if(err){
-                        res.send(err);
+                        res.json({success:false,message:err});
                       }
                       else {
-                        res.send('Account Succesfully Updated');
+                        res.json({success:true,message:'Account Updated Succesfully'});
                       }
                     });
                   }
@@ -86,26 +118,41 @@ updateInfo:function(req,res){
   in the data base for the BusinessOwner correspondes to this id and show it(forward it to the front end)
 */
   viewBusiness:function(req,res){
-    BusinessOwner.findOne({_id:req.params.id},function(err,BusinessOwner)
+    BusinessOwner.findOne({_id:req.params.id}),function(err,BusinessOwner)
     {
       if(err)
       {
-        res.send(err);
+        res.json({success:false,message:err});
       }
       else {
         if(!BusinessOwner){
-          res.send('404 Not Found');
+          res.json({success:false,message:'404 Not Found'});
         }else{
-        Activity.find({BusinessOwner_id: req.params.id}, function(err, activities){
+        NRActivity.find({BusinessOwner_id: req.params.id}, function(err, NRactivities){
 
           if(err){
 
-            res.send(err);
+            res.json({success:false,message:err});
 
           }else{
+              RActivity.find({BusinessOwner_id:req.params.id},function(err,Ractivities){
+              if(err){
+                res.json({success:false,message:err});
+              }
+              else {
+                var activities=NRactivities.concat(Ractivities);
+                Reviews.find({business_id:req.params.id},function(err,reviews){
 
-            res.send({BusinessOwner, activities});
+                  if(err){
+                    res.json({success:false,message:err});
+                  }
+                  else {
+                    res.json({success:true,businessOwner:BusinessOwner,busactivities:activities,reviews:reviews});
+                  }
+                });
 
+              }
+            });
           }
 
         });
@@ -146,7 +193,7 @@ updateInfo:function(req,res){
                             else{
                             callback(null,null);
                             }
-                            });   
+                            });
                         }
                         else{
                             callback(null,null);
@@ -209,7 +256,7 @@ console.log("I arrived rateBusiness function in controller");
                     res.json({success: false, message: err});
                     return;
                 } else {
-                    
+
                     //update average rate
                     BusinessOwner.findOne(condition, function (err, business) {
                       if(err)
