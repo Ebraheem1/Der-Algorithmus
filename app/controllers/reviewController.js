@@ -176,7 +176,8 @@ let reviewController={
   		"business_id": BusID
   	};
 
-  	var reviews = Review.find(conditions, function (err, rev) {
+	var reviews = Review.find(conditions).populate( {path: 'user_id', populate: {path: 'user_id'} })
+	  .exec(function (err, rev) {
   		if (err) {
 
   			res.json({
