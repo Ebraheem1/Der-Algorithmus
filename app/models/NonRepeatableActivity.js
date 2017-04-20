@@ -9,7 +9,6 @@ var Offer = new Schema({
 
 
 var NonRepeatableActivitySchema = new Schema({
-
 	businessOwner_id: {type: mongoose.Schema.Types.ObjectId, ref: 'BusinessOwner', required: true},
 	type: {type: String/*, required: true*/}, //Trip, Safari
 	image: {type: String/*, required: true*/},

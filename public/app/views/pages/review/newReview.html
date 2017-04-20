@@ -1,0 +1,33 @@
+<head>
+  <style type="text/css">
+    .custom {
+        color: white;
+    }
+  </style>
+</head>
+
+<br> 
+<div class="form-group">
+  <label for="rep"><h3 class="custom">New Review:</h3></label>
+  <textarea class="form-control" rows="10" id="rep" ng-model="review.revData.comment"></textarea>
+</div>
+
+
+<button type="button" ng-click="review.addReview(revData);" class="btn btn-success">Add Review</button>
+
+<br><br>
+
+<div class="jumbotron text-center" ng-show="review.loading">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<h2>Loading...</h2>
+</div>
+
+<div class="alert alert-success fade in alert-dismissable" ng-show="review.successMsg">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+  <strong>{{review.successMsg}}</strong>
+</div>
+
+<div class="alert alert-danger fade in alert-dismissable" ng-show="review.errMsg">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+  <strong>{{review.errMsg}}</strong>
+</div>
