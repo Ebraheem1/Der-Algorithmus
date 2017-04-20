@@ -409,7 +409,7 @@ let activityController={
 		var theme = req.body.theme;
 		var pricePackages = req.body.pricePackages;
 		var slots = req.body.slots;
-		var dayOffs = req.body.dayOffs;
+		var dayOffsNames = req.body.dayOffsNames;
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='';
 		if(missingFields){
@@ -462,7 +462,34 @@ let activityController={
 									repeatableActivity.theme = (theme==null||theme=='')? repeatableActivity.theme : theme;
 									repeatableActivity.pricePackages = (pricePackages==null||pricePackages=='')? repeatableActivity.pricePackages : pricePackages;
 									repeatableActivity.slots = (slots==null||slots=='')? repeatableActivity.slots : slots;
-									repeatableActivity.dayOffs = (dayOffs==null||dayOffs=='')? repeatableActivity.dayOffs : dayOffs;
+									repeatableActivity.dayOffsNames = (dayOffsNames==null||dayOffsNames=='')? repeatableActivity.dayOffsNames : dayOffsNames;
+									if(dayOffsNames!=null&&dayOffsNames!=''){
+
+										repeatableActivity.dayOffs = [];
+
+										if(dayOffsNames.indexOf("Sunday")!=-1){
+											repeatableActivity.dayOffs.push(0);
+										}
+										if(dayOffsNames.indexOf("Monday")!=-1){
+											repeatableActivity.dayOffs.push(1);
+										}
+										if(dayOffsNames.indexOf("Tuesday")!=-1){
+											repeatableActivity.dayOffs.push(2);
+										}
+										if(dayOffsNames.indexOf("Wednesday")!=-1){
+											repeatableActivity.dayOffs.push(3);
+										}
+										if(dayOffsNames.indexOf("Thursday")!=-1){
+											repeatableActivity.dayOffs.push(4);
+										}
+										if(dayOffsNames.indexOf("Friday")!=-1){
+											repeatableActivity.dayOffs.push(5);
+										}
+										if(dayOffsNames.indexOf("Saturday")!=-1){
+											repeatableActivity.dayOffs.push(6);
+										}
+									}
+
 									repeatableActivity.save(function(err) {
 						                if (err) {
 						                	res.json({success:false, message: err});
@@ -511,3 +538,5 @@ let activityController={
 };
 
 module.exports = activityController;
+
+
