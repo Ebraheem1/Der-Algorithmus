@@ -81,8 +81,8 @@
                 <div class="alert alert-success" ng-show="register.successMsg">
                     <strong><span class="glyphicon glyphicon-ok"></span> Done! {{register.successMsg}}</strong>
                 </div>
-                <div class="alert alert-danger" ng-show="register.errMsg">
-                    <span class="glyphicon glyphicon-remove"></span><strong>Error! {{register.errMsg}}</strong>
+                <div class="alert alert-danger" ng-show="register.errors" ng-repeat="error in register.errors">
+                    <span class="glyphicon glyphicon-remove"></span><strong>Error! {{error.msg}}</strong>
                 </div>
             </div>
         </div>

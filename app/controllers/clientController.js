@@ -13,6 +13,36 @@ let clientController= {
   it checks in the data base if exists businessOwners if not it will respond with that There
   is no Venues else it will forward the array of businessOwners to the front end to be used
 */
+getActivity:function(req,res){
+  var id= req.params.id;
+  var date=new Date();
+  RActivity.findById(id,function(err,ractivity){
+    if(err){
+      res.json({success:false,message:err});
+    }
+    else if(!ractivity) {
+      NRActivity.findById(id,function(err,nactivity){
+        if(err){
+          res.json({success:false,message:err});
+        }
+        else if(!nactivity | nactivity.travelingDate<=date){
+          res.json({success:false,message:'404 Not found'});
+
+        }
+        else {
+
+          res.json({success:true,activity:nactivity,type:'N'});
+
+        }
+      });
+    }
+    else {
+      res.json({success:true,activity:ractivity,type:'R'});
+
+    }
+  });
+},
+
 viewSummaries:function(req,res){
   BusinessOwner.find(function(err,businessOwners)
 {
@@ -88,7 +118,7 @@ updateInfo:function(req,res){
   in the data base for the BusinessOwner correspondes to this id and show it(forward it to the front end)
 */
   viewBusiness:function(req,res){
-    BusinessOwner.findOne({_id:req.params.id},function(err,BusinessOwner)
+    BusinessOwner.findOne({_id:req.params.id}),function(err,BusinessOwner)
     {
       if(err)
       {
@@ -105,8 +135,7 @@ updateInfo:function(req,res){
             res.json({success:false,message:err});
 
           }else{
-
-            RActivity.find({BusinessOwner_id:req.params.id},function(err,Ractivities){
+              RActivity.find({BusinessOwner_id:req.params.id},function(err,Ractivities){
               if(err){
                 res.json({success:false,message:err});
               }
@@ -118,7 +147,7 @@ updateInfo:function(req,res){
                     res.json({success:false,message:err});
                   }
                   else {
-                    res.json({success:true,activities:activities,reviews:reviews});
+                    res.json({success:true,businessOwner:BusinessOwner,busactivities:activities,reviews:reviews});
                   }
                 });
 

@@ -114,6 +114,8 @@ router.get('/businessOwner/:id', clientController.viewBusiness);//done --
 router.post('/change-username',userController.changeUsername);//done --
 
 //
+router.get('/view-activity/:id',clientController.getActivity);
+
 router.get('/application/:username/reject',applicationController.reject);//done --
 router.get('/application/:username/accept',applicationController.accept);//done --
 router.post('/user/forgotPassword',userController.forgotPassword);//done --

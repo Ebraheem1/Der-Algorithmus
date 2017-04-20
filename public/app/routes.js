@@ -42,7 +42,11 @@ templateUrl: 'app/views/pages/home.html'
   controller:'ViewBOhomepageCtrl',
   controllerAs:'ViewBOhomepage'
 })
-
+.when('/viewDetailedActivity/:id',{
+  templateUrl:'app/views/pages/DetailedActivity.html',
+  controller:'viewActivityCtrl',
+  controllerAs:'viewActivity'
+})
 .otherwise({redirectTo :'/'});
 $locationProvider.html5Mode({
   enabled: true,

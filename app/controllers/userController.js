@@ -31,7 +31,7 @@ let userController={
       req.checkBody('email',' Email Required').isEmail();
       req.checkBody('firstName',' firstName Required').notEmpty();
       req.checkBody('lastName',' lastName Required').notEmpty();
-      req.checkBody('gender',' gender Required').notEmpty();
+      req.checkBody('gender',' Gender Required').notEmpty();
       req.checkBody('phoneNumber',' phoneNumber Required').notEmpty();
       req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
       req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i");
@@ -40,7 +40,7 @@ let userController={
       var errors=req.validationErrors();
       if(errors)
       {
-        res.json({success:false,message:errors});
+        res.json({success:false,errors:errors});
       }
       else {
         if(req.body.username.toLowerCase() == 'admin'){

@@ -10,6 +10,9 @@ clientFactory.viewSummaries=function(){
 clientFactory.viewDetailed=function(id){
   return $http.get('/businessOwner/'+id);
 }
+clientFactory.viewActivity=function(id){
+  return $http.get('/view-activity/'+id);
+}
   return clientFactory;
 
 });

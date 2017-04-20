@@ -5,8 +5,7 @@ angular.module('userControllers', ['userServices','clientServices'])
 
 	app.regUser = function(regData){
 		app.successMsg = false;
-		app.errMsg = false;
-		console.log('sssss');
+		app.errors = false;
 		User.createUser(app.regData).then(function(data){
 
 			if(data.data.success){
@@ -15,13 +14,23 @@ angular.module('userControllers', ['userServices','clientServices'])
 			$location.path('/');
 			app.sucessMsg=false;
 
-	}, 2000);
-				//$location.path('/');
+			}, 2000);
+
 
 			}
 			else{
-				app.errMsg = data.data.message;
+				if(data.data.errors){
+					app.errors=data.data.errors;
+				}
 			}
+		},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
 		});
 	};
 
@@ -50,6 +59,14 @@ angular.module('userControllers', ['userServices','clientServices'])
 
 
 
+		},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
 		});
 	}
 
@@ -69,6 +86,14 @@ angular.module('userControllers', ['userServices','clientServices'])
 				app.errMsg=data.data.message;
 
 			}
+		},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
 		});
 	}
 
@@ -88,6 +113,14 @@ angular.module('userControllers', ['userServices','clientServices'])
 				app.errMsg=data.data.message;
 
 			}
+		},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
 		});
 	}
 
@@ -105,6 +138,14 @@ angular.module('userControllers', ['userServices','clientServices'])
 			else {
 					app.errMsg=data.data.message;
 			}
+		},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
 		});
 })
 .controller('viewDetailedCtrl',function($http,$location,$timeout,Client,$routeParams){
@@ -120,7 +161,15 @@ angular.module('userControllers', ['userServices','clientServices'])
 		else {
 			app.errMsg=data.data.message;
 		}
-	});
+	},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
+		});
 })
 .controller('ViewBOhomepageCtrl',function($http,Client,AuthenticationToken){
 	var app=this;
@@ -133,6 +182,35 @@ angular.module('userControllers', ['userServices','clientServices'])
 			app.reviews=data.data.reviews;
 		}
 		else {
+			app.errMsg=data.data.message;
+		}
+	},function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
+		});
+
+
+})
+.controller('viewActivityCtrl',function($http,AuthenticationToken,Client,$routeParams){
+	var app=this;
+	app.activityID=$routeParams.id;
+	app.errMsg=false;
+	Client.viewActivity(app.activityID).then(function(data){
+		if(data.data.success){
+			app.activity=data.data.activity;
+			app.offer=data.data.activity.offer;
+			if(data.data.type=='N'){
+				app.type=false;
+			}
+			else {
+				app.type=true;
+			}
+		}else {
 			app.errMsg=data.data.message;
 		}
 	});
