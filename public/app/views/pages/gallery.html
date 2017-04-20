@@ -11,10 +11,9 @@
     </form> -->
   
    <form ng-submit="Submit();">
-        <label class="btn btn-success">
-            browse
-            <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" style="display: none;">
-        </label>
+       
+            <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" >
+        
         <button ng-disabled="uploading" type="submit" class="btn btn-info btn-block login">Add To Gallery</button>
     </form>
 </div>

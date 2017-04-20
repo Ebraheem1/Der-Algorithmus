@@ -9,12 +9,15 @@
         <input name="offer" type="text" placeholder="Write Your Offer Here!" ng-required="true" ng-model="business.offerData.offer">
     </form>
 <br> -->
-     <form ng-submit="Submit(offerData);">
-     <input name="offer" type="text" placeholder="Write Your Offer Here!" ng-required="true" ng-model="offerData"><br><br>
-        <label class="btn btn-success">
-            browse
-            <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" style="display: none;">
-        </label>
+     <form ng-submit="addOffer(offerData);">
+     <input name="offer" type="text" placeholder="Write Description Here!" ng-required="true" ng-model="offerData.offer"><br><br>
+
+     <input name="exp_date" type="date" ng-required="true" ng-model="offerData.exp_date" format ="YYYY-MM-DD"><br><br>
+
+       <input name="discount" type="number" min="5" step="5" ng-required="true" ng-model="offerData.discount" placeholder="discount in percentage"> <p>%</p>
+       
+            <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile">
+        
         <button ng-disabled="uploading" type="submit" class="btn btn-info btn-block login">Add Offer</button>
     </form>
   

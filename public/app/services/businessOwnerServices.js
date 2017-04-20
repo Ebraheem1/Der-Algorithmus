@@ -12,7 +12,7 @@ angular.module('businessOwnerServices', [])
 	};
 	businessOwnerFactory.getReviews = function(){
 		
-		return $http.get('/showReview/58f4eb666bcaf119ca23f201');
+		return $http.get('/showReview/58f8bf88f355f721fe207bf8');
 	};
 
 	businessOwnerFactory.uploadMedia = function(image){
@@ -26,7 +26,7 @@ angular.module('businessOwnerServices', [])
 
     businessOwnerFactory.addOffer = function(offerData){
 
-		return $http.post('/offer/554545415451515',offerData);
+		return $http.post('/offer/58f8c200c2dfe324dda73f14',offerData);
 	};
 
 	return businessOwnerFactory;

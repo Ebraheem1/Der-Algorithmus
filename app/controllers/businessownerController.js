@@ -112,6 +112,26 @@ let businessownerController={
 // this function for adding any offer (discount or bounse) by the businessOwner
     addOffer : function(req,res){
     
+        req.checkBody('offer', 'missingField').notEmpty();
+        req.checkBody('discount', 'missingField').notEmpty();
+        req.checkBody('exp_date', 'missingField').notEmpty();
+        var x = new Date();
+        var y = new Date(req.body.exp_date);
+        var errors = req.validationErrors();
+        if(errors){
+            res.json({success:false , message:"missingField"});
+            return ;
+        }
+      
+        if(x>y){
+            res.json({success:false , message:"Invalid Date"});
+            return ;
+        }
+        
+           if(req.body.discount<5){
+            res.json({success:false , message:"Invalid discount"});
+            return ;
+        }
       
         if(req.file != undefined)
                 req.body.image=req.file.filename;
@@ -134,7 +154,8 @@ let businessownerController={
                     
                                   }
                                   else{
-                repeatableactivity.offers.push({offer: req.body.offer , image: req.body.image});
+                            
+                repeatableactivity.offer = {offer: req.body.offer , image: req.body.image , discount : req.body.discount , exp_date : req.body.exp_date};
                 repeatableactivity.save();   
                 res.json({success:true , message:'Your offer has been posted successfully'});
             }
@@ -143,7 +164,7 @@ let businessownerController={
         });
                                   }
                                   else{
-                nonrepeatableactivity.offers.push(offer);
+                nonrepeatableactivity.offer = {offer: req.body.offer , image: req.body.image , discount : req.body.discount , exp_date : req.body.exp_date};
                 nonrepeatableactivity.save();   
                 res.json({success:true , message:'Your offer has been posted successfully'});
             }

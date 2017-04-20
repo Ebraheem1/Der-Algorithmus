@@ -16,8 +16,10 @@ var Slot= new Schema({
 });
 
 var Offer = new Schema({
-	offer : String,
-	image : String,
+	offer : {type:String,required:true},
+	image : {type:String,required:true},
+	discount : {type:Number,required:true,min:0,max :100},
+	exp_date : {type:Date,required:true}
 });
 
 var RepeatableActivitySchema = new Schema({
@@ -29,7 +31,7 @@ var RepeatableActivitySchema = new Schema({
 	description: {type: String/*, required:true*/},
 	pricePackages: [PricePackage],
 	slots: [Slot],
-	offers:[Offer],
+	offer:{type:Offer,default:null},
 	dayOffs: [Number],
 	cancellationWindow: Number //client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
 	
