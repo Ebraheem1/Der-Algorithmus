@@ -1,0 +1,89 @@
+<br><br><br>
+
+<div class="container" style="background-color: #404040">
+<div class="container">
+    <div>
+        <h1 class="text-center" style="color: white">Businesses in the Directory</h1>
+        <br>
+        <!--
+        <table class="table table-striped" style="font-size: large">
+            <thead>
+                <tr>
+                    <th style="color: white">BusinessName</th>
+                    <th style="color: white">Rating</th>
+                    <th style="color: white">User_ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in adminBusiness.business">
+                    <td>{{item.name}}</td>
+                    <td>{{item.avgRating}}</td>
+                    <td>{{item.user_id}}</td>
+                    <td> <input type="button" value="Delete" class="btn btn-danger" onclick="adminBusiness.deleteBusiness(item.user_id)"> </td>
+                </tr>
+
+            </tbody>
+        </table>-->
+
+        <div class="text-left">
+            <div class="col-sm-3">
+                <h2 style="color: cornflowerblue"> Name </h2>
+            </div>
+            <div class="col-sm-2">
+                <h2 style="color: cornflowerblue"> AvgRating </h2>
+            </div>
+            <div class="col-sm-4">
+                <h2 style="color: cornflowerblue"> Description </h2>
+            </div>
+            <div class="col-sm-3">
+                <h2 style="color: cornflowerblue"> Delete </h2>
+            </div>
+
+        </div>
+
+        <div class="text-left" style="color: white" ng-repeat="item in business">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h3> <strong>{{item.name}} </strong></h3>
+                </div>
+                <div class="col-sm-2">
+                    <h3> <strong> {{item.avgRating}} </strong> </h3>
+                </div>
+                <div class="col-sm-4">
+                    <h3> {{item.description}} </h3>
+                </div>
+                <div class="col-sm-3">
+                    <h3> <input type="button" value="Delete" class="btn btn-danger" mw-confirm-click="adminBusiness.deleteBusiness(item.user_id)"
+                            mw-confirm-click-message="You are about to delete {{item.name}} , are you sure you want to delete ?!">                        </h3>
+                </div>
+            </div>
+        </div>
+
+
+
+       
+
+    </div>
+</div>
+
+ <!-- pager: keep it as it is -->
+<div class="container">
+    <ul ng-if="adminBusiness.pager.pages.length" class="pagination">
+        <li ng-class="{disabled:adminBusiness.pager.currentPage === 1}">
+            <a ng-click="adminBusiness.setPage(1)">First</a>
+        </li>
+        <li ng-class="{disabled:adminBusiness.pager.currentPage === 1}">
+            <a ng-click="adminBusiness.setPage(adminBusiness.pager.currentPage - 1)">Previous</a>
+        </li>
+        <li ng-repeat="page in adminBusiness.pager.pages" ng-class="{active:adminBusiness.pager.currentPage === page}">
+            <a ng-click="adminBusiness.setPage(page)">{{page}}</a>
+        </li>
+        <li ng-class="{disabled:adminBusiness.pager.currentPage === adminBusiness.pager.totalPages}">
+            <a ng-click="adminBusiness.setPage(adminBusiness.pager.currentPage + 1)">Next</a>
+        </li>
+        <li ng-class="{disabled:adminBusiness.pager.currentPage === adminBusiness.pager.totalPages}">
+            <a ng-click="adminBusiness.setPage(adminBusiness.pager.totalPages)">Last</a>
+        </li>
+    </ul>
+</div>
+</div>

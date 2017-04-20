@@ -40,23 +40,29 @@ let userController={
       var errors=req.validationErrors();
       if(errors)
       {
+
         res.json({success:false,errors:errors});
       }
       else {
         if(req.body.username.toLowerCase() == 'admin'){
           res.json({success:false,message:'Username Unavailable'});
+
         }else{
 
             Application.findOne({username:req.body.username},function(err,application)
             {
               if(err)
               {
+
                 res.json({success:false,message:err});
+
               }
               else
               {
                 if(application){
+
                   res.json({success:false,message:'Username Unavailable'});
+
                 }else{
 
             var user=new User({
@@ -81,10 +87,12 @@ let userController={
               });
               client.save(function(err){
                   if(err){
+
                     res.json({success:false,message:err});
                   }
                   else {
                     res.json({success:true,message:'Client Saved '});
+
                   }
               });
           }
@@ -221,29 +229,25 @@ let userController={
   with either the name of the businessOwner, the description of the businessOwner, or
   the types of the activities appear in our system then display the businessowners that offer
   these activities*/
-  search:function(req,res, callback)
+  search:function(req,res)
   {
       var keyword = req.params.keyword;
-      var flag=0;
       var list=[];
-
       BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}, {types:{"$in": [new RegExp(".*"+keyword+".*")]}}]},function(err,businesses){
 
         if(err){
+          res.json({success:false, message: 'The search fails, try it again :)'})
+        }
 
-          res.send(err);
-          return;
+        if(businesses.length > 0){
+          
+          res.json({success:true,businesses:businesses});
+            
+        }else{
+          
+          res.json({success:true,businesses:businesses,message:'No matched Venues found'});
 
         }
-          if(businesses.length > 0){
-
-            res.send(businesses);
-
-          }else{
-
-            res.send('no records to show');
-
-          }
 
       });
 

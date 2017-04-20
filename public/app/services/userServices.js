@@ -6,18 +6,19 @@ angular.module('userServices',[])
 	userFactory = {};
 
 	userFactory.createUser = function(regData){
-		return $http.post('/register', regData);
+
+		return $http.post('/api/register', regData);
 	};
 
 	userFactory.updateInfo=function(updateData){
-		return $http.post('/update-Info',updateData);
+		return $http.post('/api/update-Info',updateData);
 	};
 
 	userFactory.updateUsername=function(username){
-		return $http.post('/change-username',username);
+		return $http.post('/api/change-username',username);
 	};
 	userFactory.updatePassword=function(passwords){
-		return $http.post('/security/change-password',passwords);
+		return $http.post('/api/security/change-password',passwords);
 	};
 	return userFactory;
 });

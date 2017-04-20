@@ -17,8 +17,7 @@ passport.use('clientLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 1)
     {
-
-      Client.findOne({id: jwt_payload.user.id},function(err,client)
+      Client.findById(jwt_payload.user._id,function(err,client)
       {
         if(err)
         {
@@ -27,7 +26,7 @@ passport.use('clientLogin', new JwtStrategy(opts,function(jwt_payload,done)
         if(client)
         {
           return done(null,client);
-        }else{
+        }else{ 
           return done(null,false);
         }
       });
@@ -40,8 +39,7 @@ passport.use('businessLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 2)
     {
-
-      BusinessOwner.findOne({id: jwt_payload.user.id},function(err,businessOwner)
+      BusinessOwner.findById(jwt_payload.user._id,function(err,businessOwner)
       {
         if(err)
         {
@@ -63,8 +61,7 @@ passport.use('adminLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 0)
     {
-
-      Administrator.findOne({id: jwt_payload.user.id},function(err,admin)
+      Administrator.findById(jwt_payload.user._id,function(err,admin)
       {
         if(err)
         {
@@ -84,16 +81,16 @@ passport.use('adminLogin', new JwtStrategy(opts,function(jwt_payload,done)
 
 passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
-    
-      User.findOne({user_id: jwt_payload.user.user_id},function(err,admin)
+      User.findById(jwt_payload.user.user_id,function(err,user)
       {
         if(err)
         {
           return done(err,false);
+          
         }
-        if(admin)
+        if(user)
         {
-          return done(null,admin);
+          return done(null,user);
         }else{
 
           Administrator.findOne({id: jwt_payload.user.id},function(err,admin)
@@ -105,8 +102,9 @@ passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
             if(admin)
             {
               return done(null,admin);
-            }else{
-              return done(null,false);
+            }
+            else{
+              return done(err,false);
             }
           });
         }
