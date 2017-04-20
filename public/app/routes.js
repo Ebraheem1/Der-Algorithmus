@@ -176,22 +176,21 @@ angular.module('appRoutes', ['ngRoute'])
   .when('/public/client/review/view/:businessownerID', {
   templateUrl: 'app/views/pages/review/clientViewReviews.html',
   controller: 'viewReviewCtrl',
-  controllerAs: 'review',
-  loggedIn: false
+  controllerAs: 'review'
   })
 
   .when('/public/client/rate/:businessownerID', {
     templateUrl: 'app/views/pages/client/rateBusiness.html',
     controller: 'ratingCtrl',
     controllerAs: 'rating',
-    loggedIn: false
+    clientAuthenticated: true
   })
 
   .when('/public/admin/viewBusinesses', {
     templateUrl: 'app/views/pages/admin/adminViewBusiness.html',
     controller: 'adminBusinessCtrl',
     controllerAs: 'adminBusiness',
-    loggedIn: false
+    adminAuthenticated: true
   })
 
 	.when('/error404',{
