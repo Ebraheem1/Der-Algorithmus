@@ -1,6 +1,6 @@
-angular.module('reservationController', ['reservationServices', 'pagingServices','modalDialog'])
+angular.module('reservationController', ['authServices','reservationServices', 'pagingServices','modalDialog'])
 
-    .controller('resCtrlNR', function($http, $scope, $location, $timeout, Reservation, $routeParams) {
+    .controller('resCtrlNR', function(AuthenticationToken,$http, $scope, $location, $timeout, Reservation, $routeParams) {
         var app = this; //TODO : handle negative number for participants // ADD cancelation window warning // Display to USer the price
 
 
@@ -29,6 +29,13 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
                     $scope.price = data.data.reservation.price * 100;
 
                 }
+            },function(err){
+              AuthenticationToken.setToken();
+        			AuthenticationToken.setType();
+        			AuthenticationToken.setUsername();
+        			AuthenticationToken.setId();
+        			$location.path('/');
+        			location.reload();
             });
         }
 
@@ -36,7 +43,7 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
     })
 
 
-    .controller('resCtrlR', function($http, $scope, $location, $timeout, Reservation, $routeParams) { //TODO : Logic of MAX day ;
+    .controller('resCtrlR', function(AuthenticationToken,$http, $scope, $location, $timeout, Reservation, $routeParams) { //TODO : Logic of MAX day ;
         var app = this;
 
 
@@ -59,6 +66,13 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
 
 
 
+        },function(err){
+          AuthenticationToken.setToken();
+    			AuthenticationToken.setType();
+    			AuthenticationToken.setUsername();
+    			AuthenticationToken.setId();
+    			$location.path('/');
+    			location.reload();
         });
         app.ReserveR = function(res) {
             var client_id = "58f24bf50a785f677525f8f1" // TODO : to be changed to authentication id
@@ -81,15 +95,23 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
                     $scope.reservation = data.data.reservation;
                     $scope.price = data.data.reservation.price * 100;
                 }
+            },function(err){
+              AuthenticationToken.setToken();
+        			AuthenticationToken.setType();
+        			AuthenticationToken.setUsername();
+        			AuthenticationToken.setId();
+        			$location.path('/');
+        			location.reload();
             });
         }
     })
 
 
     //Your Reservations controller
-    .controller('yourReservations', function(Pager, $http, $scope, $location, $timeout, Reservation, $routeParams, $window) {
+    .controller('yourReservations', function(AuthenticationToken,Pager, $http, $scope, $location, $timeout, Reservation, $routeParams, $window) {
         var app = this;
         $scope.success = true;
+        $scope.errorMessage = "You have no reservations currently !";
         var client_id = "58f24bf50a785f677525f8f1" // TODO : to be changed to authentication id
 
         $scope.currentPage = 1;
@@ -130,6 +152,13 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
                 $scope.success = false;
 
             }
+        },function(err){
+          AuthenticationToken.setToken();
+    			AuthenticationToken.setType();
+    			AuthenticationToken.setUsername();
+    			AuthenticationToken.setId();
+    			$location.path('/');
+    			location.reload();
         });
 
 
@@ -154,6 +183,13 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
                             $window.alert(data.data.message);
                         }
 
+                    },function(err){
+                      AuthenticationToken.setToken();
+                			AuthenticationToken.setType();
+                			AuthenticationToken.setUsername();
+                			AuthenticationToken.setId();
+                			$location.path('/');
+                			location.reload();
                     });
                 } else {
                     Reservation.cancelReservationNR(reservation_id).then(function(data) {
@@ -166,6 +202,13 @@ angular.module('reservationController', ['reservationServices', 'pagingServices'
                         } else {
                             $window.alert(data.data.message);
                         }
+                    },function(err){
+                      AuthenticationToken.setToken();
+                			AuthenticationToken.setType();
+                			AuthenticationToken.setUsername();
+                			AuthenticationToken.setId();
+                			$location.path('/');
+                			location.reload();
                     });
                 }
             }

@@ -1,27 +1,3 @@
-
- angular.module('appRoutes', ['ngRoute'])
-
-     .config(function($routeProvider, $locationProvider) {
-
-         $routeProvider
-
-
-             .when('/', {
-                 templateUrl: 'app/views/pages/home.html'
-             })
-            
-             .otherwise({
-                 redirectTo: '/'
-             });
-         $locationProvider.html5Mode({
-             enabled: true,
-             requireBase: false
-         });
-
-
-     });
-
-//the frontend routes is an angular module, the config contains the directing
 angular.module('appRoutes', ['ngRoute'])
 
 
@@ -39,24 +15,28 @@ angular.module('appRoutes', ['ngRoute'])
     .when('/reserve/1/:activity_id',{
        templateUrl: 'app/views/pages/reservationPageNR.html',
        controller: "resCtrlNR",
-       controllerAs:"resCtrl"
+       controllerAs:"resCtrl" ,
+			 clientAuthenticated:true
     })
     .when('/reserve/0/:activity_id',{
        templateUrl: 'app/views/pages/reservationPageR.html',
        controller: "resCtrlR",
-       controllerAs:"resCtrl"
+       controllerAs:"resCtrl",
+			 clientAuthenticated:true
     })
     .when('/profile/reservations/',{
       templateUrl:'app/views/pages/yourReservations.html',
       controller:"yourReservations",
-      controllerAs:
+      controllerAs: "yrCtrl",
+			clientAuthenticated:true
     })
+
     .when('/login/forgotPassword',{
       templateUrl:'app/views/pages/forgotPasswordPage.html',
       controller:"passwordController",
       controllerAs:"Ctrl"
     })
-	
+
 	//This returns the page used for searchResults
 	//and assigns the controller to it
 	.when('/search/search/:keyword',{

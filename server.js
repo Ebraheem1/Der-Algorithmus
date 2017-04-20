@@ -75,6 +75,10 @@ app.use(flash());
 //using the routes file
 app.use(router);
 //Global Vars as well
+
+
+app.use('/api', router);
+
 app.use(function(req, res, next) {
     res.locals.req = req;
     res.locals.res = res;

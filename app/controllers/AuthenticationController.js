@@ -62,7 +62,6 @@ let AuthenticationController = {
         return;
       }
   },
-  //Logout Function to end the session
   generalLogOut: function(req,res)
   {
       if(!req.user)
@@ -73,7 +72,6 @@ let AuthenticationController = {
       return res.json({success:true, message:'You are logged Out Correctly'});
 
   }
-
 
 
 

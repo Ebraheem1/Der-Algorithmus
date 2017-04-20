@@ -29,7 +29,7 @@ require('./config/passport')(passport);
 //an error message is displayed accordingly.
 router.post('/login', function(req, res) {
 
-  //These extra checks to maintain the code secure 
+  //These extra checks to maintain the code secure
 
   req.checkBody('username',' Username Required').notEmpty();
   req.checkBody('password',' Password Required').notEmpty();
@@ -47,7 +47,7 @@ router.post('/login', function(req, res) {
   if(client){
     var token = jwt.sign({user:client,type:1}, secret, {
 
-        expiresIn: '24h' 
+        expiresIn: '24h'
         });
     return res.json({ success: true,id:client._id ,username:username ,type: 1 ,token: 'JWT ' + token });
  }
@@ -56,7 +56,7 @@ router.post('/login', function(req, res) {
     if(err){
       return res.json({ success: false, message: 'Authentication failed.' });
 
-    } 
+    }
 
     if(isAdmin && username=="admin"){
       administratorController.getAdmin(function(err,admin)
@@ -66,7 +66,7 @@ router.post('/login', function(req, res) {
           return res.json({ success: false, message: 'Authentication failed.' });
         }
         var token = jwt.sign({user:admin[0],type:0}, secret, {
-        expiresIn: '24h' 
+        expiresIn: '24h'
 
         });
         return res.json({ success: true,id:admin[0]._id , username:username ,type: 0 ,token: 'JWT ' + token });
@@ -83,7 +83,7 @@ router.post('/login', function(req, res) {
     {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
 
-        expiresIn: '24h' 
+        expiresIn: '24h'
 
         });
       return res.json({ success: true,id:businessOwner._id ,username:username , type:2 ,token: 'JWT ' + token });
@@ -166,11 +166,11 @@ router.get('/removeBusiness/:businessId',administratorController.removeBusiness)
 
 router.post('/createAdmin',administratorController.createAdmin);//done--
 // Reservation controller
-router.post('/api/pay',reservationController.Pay);
-router.post('/reserve/:type/:activity_id',reservationController.reserveSlot);
-router.get('/reserve/activity/:activity_type/:activity_id',reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
+router.post('/api/pay',passport.authenticate('clientLogin', { session: false }),reservationController.Pay);
+router.post('/api/reserve/:type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.reserveSlot);
+router.get('/api/reserve/activity/:activity_type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
 router.get('/api/getReservations/:client_id',passport.authenticate('clientLogin', { session: false }),reservationController.getAllReservations);
-router.get('/api/cancelReservation/:type/:reservation_id',reservationController.cancelReservation);
+router.get('/api/cancelReservation/:type/:reservation_id',passport.authenticate('clientLogin', { session: false }),reservationController.cancelReservation);
 
 //export router
 module.exports = router;

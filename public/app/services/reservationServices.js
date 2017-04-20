@@ -3,7 +3,7 @@ angular.module('reservationServices', [])
         reservationFactory = {};
         reservationFactory.getActivity = function(activity_id, activity_type) { //$routeParams.activity_id in controller; TODO : remove actiity type and zbtha .
 
-            return $http.get('/reserve/activity/' + activity_type + '/' + activity_id);
+            return $http.get('api/reserve/activity/' + activity_type + '/' + activity_id);
 
         }
 
@@ -14,7 +14,7 @@ angular.module('reservationServices', [])
                 participants: reservationData,
                 price: price
             });
-            return $http.post('reserve/1/' + activity_id, parameters);
+            return $http.post('api/reserve/1/' + activity_id, parameters);
         }
 
 
@@ -28,7 +28,7 @@ angular.module('reservationServices', [])
                 slot_id: slot_id,
                 date: date
             });
-            return $http.post('reserve/0/' + activity_id, parameters);
+            return $http.post('api/reserve/0/' + activity_id, parameters);
         }
 
         reservationFactory.getAllReservation = function(client_id) {
