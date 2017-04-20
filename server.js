@@ -74,7 +74,7 @@ app.use(expressValidator({
 app.use(flash());
 
 //using the routes file
-app.use(router);
+app.use('/api', router);
 //Global Vars as well
 app.use(function(req, res, next) {
   res.locals.req = req;

@@ -6,7 +6,6 @@ angular.module('reviewServices',[])
 	reviewFactory = {};
 
 	reviewFactory.newReview = function(revData){
-		console.log(revData);
 		return $http.post('/api/review/newReview', revData);
 	};
 
@@ -16,7 +15,6 @@ angular.module('reviewServices',[])
 	};
 
 	reviewFactory.editReview = function(id, revData){
-		console.log(revData);
 		return $http.post('/api/review/editReview/'+id, revData);
 	};
 
