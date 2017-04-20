@@ -39,7 +39,7 @@ var upload = multer({
 }).single('myfile');
 
 //uploading files route
-router.post('/api/upload', function (req, res) {
+router.post('/upload', function (req, res) {
   upload(req, res, function (err) {
     if (err) {
       if(err.code=='notAnImage'){
