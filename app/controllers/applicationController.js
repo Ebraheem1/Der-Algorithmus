@@ -30,15 +30,14 @@ let applicationController = {
     //Accepting Application function . we find the application with the given username ,  then we create a new buisness owner
     // and user
     accept: function(req, res) {
-         var pass = userController.generatePassword();
-       
 
+        var pass = userController.generatePassword();
     
         var errors=null;
         if (!errors) {
-            var username = req.param('username');
+            var id = req.params.id;
             Application.findOne({
-                username: username
+                _id: id
             }, function(err, application) {
                 if(application){
                     var owner = new Owner();
@@ -55,30 +54,142 @@ let applicationController = {
 
                     user.save(function(err) {
                         if (err) {
-                            res.send("Error occured while saving user");
+                            res.json({success:false, message: 'problem with saving!'});
                             return;
                         } else { //Code was put in here to avoid asynchronous code.
                             applicationController.findId(application, owner);
                             applicationController.sendAcceptMail(application,pass);
+
+                            res.json({success:true, message: 'Business owner saved successfully!'});
                         }
                     });
-                    res.send("Application accepted successfuly");
                     return;
                 } else {
-                    res.send("Application was not found !");
+                    res.json({success:false, message: 'Application was not found!'});
                     return;
                 }
             });
         } else {
-            res.send(errors);
+            res.json({success:true, message: errors});
             return;
         }
 
     },
 
+    checkUsername: function(req, res){
+
+        if(req.body.username && req.body.username != ''){
+
+            Application.find({username: req.body.username}, function(err, applications){
+
+                if(err){
+
+                    res.json({success: false, message: err.message});
+
+                }else{
+
+                    if(applications.length > 0){
+
+                        res.json({success: false, message: 'Username not available!'});
+
+                    }else{
+
+                        User.find({username: req.body.username}, function(err, users){
+
+                            if(err){
+
+                                res.json({success: false, message: err.message});
+
+                            }else{
+
+                                if(users.length > 0){
+
+                                    res.json({success: false, message: 'Username not available!'});
+
+                                }else{
+
+                                    res.json({success: true, message: '✔'});
+
+                                }
+
+                            }
+
+                        });
+
+                    }
+
+                }
+
+            });
+
+        }else{
+
+
+
+        }
+
+    },
+
+    checkEmail: function(req, res){
+
+        console.log('a7a');
+
+        if(req.body.email && req.body.email != ''){
+
+            Application.find({email: req.body.email}, function(err, applications){
+
+                if(err){
+
+                    res.json({success: false, message: err.message});
+
+                }else{
+
+                    if(applications.length > 0){
+
+                        res.json({success: false, message: 'Email not available!'});
+
+                    }else{
+
+                        User.find({email: req.body.email}, function(err, users){
+
+                            if(err){
+
+                                res.json({success: false, message: err.message});
+
+                            }else{
+
+                                if(users.length > 0){
+
+                                    res.json({success: false, message: 'Email not available!'});
+
+                                }else{
+
+                                    res.json({success: true, message: '✔'});
+
+                                }
+
+                            }
+
+                        });
+
+                    }
+
+                }
+
+            });
+
+        }else{
+
+
+
+        }
+
+    },
     //in this function we create a business owner application using the data provided by the applicant
     //this application is to be later reviewed by the admin
     createApplication: function(req, res) {
+
+        console.log('a7a');
 
         req.checkBody('name', 'Name Required').notEmpty();
         req.checkBody('username', 'Username Required').notEmpty();
@@ -94,7 +205,7 @@ let applicationController = {
             
             if(req.body.username.toLowerCase() == 'admin'){
 
-                res.send('Username Unavailable');
+                res.json({success:false, message: 'Username requested not available!'});
             
             }else{
             
@@ -102,13 +213,13 @@ let applicationController = {
 
                     if(err){
 
-                        res.json(err);
+                        res.json({success:false, message: err.message});
 
                     }else{
 
                         if(users.length>0){
 
-                            res.send('Username already in use!');
+                            res.json({success:false, message: 'Username requested not available!'});
 
                         }else{
 
@@ -116,13 +227,13 @@ let applicationController = {
 
                                 if(err){
                                     
-                                    res.json(err);
+                                    res.json({success:false, message: err.message});
 
                                 }else{
 
                                     if(users.length>0){
 
-                                        res.send('email already in use!');
+                                        res.json({success:false, message: 'email entered not available!'});
 
                                     }else{
 
@@ -141,11 +252,11 @@ let applicationController = {
                                         
                                             if(err){
                                         
-                                                res.json(err);
+                                                res.json({success:false, message: 'problem submitting application!'});
                                         
                                             }else{
-                                        
-                                                res.send('Your application was submitted succesffuly! you\'ll be notified once it is reviewed');
+                                                
+                                                res.json({success:true, message: 'Your application was submitted succesffuly! you\'ll be notified once it is reviewed'});
                                         
                                             }
                                                  
@@ -167,24 +278,29 @@ let applicationController = {
 
         }else{
 
-            res.send(errors);
+            res.json({success:false, message: errors});
 
         }
 
     },
     //Rejecting application function
     reject: function(req, res) {
-        var username = req.param('username'); // Could be changed to ID later .
+        var id = req.params.id; // Could be changed to ID later .
 
         Application.findOne({
-            username: username
+            _id: id
         }, function(err, application) {
+
             if (application) {
+
                 applicationController.sendRejectMail(application);
                 applicationController.removeApplication(application);
-                res.send("Application rejected successfuly");
+                res.json({success:true, message: 'Application rejected!'});
+            
             } else {
-                res.send("Application was not found !");
+
+                res.json({success:false, message: 'Application was not found!'});
+
             }
         });
     },

@@ -1,0 +1,42 @@
+<br>
+<br>
+
+<div class = "container" ng-show = "currentApplication._id" ng-controller = "applicationCtrl as application">
+	<div class = "row">
+		<div>	
+			<h3>{{currentApplication.name}}</h3>
+			<hr>
+			<h3>{{currentApplication.username}}</h3>
+			<h3>{{currentApplication.email}}</h3>
+			<h3>{{currentApplication.phoneNumber}}</h3>
+			<h3>{{currentApplication.description}}</h3>
+			<ul>locations:	
+				<li ng-repeat = "location in currentApplication.locations">
+					<h4>{{location}}</h4>
+				</li>
+			</ul>
+			<h6 ng-repeat = "location in application.locations">{{location}}</h6>
+
+			
+
+			<h3>
+				<button href = "/applications" class = "btn btn-success" ng-click = "application.accept(currentApplication._id);">Accept</button>
+				<button href = "/applications" class = "btn btn-danger" ng-click = "application.reject(currentApplication._id);">Reject</button>
+				<h6>
+					<a href="/applications">Go back to Applications</a>
+				</h6>
+			</h3>
+			
+
+			<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
+			    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+			    <strong>{{errMsg}}</strong>
+			</div>
+
+			<div class="alert alert-success fade in alert-dismissable" ng-show = "successMsg">
+			    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+			    {{successMsg}}
+			</div>
+		</div>	
+	<div>
+</div>

@@ -1,0 +1,84 @@
+<style type="text/css">
+	div.div-centered {
+	  	padding-left: 350px;
+	}
+	input.input-red{
+		border-color: red;
+	}
+</style>
+<br>
+<div class = "container" ng-controller = "applicationFormCtrl as applicationForm">
+	<div class="page-header">
+		<h1>Business Application</h1>
+	</div>
+
+	<div class = "div-centered">
+		<form class = "form-horizontal" role = "form" name = "data" ng-submit="applicationForm.apply(applicationForm.application)">
+			<div class="form-group">
+                <div class="col-md-6">
+                    <input class="form-control" type="text" name="username" placeholder="username" ng-model="applicationForm.application.username" ng-change = "data.username.$dirty && applicationForm.checkUsername()"
+					required> 
+                </div>
+                <label for="email" style="color: #ffffff" ng-show = "!(applicationForm.isEmpty(data.username)) && data.username.$dirty">{{usernameAvailable?"✔":"username not available!"}}</label>
+            </div>
+            <br>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <input class="form-control" type="text" name="name" placeholder="Name" ng-model="applicationForm.application.name" required>
+                </div>
+            </div>
+			<br>
+			
+			<div class="form-group">
+                <div class="col-md-6">
+                    <input class="form-control" type="email" name="email" placeholder="email@example.com" ng-model="applicationForm.application.email" ng-change = "data.email.$dirty && applicationForm.checkEmail()"
+					required> 
+                </div>
+                <label for="email" style="color: #ffffff" ng-show = "data.email.$dirty">{{emailAvailable?"✔":"email not available!"}}</label>
+            </div>
+			<br>
+
+			<div class="form-group">
+                <div class="col-md-6">
+                    <input class="form-control" type="text" name="description" placeholder="description" ng-model="applicationForm.application.description" required>
+                </div>
+            </div>			
+			<br>
+
+			<div class="form-group">
+                <div class="col-md-6">
+                    <input class="form-control" type="number" name="phoneNumber" placeholder="phone number" ng-model="applicationForm.application.phoneNumber" required>
+                </div>
+            </div>
+            <br>
+			
+			
+			<div>	
+				<fieldset  data-ng-repeat="choice in choices">
+			      	<input type="text" name="" placeholder="location" ng-model = "choices[$index].location" required>
+			      	<a href="" class="remove" ng-show="$last && choices.length>1" ng-click="removeChoice()">-</a>
+			    </fieldset>
+			   <a href="" ng-click="addNewChoice()">Add locations</a>
+		    </div>   
+
+			<button class="btn btn-primary" ng-disabled = "data.$invalid || !usernameAvailable || !emailAvailable" type="submit">Apply</button>
+		</form>
+	</div>	
+
+	<br>
+
+	<div class="jumbotron text-center" ng-show="loading">
+		<span class="glyphicon glyphicon-repeat spinner"></span>
+		<h2>Loading...</h2>
+	</div>
+
+	<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	    <strong>{{errMsg}}</strong>
+	</div>
+
+	<div class="alert alert-success fade in alert-dismissable" ng-show = "successMsg">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	    {{successMsg}}
+	</div>
+</div>	
