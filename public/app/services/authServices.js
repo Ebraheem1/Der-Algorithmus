@@ -6,7 +6,7 @@ angular.module('authServices', [])
 	//this function calls the login function in the backe-end
 	//and passes to it the required data it needs.
 	authFactory.loginUser=function(loginData){
-		return $http.post('/login', loginData);
+		return $http.post('/api/login', loginData);
 	};
 	//This function checks whether there is a logged In user in
 	//the session
@@ -50,7 +50,7 @@ angular.module('authServices', [])
 	//in the window localStorage to null (remove them), then it calls
 	//the functions that performs the logout actions in the back-end.
 	authFactory.logoutUser = function(){
-		return $http.get('/logout');
+		return $http.get('/api/logout');
 	};
 
 	return authFactory;

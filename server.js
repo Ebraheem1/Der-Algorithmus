@@ -73,7 +73,7 @@ app.use(expressValidator({
 app.use(flash());
 
 //using the routes file
-app.use(router);
+app.use('/api', router);
 //Global Vars as well
 app.use(function(req, res, next) {
   res.locals.req = req;
@@ -84,11 +84,9 @@ app.use(function(req, res, next) {
   next();
 });
 
-
 app.get('*', function(req,res){
   res.sendFile(path.join(__dirname + '/public/app/views/index.html'))
 });
-
 
 //app.use(router);
 app.listen(8080,function(){
