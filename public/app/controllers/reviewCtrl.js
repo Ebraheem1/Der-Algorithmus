@@ -65,6 +65,7 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 
 
 	app.deleteReview = function(revData){
+
 		app.successMsg = false;
 		app.errMsg = false;
 		app.loading = true;
@@ -83,6 +84,7 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 						app.reviewExists = false;
 					}
 				});
+
 			}
 			else{
 				app.errMsg = data.data.message;

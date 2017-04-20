@@ -21,6 +21,7 @@ angular.module('reviewServices',[])
 	reviewFactory.deleteReview = function(id, revData){
 		return $http.post('/api/review/deleteReview/'+id, revData);
 	}
-
+  
 	return reviewFactory;
+  
 });

@@ -224,7 +224,6 @@ let userController={
   search:function(req,res)
   {
       var keyword = req.params.keyword;
-      var flag=0;
       var list=[];
       BusinessOwner.find({$or:[{name:new RegExp(".*"+keyword+".*")},{description:new RegExp(".*"+keyword+".*")}, {types:{"$in": [new RegExp(".*"+keyword+".*")]}}]},function(err,businesses){
         
@@ -233,11 +232,11 @@ let userController={
         }
         if(businesses.length > 0){
           
-          res.json({success:true, businesses:businesses});
+          res.json({success:true,businesses:businesses});
             
         }else{
-
-          res.json({success:true, message:'No matched Venues found', businesses:businesses});
+          
+          res.json({success:true,businesses:businesses,message:'No matched Venues found'});
 
         }
 
