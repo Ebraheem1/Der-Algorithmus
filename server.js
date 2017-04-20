@@ -13,6 +13,7 @@ var path = require('path');
 var app = express();
 //Database name is Algorithmus
 var DB_URI = "mongodb://localhost:27017/Algorithmus";
+var path = require('path');
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -73,7 +74,7 @@ app.use(expressValidator({
 app.use(flash());
 
 //using the routes file
-app.use(router);
+app.use('/api', router);
 //Global Vars as well
 
 
@@ -88,11 +89,9 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 app.get('*', function(req,res){
   res.sendFile(path.join(__dirname + '/public/app/views/index.html'))
 });
-
 
 //app.use(router);
 

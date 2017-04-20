@@ -61,7 +61,6 @@ passport.use('adminLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 0)
     {
-
       Administrator.findById(jwt_payload.user._id,function(err,admin)
       {
         if(err)
