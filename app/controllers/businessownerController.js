@@ -26,8 +26,8 @@ var storage = multer.diskStorage({
             //should be replaced when session is used
             var businessownerID=req.body.BusinessOwnerId;
             BusinessOwner.findById(businessownerID,function(err,businessowner){
-                if (err)
-                    return ;
+                if (err) 
+                    return ; 
                 else {
                     if(!businessowner){
                         return ;
@@ -39,13 +39,13 @@ var storage = multer.diskStorage({
                      checkUpload = 1;
                     }
 
-
-
-
+                    
+                
+            
                 }
 
             });
-
+       
         }
 
     }
@@ -56,11 +56,11 @@ let businessownerController={
 
 // this function for uploading pictures and videos to the gallery of the businessOwner
     addMedia:function(req,res){
-
+        
 
             upload(req,res,function(err){
             if(err){
-                res.send(err);
+                res.send(err); 
             }
             else if (checkUpload ==1)
             {
@@ -71,39 +71,39 @@ let businessownerController={
                 res.send('No Data entered');
             }
         });
-         },
-
+         }, 
+   
 // this function for adding any offer (discount or bounse) by the businessOwner
     addOffer : function(req,res){
-
+    
         var offer = req.body.offer ;
         var businessownerID = req.body.businessownerID;
         BusinessOwner.findById(businessownerID,function(err,businessowner){
-            if (err)
-                res.send(err) ;
+            if (err) 
+                res.send(err) ; 
             else {
-
+             
                 if(!businessowner){
                     res.send('No businessowner');
                     return ;
                                   }
                 businessowner.offers.push(offer);
-                businessowner.save();
+                businessowner.save();   
                 res.send('Your offer has been posted successfully');
             }
 
         });
 
     },
-
+ 
 
 // this function for showing reviews of the logged-in businessOwner
     showReview : function(req,res){
 
         var businessownerID=req.params.businessownerID;
         Review.find({business_id:businessownerID},function(err,reviews){
-        if (err)
-            res.send(err) ;
+        if (err) 
+            res.send(err) ; 
         else {
                 if(!reviews){
                     res.send('No reviews found');
@@ -122,7 +122,7 @@ let businessownerController={
 
         var reviewID=req.params.reviewID;
         Review.findById(reviewID,function(err,review){
-            if (err) res.send(err) ;
+            if (err) res.send(err) ; 
             else{
                 if(!review){
                     res.send('No review found');
@@ -130,7 +130,7 @@ let businessownerController={
                 }
 
                 review.reply = reply;
-                review.save();
+                review.save(); 
                 res.send('your reply has been posted successfully');
             }
 
@@ -157,9 +157,9 @@ let businessownerController={
 
     addActivity:function(req,res){
 
-
+        
         var type=req.body.type;
-
+        
         req.body.businessOwner_id=req.params.BusinessOwnerId;
 
         BusinessOwner.findById(req.params.BusinessOwnerId,function(err,businessOwner){
@@ -196,7 +196,7 @@ let businessownerController={
                     {
 
                         repeatableActivity.pricePackages.push(
-                            {
+                            { 
                                 participants: req.body['participant' + i],
                                 price: req.body['price'+ i]
                             });
@@ -220,7 +220,7 @@ let businessownerController={
                         if(err)
                             return res.send(err);
                     });
-
+                    
                     businessownerController.updateBusinessTypes(businessOwner,type);
                     return res.send('Activity has been created successfully!');
 
@@ -231,13 +231,13 @@ let businessownerController={
 
 
         });
-
+       
     },
 
    // business owner deletes an activity
     deleteActivity: function(req,res){
 
-        // should be replaced with req.user._id later
+        // should be replaced with req.user._id later 
         var BusinessOwnerId=req.params.BusinessOwnerId;
 
         BusinessOwner.findById(BusinessOwnerId,function(err,businessOwner){
@@ -283,8 +283,8 @@ let businessownerController={
 
                                 }
 
-                            });
-
+                            }); 
+   
                         }
 
                     }
@@ -292,7 +292,7 @@ let businessownerController={
                     res.send('Activity has been deleted successfully');
 
                 });
-
+            
             }
 
             });
@@ -301,104 +301,171 @@ let businessownerController={
 
     },
 
+
+    getBusinessInfo: function(req, res){
+
+        console.log('a7a');
+
+        BusinessOwner.findOne({_id: req.user._id}, function(err, businessOwner){
+
+            if(err){
+
+                res.json({success: false, message: err.message});
+
+            }else{
+
+                if(!businessOwner){
+
+                    res.json({success: false, message: 'No business found'});
+
+                }else{
+
+                    User.findOne({_id: businessOwner.user_id}, function(err, user){
+
+                        if(err){
+
+                            res.json({success: false, message: err.message});
+
+                        }else{
+
+                            if(!user){
+
+                                res.json({success: false, message: 'No business found'});
+
+                            }else{
+
+                                delete user.password;
+                                res.json({success: true, businessOwner, user});
+
+                            }
+
+                        }
+
+                    })
+
+                }
+
+            }
+
+        });
+
+    },
     //this function updates the business owners info with that provided in the request
     //if a field has no specified value to update it with, it is not changed at all
 
     updateInfo: function (req,res) {
 
+        console.log(req.body);
+
         var email=req.body.email;
         var phoneNumber = req.body.phoneNumber;
         var name = req.body.name;
         var description = req.body.description;
+        
+        var conditions = {_id: req.user._id};
 
-        var conditions = {username: req.body.username};
-
-        User.findOne(conditions, function(err, user){
+        BusinessOwner.findOne(conditions, function(err, businessOwner){
 
             if(err){
 
-              res.json(err);
+                res.json({success: false, message: err.message});
 
             }else{
 
-                if(!(email == null | email == "")){
+                if(!businessOwner){
 
-                    req.checkBody('email', 'Not a valid email address').isEmail();
+                    res.json({success: false, message: 'No profile found'});
 
-                    var errors = req.validationErrors();
+                }else{
 
-                    if(errors){
+                    businessOwner.name = (name == null | name == "")? businessOwner.name: name;
+                    businessOwner.description = (description == null | description ==" ")? businessOwner.description: description;
 
-                        res.send(errors);
-                        return;
+                    businessOwner.save(function(err){
 
-                    }else{
+                        if(err){
 
-                        user.email = email;
+                            res.json({success: false, message: err.message});
 
-                    }
+                        }else{
 
-                }
+                            User.findOne({_id: businessOwner.user_id}, function(err, user){
+                                
+                                if(err){
+                                
+                                  res.json({success: false, message: err.message});
+                                
+                                }else{
 
-                if(!(phoneNumber == null | phoneNumber == "")){
+                                    if(!user){
 
-                    req.checkBody('phoneNumber', 'Not a valid phone number').isInt();
-
-                    var errors = req.validationErrors();
-
-                    if(errors){
-
-                        res.send(errors);
-                        return;
-
-                    }else{
-
-                        user.phoneNumber = phoneNumber;
-
-                    }
-
-                }
-
-                user.save(function(err){
-
-                    if(err){
-
-                        res.send(err);
-
-                    }else{
-
-                        BusinessOwner.findOne({user_id: user.id}, function(err, businessOwner){
-
-                            if(err){
-
-                                res.send(err);
-
-                            }else{
-
-                                businessOwner.name = (name == null | name == "")? businessOwner.name: name;
-                                businessOwner.description = (description == null | description ==" ")? businessOwner.description: description;
-
-                                businessOwner.save(function(err){
-
-                                    if(err){
-
-                                        res.send(err);
+                                        res.json({success: false, meassage: 'profile not found!'});
 
                                     }else{
 
-                                        res.send('Account Updated Succesfully!');
+                                        if(!(email == null | email == "")){
+
+                                            req.checkBody('email', 'Not a valid email address').isEmail();
+
+                                            var errors = req.validationErrors();
+
+                                            if(errors){
+
+                                                res.json({success: false, message: errors});
+                                                return;
+
+                                            }else{
+
+                                                user.email = email;
+
+                                            }
+
+                                        }
+
+                                        if(!(phoneNumber == null | phoneNumber == "")){
+
+                                            req.checkBody('phoneNumber', 'Not a valid phone number').isInt();
+
+                                            var errors = req.validationErrors();
+
+                                            if(errors){
+
+                                                res.json({success: false, message: errors});
+                                                return;
+
+                                            }else{
+
+                                                user.phoneNumber = phoneNumber;
+
+                                            }
+
+                                        }
+                                    
+                                        user.save(function(err){
+                                    
+                                            if(err){
+                                    
+                                                res.json({success: false, message: err.message});
+                                    
+                                            }else{
+                                                
+                                                res.json({success: true, message: 'info updated!'})
+                                                
+                                            }
+                                    
+                                        });                    
 
                                     }
 
-                                });
+                                }
+                            
+                            });
 
-                            }
+                        }
 
-                        });
+                    });
 
-                    }
-
-                });
+                }
 
             }
 
@@ -415,10 +482,149 @@ let businessownerController={
         var errors = req.validationErrors();
 
         if(!errors){
+            
+            var conditions = { _id: req.params.id };
 
-            var loginUsername = req.body.username;
+            BusinessOwner.findOne(conditions, function(err, businessOwner){
 
-            var conditions = { username: loginUsername };
+                if(err){
+
+                    res.json({success:false, message: err.message});
+
+                }else{
+
+                    if(businessOwner){
+
+                        var exists = false;
+
+                        for(var i = 0; i < businessOwner.locations.length; i++){
+
+                            if(businessOwner.locations[i] == req.body.location){
+
+                                exists = true;
+
+                                break;
+
+                            }
+
+                        }
+
+                        if(!exists){                            
+
+                            businessOwner.locations.push(req.body.location);
+    
+                            businessOwner.save(function(err){
+    
+                                if(err){
+    
+                                    res.json({success:false, message: err.message});
+    
+                                }else{
+    
+                                    res.json({success:true, message: 'location added!'});
+    
+                                }
+    
+                            }); 
+
+                        }else{
+
+                            res.json({success:false, message: 'location already exists'});
+
+                        }
+
+                    }    
+                
+                }
+
+            });
+
+        }else{
+
+            res.json({success:false, message: 'Cannot add an emty location'});
+
+        }
+
+    },
+
+    //the business owner adds a location to his set of locations
+
+    removeLocation: function (req, res){
+        
+        var conditions = { _id: req.params.id };
+
+        BusinessOwner.findOne(conditions, function(err, businessOwner){
+
+            if(err){
+
+                res.json({success: false, message: err.message});
+
+            }else{
+
+                if(businessOwner){
+                
+                    if(businessOwner.locations.length>1){
+
+                        var i = businessOwner.locations.indexOf(req.body.location);
+                        
+                        if(i == -1){
+
+                            res.json({success: false, message: 'location not found!'});
+
+                        }else{
+
+                            businessOwner.locations.pull(req.body.location);
+
+                            businessOwner.save(function(err){
+
+                                if(err){
+
+                                    res.json({success: false, message: err.message});
+
+                                }else{
+
+                                    res.json({success: true, message: 'location removed from list!'});
+
+                                }
+
+                            });
+
+                        }
+
+                    }else{
+
+                        res.json({success: false, message: 'must have at least one location'});
+                    }
+
+
+                }else{
+
+                    res.json({success: false, message: 'user not found!'});
+
+                }
+
+            }
+
+        });
+
+    },
+
+
+    //this function changes the user password to a new one that satisfies the security criteria 
+
+    changePassword: function(req, res){
+
+        var loginUsername = req.body.username;
+        
+        var conditions = { username: loginUsername };
+
+        req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
+        req.checkBody('password-confirm', 'Passwords do not match').equals(req.body.password);
+        req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i");     
+
+        var errors = req.validationErrors();
+
+        if(!errors){
 
             User.findOne(conditions, function(err, user){
 
@@ -429,228 +635,47 @@ let businessownerController={
                 }else{
 
                     if(user){
-
-                        conditions = {user_id: user._id};
-
-                        BusinessOwner.findOne(conditions, function(err, businessOwner){
-
-                            if(err){
-
-                                res.send(err);
-
-                            }else{
-
-                                if(businessOwner){
-
-                                    var exists = false;
-
-                                    for(var i = 0; i < businessOwner.locations.length; i++){
-
-                                        if(businessOwner.locations[i] == req.body.location){
-
-                                            exists = true;
-
-                                            break;
-
-                                        }
-
-                                    }
-
-                                    if(!exists){
-
-                                        businessOwner.locations.push(req.body.location);
-
-                                        businessOwner.save(function(err){
-
-                                            if(err){
-
-                                                res.json(err);
-
-                                            }else{
-
-                                                res.send('location added successfully');
-
-                                            }
-
-                                        });
-
-                                    }else{
-
-                                        res.send('location already exists!');
-
-                                    }
-
-                                }
-
-                            }
-
-                        });
-
-                    }else{
-
-                        res.send('user not found');
-
-                    }
-
-                }
-
-            });
-
-        }else{
-
-            res.send('cannot use empty location!');
-
-        }
-
-    },
-
-    //the business owner adds a location to his set of locations
-
-    removeLocation: function (req, res){
-
-        var loginUsername = req.body.username;
-
-        var conditions = { username: loginUsername };
-
-        User.findOne(conditions, function(err, user){
-
-            if(err){
-
-                res.json(err);
-
-            }else{
-
-                conditions = {user_id: user.id};
-
-                BusinessOwner.findOne(conditions, function(err, businessOwner){
-
-                    if(err){
-
-                        res.json(err);
-
-                    }else{
-
-                        if(businessOwner){
-
-                            if(businessOwner.locations.length>1){
-
-                                var i = businessOwner.locations.indexOf(req.body.location);
-
-                                if(i == -1){
-
-                                    res.send('location not found');
-
-                                }else{
-
-                                    businessOwner.locations.pull(req.body.location);
-
-                                    businessOwner.save(function(err){
-
-                                        if(err){
-
-                                            res.json(err);
-
-                                        }else{
-
-                                            res.send('location removed from list')
-
-                                        }
-
-                                    });
-
-                                }
-
-                            }else{
-
-                                res.send('must have at least one location');
-
-                            }
-
-
-                        }else{
-
-                            res.send('user not found');
-
-                        }
-
-                    }
-
-                });
-
-            }
-
-        });
-
-    },
-
-
-    //this function changes the user password to a new one that satisfies the security criteria
-
-    changePassword: function(req, res){
-
-        var loginUsername = req.body.username;
-        console.log(req.body.password);
-        console.log(req.body.confirmPassword);
-        var conditions = { username: loginUsername };
-
-        req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
-        req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
-        req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i");
-
-        var errors = req.validationErrors();
-
-        if(!errors){
-
-            User.findOne(conditions, function(err, user){
-
-                if(err){
-
-                    res.json({success:false,message:err});
-
-                }else{
-
-                    if(user){
-
+                    
                         bcrypt.compare(req.body.oldPassword, user.password, function(err, isMatch){
 
-
+                        
                             if(err){
 
-                                res.json({success:false,message:err});
+                                res.json(err);
 
                             }else{
 
                                 if(isMatch){
 
                                     user.password = req.body.password;
-
-                                    user.save(function(err){
+                                    
+                                    user.save(function(err){        
 
                                         if(err){
-
-                                            res.json({success:false,message:err});
-
+                                            
+                                            res.send(err);
+                                        
                                         }else{
 
-                                            res.json({success:true,message:'your Password changed successfully'});
+                                            res.send('Your password has been changed successfully!');
 
                                         }
 
-                                    });
+                                    });                                        
 
                                 }else{
 
-                                    res.json({success:false,message:'wrong password'});
+                                    res.send('wrong password');
 
                                 }
 
                             }
-
-                        });
-
+                                                        
+                        });             
+                    
                     }else{
 
-                        res.json({success:false,message:'user not found'});
+                        res.send('user not found!');
 
                     }
                 }
@@ -659,7 +684,7 @@ let businessownerController={
 
         }else{
 
-            res.json({success:false,message:errors});
+            res.send(errors);
 
         }
 
@@ -687,7 +712,7 @@ getOwner:function(username,password,callback)
                         {
                            callback(null,null);
                         }
-
+                        
                         if(businessOwner)
                         {
                         bcrypt.compare(password,user.password,function(err,isMatch)

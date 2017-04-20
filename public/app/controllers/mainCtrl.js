@@ -4,7 +4,7 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 .controller('mainCtrl', function(Authentication, AuthenticationToken,$location, $rootScope,BusinessOwner){
 
 	var app = this;
-
+	
 	app.dataReady = false;
 	//AuthenticationToken.setToken();
 	//AuthenticationToken.setType();
@@ -21,7 +21,7 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 	//The information saved in the localStorage are not very critical to be more
 	//secure they are only the token, the username and the type.
 	app.doLogin = function(loginData){
-
+		
 		app.errMsg = false;
 		Authentication.loginUser(app.loginData).then(function(data){
 
@@ -50,7 +50,7 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 			{
 				$location.path('/');
 				location.reload();
-			}else{
+			}else{	
 				location.reload();
 			}
 			AuthenticationToken.setToken();
@@ -66,14 +66,14 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 			$location.path('/');
 			location.reload();
 		});
-
+		
 	};
 	//This function checks whether the user has entered a nonempty search keyword
 	//then it redirects the user to the page that contains the page results of
 	//his/her search keyword.
 	app.searchVenues = function(searchData)
 	{
-
+		
 		if(!app.searchData)
 		{
 			$location.path('/');
@@ -98,7 +98,7 @@ app.run(['$rootScope', 'Authentication','$location', function($rootScope, Authen
 
 	$rootScope.$on('$routeChangeStart', function(event, next, current){
 		if (next.$$route !== undefined) {
-			if(next.$$route.clientAuthenticated == true){
+			if(next.$$route.clientAuthenticated == true){	
 				if(!Authentication.isClient()){
 					event.preventDefault();
 					$location.path('/');

@@ -35,11 +35,11 @@ let reviewController={
 		review.user_id = req.body.user_id;
 		review.business_id = '58f13a6ef286e74e0ecdadcc';
 		review.comment = req.body.comment;
+		console.log('here'+req.body.user_id);
 		var missingFields = req.body.user_id==null || req.body.user_id=='' || req.body.comment==null || req.body.comment=='';
 
 		if(missingFields){
-			//The fields: (user_id, business_id, comment) are required!
-			res.json({success: false, message: 'Your review is empty!'})
+			res.json({success: false, message: 'The fields: (user_id, business_id, comment) are required!'})
 		}
 		else{
 			review.save(function(err){
@@ -64,8 +64,7 @@ let reviewController={
 		var review_id =  req.params.id;
 		var missingFields = review_user_id==null || review_user_id=='' || review_newComment==null || review_newComment=='';
 		if(missingFields){
-			//'The fields: (user_id, comment) are required!'
-			res.json({success: false, message: 'Your review is empty!'});
+			res.json({success: false, message: 'The fields: (user_id, comment) are required!'});
 		}
 		else{
 			Review.findOne({_id:review_id}, function(err, review) {
@@ -108,8 +107,7 @@ let reviewController={
         var review_id =  req.params.id;
         var missingFields = review_user_id==null || review_user_id=='';
 		if(missingFields){
-			//The field: (user_id) is required!
-			res.json({success: false, message: 'Contact Development Team!'});
+			res.json({success: false, message: 'The field: (user_id) is required!'});
 		}
 		else{
 			Review.findOne({_id:review_id}, function(err, review){
@@ -165,38 +163,9 @@ let reviewController={
         }
 
     });
-  },
-
-  clientViewReviews: function (req, res) {
+  }  
 
 
-  	var BusID = req.params.businessownerID;
-
-  	var conditions = {
-  		"business_id": BusID
-  	};
-
-  	var reviews = Review.find(conditions, function (err, rev) {
-  		if (err) {
-
-  			res.json({
-  				success: false,
-  				message: err
-  			});
-
-  		} else {
-			
-  			res.json({
-  				success: true,
-  				message: 'Reviews has been retrieved successfully.',
-  				reviews: rev
-  			});
-
-  		}
-		  
-  	});
-
-  }
 
 };
 
