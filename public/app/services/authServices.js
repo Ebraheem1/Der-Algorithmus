@@ -95,18 +95,20 @@ angular.module('authServices', [])
 		{
 			$window.localStorage.setItem('type', type);
 
+			
 		}else if(type == 1){
-
+			
 			$window.localStorage.setItem('type', type);
-
+			
 		}else if(type==2)
 		{
 			$window.localStorage.setItem('type', type);
-
+			
 		}else{
 			$window.localStorage.removeItem('type');
-
+			
 		}
+		
 
 	};
 //This function gets the Username item stored in the window LocalStorage
@@ -146,4 +148,6 @@ angular.module('authServices', [])
 	};
 
 	return authInterceptorsFactory;
+
 });
+

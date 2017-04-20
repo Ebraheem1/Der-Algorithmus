@@ -83,6 +83,13 @@ app.use(function(req, res, next) {
     res.locals.error_msg = req.flash('error_msg');
     next();
 });
+
+
+app.get('*', function(req,res){
+  res.sendFile(path.join(__dirname + '/public/app/views/index.html'))
+});
+
+
 //app.use(router);
 
 //For any wrong get requests

@@ -28,7 +28,9 @@ require('./config/passport')(passport);
 //BusinessOwner, if not found then the data entered doesn't exist in my system
 //an error message is displayed accordingly.
 router.post('/login', function(req, res) {
-  //These extra checks to maintain the code secure
+
+  //These extra checks to maintain the code secure 
+
   req.checkBody('username',' Username Required').notEmpty();
   req.checkBody('password',' Password Required').notEmpty();
   var errors=req.validationErrors();
@@ -44,7 +46,8 @@ router.post('/login', function(req, res) {
   }
   if(client){
     var token = jwt.sign({user:client,type:1}, secret, {
-        expiresIn: '24h'
+
+        expiresIn: '24h' 
         });
     return res.json({ success: true,id:client._id ,username:username ,type: 1 ,token: 'JWT ' + token });
  }
@@ -52,7 +55,9 @@ router.post('/login', function(req, res) {
  administratorController.comparePassword(password,function(err, isAdmin){
     if(err){
       return res.json({ success: false, message: 'Authentication failed.' });
-    }
+
+    } 
+
     if(isAdmin && username=="admin"){
       administratorController.getAdmin(function(err,admin)
       {
@@ -61,7 +66,8 @@ router.post('/login', function(req, res) {
           return res.json({ success: false, message: 'Authentication failed.' });
         }
         var token = jwt.sign({user:admin[0],type:0}, secret, {
-        expiresIn: '24h'
+        expiresIn: '24h' 
+
         });
         return res.json({ success: true,id:admin[0]._id , username:username ,type: 0 ,token: 'JWT ' + token });
       });
@@ -76,7 +82,9 @@ router.post('/login', function(req, res) {
     if(businessOwner)
     {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
-        expiresIn: '24h'
+
+        expiresIn: '24h' 
+
         });
       return res.json({ success: true,id:businessOwner._id ,username:username , type:2 ,token: 'JWT ' + token });
     }
@@ -92,10 +100,6 @@ router.post('/login', function(req, res) {
 
   });//done--
 
-
-router.get('/dashboard', passport.authenticate('generalLogin', { session: false }), function(req, res) {
-  return res.json('It worked! User id is: ' + req.user._id + '.');
-});
 
 //Routes
 
