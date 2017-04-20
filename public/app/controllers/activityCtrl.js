@@ -1,7 +1,7 @@
-angular.module('activityController', ['authServices', 'activityServices', 'fileModelDirective', 'fileUploadService'])
+angular.module('activityController', ['authServices', 'activityServices', 'fileModelDirective', 'fileUploadService', 'authServices'])
 
 
-.controller('activityCtrl', function(Activity, Authentication, $scope, $routeParams, $timeout, fileUpload){
+.controller('activityCtrl', function(Activity, Authentication, $scope, $routeParams, $timeout, fileUpload, AuthenticationToken){
 
 	var app = this;
 	app.activityData = {};
@@ -9,7 +9,17 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 
 	Authentication.getUser().then(function(data){
 		app.activityData.user_id = data.data.user_id;
-	});
+	},
+	function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
+		}
+	);
 
 
 	Activity.getActivity($routeParams.id).then(function(data){
@@ -45,7 +55,17 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			app.errMsg = data.data.message;
 			app.activityExists = false;
 		}
-	});
+	},
+	function(err)
+		{
+			AuthenticationToken.setToken();
+			AuthenticationToken.setType();
+			AuthenticationToken.setUsername();
+			AuthenticationToken.setId();
+			$location.path('/');
+			location.reload();
+		}
+	);
 
 
 
@@ -63,7 +83,17 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 				app.errMsg = data.data.message;
 				app.loading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 	app.addSlot = function(startTime, endTime){
@@ -84,7 +114,17 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 				app.slotErrMsg = data.data.message;
 				app.slotLoading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 	app.deleteSlot = function(activity_id, slot_id){
@@ -106,7 +146,17 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 				app.slotErrMsg = data.data.message;
 				app.slotLoading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 	app.addPackage = function(participants, price){
@@ -133,7 +183,17 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 				app.packageErrMsg = data.data.message;
 				app.packageLoading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 	app.deletePackage = function(activity_id, package_id){
@@ -154,7 +214,17 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 				app.packageErrMsg = data.data.message;
 				app.packageLoading = false;
 			}
-		});
+		},
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
 	};
 
 	$scope.file = {};
@@ -182,14 +252,34 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
                 		$scope.message = data.data.message;
                 		$scope.file = {};
 					}
-                });
+                },
+				function(err)
+					{
+						AuthenticationToken.setToken();
+						AuthenticationToken.setType();
+						AuthenticationToken.setUsername();
+						AuthenticationToken.setId();
+						$location.path('/');
+						location.reload();
+					}
+				);
             } else {
                 $scope.uploading = false;
                 $scope.alert = 'alert alert-danger';
                 $scope.message = data.data.message;
                 $scope.file = {};
             }
-        });
+        },
+		function(err)
+			{
+				AuthenticationToken.setToken();
+				AuthenticationToken.setType();
+				AuthenticationToken.setUsername();
+				AuthenticationToken.setId();
+				$location.path('/');
+				location.reload();
+			}
+		);
     };
 
 });
