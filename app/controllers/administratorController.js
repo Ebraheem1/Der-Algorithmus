@@ -65,8 +65,9 @@ let administratorController={
 					}
 
 					//remove the user referenced by the deleted business owner
-					User.remove({_id:req.params.businessId},function(err){
+					User.remove({_id:new mongoose.mongo.ObjectID(req.params.businessId)},function(err){
 
+						// console.log("Deleted user : "+user);
 						if(err){
 							res.json({success: false, message:err});
 							return;

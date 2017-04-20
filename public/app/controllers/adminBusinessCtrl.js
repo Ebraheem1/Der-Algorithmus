@@ -1,6 +1,26 @@
-angular.module('adminBusinessController', ['adminServices', 'authServices', 'pagingServices'])
+var app = angular.module('adminBusinessController', ['adminServices', 'authServices', 'pagingServices']);
 
-    .controller('adminBusinessCtrl', function ($http, Admin, Authentication, Pager, $scope, $routeParams) {
+app.directive( "mwConfirmClick", [
+  function( ) {
+    return {
+      priority: -1,
+      restrict: 'A',
+      scope: { confirmFunction: "&mwConfirmClick" },
+      link: function( scope, element, attrs ){
+        element.bind( 'click', function( e ){
+          // message defaults to "Are you sure?"
+          var message = attrs.mwConfirmClickMessage ? attrs.mwConfirmClickMessage : "Are you sure?";
+          // confirm() requires jQuery
+          if( confirm( message ) ) {
+            scope.confirmFunction();
+          }
+        });
+      }
+    }
+  }
+]);
+
+app.controller('adminBusinessCtrl', function ($http, Admin, Authentication, Pager, $scope, $routeParams) {
 
         var app = this;
 
