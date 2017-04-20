@@ -309,7 +309,7 @@ let businessownerController={
                 }
                 if(nonRepeatableActivities.length==0 && repeatableActivities.length==0){
 
-                    res.json({ success:false, message:'Currently you have no acitivites'});
+                    res.json({ success:false, message:'Currently you have no acitivites',nonRepeatableActivities:nonRepeatableActivities, repeatableActivities:repeatableActivities});
                 }
                 else{
 
@@ -325,8 +325,34 @@ let businessownerController={
 
         // should be replaced with req.user._id
         var businessOwnerId='58f499e6695f871fff9a7615';
+        NonRepeatableActivity.find({businessOwner_id:businessOwnerId},function(err,nonRepeatableActivities){
 
-        businessownerController.getBusinessActivities(businessOwnerId,res);
+            if(err){
+                res.json( {success:false, message:err } );
+                return;
+            }
+
+            RepeatableActivity.find({businessOwner_id:businessOwnerId},function(err,repeatableActivities){
+
+                if(err){
+
+                    res.json({success:false, message:err });
+                    return;
+                }
+                if(nonRepeatableActivities.length==0 && repeatableActivities.length==0){
+
+                    res.json({ success:false, message:'Currently you have no acitivites',nonRepeatableActivities:nonRepeatableActivities, repeatableActivities:repeatableActivities});
+                }
+                else{
+
+                    res.json({ success:true, nonRepeatableActivities:nonRepeatableActivities, repeatableActivities:repeatableActivities });
+                }
+                
+            });
+
+        });
+
+        
 
     },
 

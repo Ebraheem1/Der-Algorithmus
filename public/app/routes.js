@@ -4,12 +4,13 @@ angular.module('appRoutes', ['ngRoute'])
 
 .config(function($routeProvider, $locationProvider){
 
+
 	$routeProvider
 	.when('/', {
 		templateUrl: 'app/views/pages/home.html',
 		controller:'mainCtrl',
 		controllerAs:'main'
-	})
+	}) 
 	
 	.when('/register', {
 		templateUrl: 'app/views/pages/users/register.html',
@@ -37,7 +38,7 @@ angular.module('appRoutes', ['ngRoute'])
 		controllerAs: 'review'
 	})
 
-	.when('/viewBusinessActivities', {	
+	.when('/viewBusinessActivities', {		
 		templateUrl: 'app/views/pages/businessActivities.html',
 		controller: 'businessActivitiesCtrl',
 		controllerAs: 'businessActivities'

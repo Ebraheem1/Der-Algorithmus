@@ -2,10 +2,12 @@ angular.module('businessActivitiesController',['businessActivitiesServices'])
 
 .controller('businessActivitiesCtrl',function($location,$scope,BusinessActivities){
 
-	$scope.loading=true
+	$scope.loading=true;
 	$scope.errorMsg=false;
 	$scope.successMsg=false;
 	$scope.deletingErrorMsg=false;
+	$scope.nonRepeatableActivities={};
+	$scope.repeatableActivities={};
 
 	BusinessActivities.getActivities().then(function(data){
 
@@ -18,6 +20,8 @@ angular.module('businessActivitiesController',['businessActivitiesServices'])
 		}
 		else{
 
+			$scope.nonRepeatableActivities=data.data.nonRepeatableActivities;
+			$scope.repeatableActivities=data.data.repeatableActivities;
 			$scope.errorMsg=data.data.message;
 			$scope.loading=false;
 		}
@@ -44,21 +48,26 @@ angular.module('businessActivitiesController',['businessActivitiesServices'])
 		$scope.successMsg=false;
 		$scope.errorMsg=false;
 		$scope.deletingErrorMsg=false;
+		
 
 		BusinessActivities.deleteNonRepeatableActivity(activityId).then(function(data){
-
+			
 			if(data.data.success){
-
-				$scope.nonRepeatableActivities=data.data.nonRepeatableActivities;
-				$scope.repeatableActivities=data.data.repeatableActivities;
+				
 				$scope.deletingErrorMsg=false;
 				$scope.successMsg='Activity has been deleted successfully !';
 				$scope.loading=false;
+				$scope.nonRepeatableActivities=data.data.nonRepeatableActivities;
+				$scope.repeatableActivities=data.data.repeatableActivities;
+
 			}
 			else{
 
 				$scope.deletingErrorMsg=data.data.message;
 				$scope.loading=false;
+				$scope.nonRepeatableActivities=data.data.nonRepeatableActivities;
+				$scope.repeatableActivities=data.data.repeatableActivities;
+
 			}
 
 		});
@@ -81,9 +90,12 @@ angular.module('businessActivitiesController',['businessActivitiesServices'])
 				$scope.deletingErrorMsg=false;
 				$scope.successMsg='Activity has been deleted successfully !';
 				$scope.loading=false;
+
 			}
 			else{
 
+				$scope.nonRepeatableActivities=data.data.nonRepeatableActivities;
+				$scope.repeatableActivities=data.data.repeatableActivities;
 				$scope.deletingErrorMsg=data.data.message;
 				$scope.loading=false;
 			}

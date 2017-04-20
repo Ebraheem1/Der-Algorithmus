@@ -1,10 +1,12 @@
 angular.module('nonRepeatableActivityFormController',['businessActivitiesServices','fileModelDirective', 'fileUploadService'])
 
-.controller('nonRepeatableActivityFormCtrl',function($scope,$route, $routeParams,BusinessActivities,fileUpload){
+.controller('nonRepeatableActivityFormCtrl',function($location,$scope,$route, $routeParams,BusinessActivities,fileUpload){
 
 	$scope.file = {};
+	$scope.activityData={};
 
 	$scope.addActivity = function() {
+
 
 		$scope.loading=true;
 		$scope.successMsg=false;
@@ -13,7 +15,7 @@ angular.module('nonRepeatableActivityFormController',['businessActivitiesService
 		
         fileUpload.upload($scope.file).then(function(data) {
             if (data.data.success) {
-                $scope.file = {};
+                
                 $scope.activityData.image='gallery/'+data.data.name;
                 BusinessActivities.create({data: $scope.activityData}).then(function(data){
 
@@ -21,12 +23,16 @@ angular.module('nonRepeatableActivityFormController',['businessActivitiesService
 
 						$scope.successMsg=data.data.message;
 						$scope.loading=false;
+						$scope.file = {};
+						$scope.activityData={};
 					}
 					else
 					{
+						
 						$scope.errorMsg=data.data.message;
 						$scope.loading=false;
-						$scope.file = {};
+						$scope.activityData={};
+						
 					}
 
 				});
@@ -34,9 +40,12 @@ angular.module('nonRepeatableActivityFormController',['businessActivitiesService
             } 
             else 
             {
+            	
                 $scope.errorMsg = data.data.message;
                 $scope.loading=false;
                 $scope.file = {};
+                $scope.activityData={};
+                
             }
 
         });

@@ -2,6 +2,8 @@ angular.module('repeatableActivityFormController',['businessActivitiesServices',
 
 .controller('repeatableActivityFormCtrl',function($scope,$route, $routeParams,BusinessActivities,fileUpload){
 
+  $scope.file = {};
+  $scope.activityData={};
 
    $scope.slots = [{id: 'slot1'}];
    $scope.pricePackages=[{id: 'pricePackage1'}];
@@ -47,9 +49,8 @@ angular.module('repeatableActivityFormController',['businessActivitiesServices',
     
         fileUpload.upload($scope.file).then(function(data) {
             if (data.data.success) {
-                $scope.file = {};
-                $scope.activityData.image='gallery/'+data.data.name;
-                
+               
+                $scope.activityData.image='gallery/'+data.data.name;               
                 BusinessActivities.create({
                   slots: $scope.slots,
                   pricePackages: $scope.pricePackages,
@@ -60,11 +61,14 @@ angular.module('repeatableActivityFormController',['businessActivitiesServices',
 
                     $scope.successMsg=data.data.message;
                     $scope.loading=false;
+                    $scope.file = {};
+                    $scope.activityData={};
                   }
                   else
                   {
                     $scope.errorMsg=data.data.message;
                     $scope.loading=false;
+                    $scope.activityData={};
                   }
 
                 });
@@ -75,6 +79,7 @@ angular.module('repeatableActivityFormController',['businessActivitiesServices',
                 $scope.errorMsg = data.data.message;
                 $scope.loading=false;
                 $scope.file = {};
+                $scope.activityData={};
             }
 
 
