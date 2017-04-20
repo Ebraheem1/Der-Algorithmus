@@ -7,14 +7,15 @@ angular.module('appRoutes', ['ngRoute'])
 
 .config(function($routeProvider, $locationProvider){
 
+
 	$routeProvider
 
 	.when('/', {
 		templateUrl: 'app/views/pages/home.html',
 		controller:'mainCtrl',
 		controllerAs:'main'
-	})
-
+	}) 
+	
   .when('/businessOwnerHP',{
   templateUrl: 'app/views/pages/BusinessOwnerHomePage.html'
 })
@@ -78,6 +79,7 @@ angular.module('appRoutes', ['ngRoute'])
       controller:"passwordController",
       controllerAs:"Ctrl"
     })
+  
 	//This returns the page used for searchResults
 	//and assigns the controller to it
 	.when('/search/search/:keyword',{
@@ -119,6 +121,37 @@ angular.module('appRoutes', ['ngRoute'])
 		controller: 'activityCtrl',
 		controllerAs: 'activity',
 		businessAuthenticated: true
+	})
+
+	.when('/viewBusinessActivities', {		
+		templateUrl: 'app/views/pages/businessActivities.html',
+		controller: 'businessActivitiesCtrl',
+		controllerAs: 'businessActivities'
+	})
+
+	.when('/repeatableActivityForm/:activityType', {	
+		templateUrl: 'app/views/pages/repeatableActivityForm.html',
+		controller: 'repeatableActivityFormCtrl'
+	})
+
+	.when('/nonRepeatableActivityForm/:activityType', {	
+		templateUrl: 'app/views/pages/nonRepeatableActivityForm.html',
+		controller: 'nonRepeatableActivityFormCtrl'
+
+	})
+
+	.when('/viewNonRepeatableReservations/:activityId', {
+
+		templateUrl: 'app/views/pages/nonRepeatableReservations.html',
+		controller: 'nonRepeatableReservationsCtrl'
+
+	})
+
+	.when('/viewRepeatableReservations/:activityId', {
+
+		templateUrl: 'app/views/pages/repeatableReservations.html',
+		controller: 'repeatableReservationsCtrl'
+
 	})
 
 	.when('/activity/repeatableActivityDetails/:id',{

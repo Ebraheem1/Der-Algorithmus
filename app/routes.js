@@ -18,6 +18,49 @@ var secret = 'Der-Algorithmus-Team';
 var multer = require('multer');
 require('./config/passport')(passport);
 
+//multer stuff, to upload a file
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/gallery/');
+  },
+  filename: function (req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
+      var err = new Error();
+      err.code = 'notAnImage';
+      return cb(err);
+    } else {
+      cb(null, Date.now()+'_'+file.originalname);
+    }
+  }
+});
+
+var upload = multer({ 
+  storage: storage
+}).single('myfile');
+
+//uploading files route
+router.post('/api/upload', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      if(err.code=='notAnImage'){
+        res.json({success:false, message: 'File should be an image of one of these extension (png, jpeg, jpg)!'});
+        return;
+      }
+      res.json({success:false, message: 'File Upload Error!'});
+    }
+    else{
+      if(!req.file){
+        res.json({success:false, message: 'No file was selected!'});
+      }
+      else{
+        res.json({success:true, message: 'File was uploaded successfully.', path: req.file.path, name: req.file.filename});
+      }
+
+    }
+
+  });
+});
+
 
 //multer stuff, to upload a file
 var storage = multer.diskStorage({
@@ -217,8 +260,13 @@ router.post('/activity/deleteRepeatableActivityPricePackage', activityController
 router.post('/activity/editActivity/:id', activityController.editActivity);//done--
 router.post('/activity/changeActivityImage', activityController.editActivityImage);
 
-router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
-router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--
+router.post('/addActivity',businessOwnerController.addActivity);
+router.get('/deleteNonRepeatableActivity/:activityId',businessOwnerController.deleteNonRepeatableActivity);
+router.get('/deleteRepeatableActivity/:activityId',businessOwnerController.deleteRepeatableActivity);
+router.get('/viewBusinessActivities', businessOwnerController.viewBusinessActivities);
+router.get('/viewNonRepeatableReservations/:activityId', businessOwnerController.viewNonRepeatableReservations);
+router.get('/viewRepeatableReservations/:activityId', businessOwnerController.viewRepeatableReservations);
+
 
 router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
 router.get('/removeBusiness/:businessId',administratorController.removeBusiness);//done--
@@ -226,11 +274,11 @@ router.get('/removeBusiness/:businessId',administratorController.removeBusiness)
 router.post('/createAdmin',administratorController.createAdmin);//done--
 
 // Reservation controller
-router.post('/api/pay',passport.authenticate('clientLogin', { session: false }),reservationController.Pay);
-router.post('/api/reserve/:type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.reserveSlot);
-router.get('/api/reserve/activity/:activity_type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
-router.get('/api/getReservations/:client_id',passport.authenticate('clientLogin', { session: false }),reservationController.getAllReservations);
-router.get('/api/cancelReservation/:type/:reservation_id',passport.authenticate('clientLogin', { session: false }),reservationController.cancelReservation);
+router.post('/pay',passport.authenticate('clientLogin', { session: false }),reservationController.Pay);
+router.post('/reserve/:type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.reserveSlot);
+router.get('/reserve/activity/:activity_type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
+router.get('/getReservations/:client_id',passport.authenticate('clientLogin', { session: false }),reservationController.getAllReservations);
+router.get('/cancelReservation/:type/:reservation_id',passport.authenticate('clientLogin', { session: false }),reservationController.cancelReservation);
 
 
 //export router

@@ -1,0 +1,155 @@
+<head>
+    <style type="text/css">
+
+        .picture{
+          max-width:140px;
+          max-height:100px;
+        }
+
+
+    </style>
+</head>
+
+
+<div class="container theme-showcase" role="main">
+
+    <br><br><br>
+    <div class="page-header" style="color: white">
+    	<h1>My Activities</h1>
+    </div>
+
+    <form>
+        <div class="form-group custom">
+          <select class="form-control" name="Type" ng-model="type" style="width:150px">
+            <option>Room-Escaping</option>
+            <option>Paintball Fight</option>
+            <option>Battlefield</option>
+            <option>Playground</option>
+            <option>Trip</option>
+            <option>Safari</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-success" ng-click="activityForm()">Add Activity</button><br>
+    </form>
+    
+    <div class="jumbotron text-center" ng-show="loading">
+    	<span class="glyphicon glyphicon-repeat spinner">
+    		<p>Loading...</p>
+    	</span>
+    </div>
+
+    <br>
+
+    <div class="panel panel-primary" ng-show="!errorMsg">
+
+        <!-- Start: Table -->
+        <table class="table">
+            <tr style="color: grey" >
+                <th></th>
+                <th>Information</th>
+                <th>Timing</th>
+                <th>Price</th>
+            </tr>
+            <tr ng-repeat="activity in nonRepeatableActivities ">
+                <td>
+                    <img class="picture img-circle"  src="{{activity.image}}">
+                </td>
+                <td >
+                    <strong><i>{{activity.type}}</i></strong><br><br>
+                    <strong>Destination: </strong>{{ activity.destination }} <br>
+                    <strong>Accommodation: </strong>{{ activity.Accommodation }} <br>
+                    <strong>Transportation: </strong>{{ activity.transportation }} <br>
+                    <strong>Max Participants: </strong>{{ activity.maxParticipants }} <br>
+                    <strong>Cancellation Window: </strong>{{ activity.cancellationWindow }} <br>
+                    <strong>Description: </strong>{{ activity.description }}
+                </td>
+                <td>
+                   <strong>Traveling Date: </strong>{{ activity.travelingDate | limitTo : 10 : 0}} <br>
+                   <strong>Return Date: </strong>{{ activity.returnDate | limitTo : 10 : 0 }} 
+                </td>
+                <td>
+                   <strong>Price Per Person: </strong>{{ activity.pricePerPerson }}  
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" 
+                     ng-click="deleteNonRepeatableActivity(activity._id)">Delete</button>
+                     <br><br>
+                    <button type="button" class="btn btn-primary" 
+                    ng-click="viewNonRepeatableReservations(activity._id)">View Reservations</button> 
+                </td>
+
+            </tr>
+
+            <tr ng-repeat="activity in repeatableActivities ">
+                <td>
+                    <img class="picture img-circle"  src="{{activity.image}}">
+                </td>
+                <td >
+                    <strong><i>{{activity.type}}</i></strong><br><br>
+                    <strong>Theme: </strong>{{ activity.theme }} <br>
+                    <strong>Cancellation Window: </strong>{{ activity.cancellationWindow }} <br>
+                    <strong>Description: </strong>{{ activity.description }} <br>
+                </td>
+                <td>
+                    <strong>Available Slots:</strong>
+                    <div ng-repeat="slot in activity.slots">
+                        <strong>Start Time: </strong>{{slot.startTime}}
+                        <span style="display:inline-block; width:10px;"></span>                        
+                        <strong>End Time: </strong>{{slot.endTime}}
+                    </div> <br>
+                    <div ng-if="activity.dayOffs.length>0">
+                        <strong>Days Off: </strong>
+                        <div ng-repeat="day in activity.dayOffs">
+                            <div ng-if="day==0">Sunday</div>
+                            <div ng-if="day==1">Monday</div>
+                            <div ng-if="day==2">Tuesday</div>
+                            <div ng-if="day==3">Wednesday</div>
+                            <div ng-if="day==4">Thursday</div>
+                            <div ng-if="day==5">Friday</div>
+                            <div ng-if="day==6">Saturday</div>   
+                        </div>  
+                    </div>
+                </td>
+                <td>
+                    <div ng-repeat="package in activity.pricePackages">
+                        <strong>Participants: </strong>{{package.participants}}
+                        <span style="display:inline-block; width:10px;"></span>
+                        <strong>Price: </strong>{{package.price}}
+                    </div>
+                 
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" ng-click="deleteRepeatableActivity(activity._id)">Delete</button> <br><br>
+                    <button type="button" class="btn btn-primary" 
+                    ng-click="viewRepeatableReservations(activity._id)">View Reservations</button> 
+                </td>
+
+            </tr>
+            <!-- End: Table -->
+        </table>
+    </div>
+
+    <br>
+
+    <div class="row show-hide-message" ng-show="deletingErrorMsg">
+        <div class="alert alert-danger">
+            {{deletingErrorMsg}}
+        </div>
+    </div>
+
+    <div class="row show-hide-message" ng-show="errorMsg">
+    	<div class="alert alert-danger">
+    		{{errorMsg}}
+    	</div>
+    </div>
+
+    <div class="row show-hide-message" ng-show="successMsg">
+        <div class="alert alert-success">
+          {{successMsg}}
+        </div>
+    </div>
+
+</div>
+
+
+
