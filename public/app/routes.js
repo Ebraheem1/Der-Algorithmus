@@ -1,5 +1,4 @@
 //the frontend routes is an angular module, the config contains the directing
-
 angular.module('appRoutes', ['ngRoute'])
 
 
@@ -56,6 +55,27 @@ angular.module('appRoutes', ['ngRoute'])
 		controllerAs: 'activity',
 		businessAuthenticated: true
 	})
+  
+  .when('/public/client/review/view/:businessownerID', {
+  templateUrl: 'app/views/pages/review/clientViewReviews.html',
+  controller: 'viewReviewCtrl',
+  controllerAs: 'review',
+  loggedIn: false
+  })
+
+  .when('/public/client/rate/:businessownerID', {
+    templateUrl: 'app/views/pages/client/rateBusiness.html',
+    controller: 'ratingCtrl',
+    controllerAs: 'rating',
+    loggedIn: false
+  })
+
+  .when('/public/admin/viewBusinesses', {
+    templateUrl: 'app/views/pages/admin/adminViewBusiness.html',
+    controller: 'adminBusinessCtrl',
+    controllerAs: 'adminBusiness',
+    loggedIn: false
+  })
 
 	.when('/error404',{
 		templateUrl: 'app/views/pages/error404.html'
@@ -73,4 +93,3 @@ angular.module('appRoutes', ['ngRoute'])
     });
 
 });
-

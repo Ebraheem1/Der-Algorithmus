@@ -16,12 +16,20 @@ angular.module('reviewServices',[])
 
 	reviewFactory.editReview = function(id, revData){
 		return $http.post('/api/review/editReview/'+id, revData);
-	}
+	};
 
 	reviewFactory.deleteReview = function(id, revData){
+		console.log(revData);
 		return $http.post('/api/review/deleteReview/'+id, revData);
-	}
-  
+	};
+
+	reviewFactory.clientGetReviews = function(id){
+		return $http.get('/api/client/review/view/'+id);
+	};
+	
+	reviewFactory.rateBusiness = function(id,rating){
+		return $http.post('/api/client/rate/'+id, rating);
+	};
+
 	return reviewFactory;
-  
 });

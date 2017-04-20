@@ -511,5 +511,3 @@ let activityController={
 };
 
 module.exports = activityController;
-
-

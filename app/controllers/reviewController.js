@@ -103,6 +103,7 @@ let reviewController={
 	//the function ensures that the request includes the required field (user_id)
 	//by using angular's ng-show, it will be guaranteed that each user can only delete his own reviews
 	deleteReview: function(req,res){
+		console.log(req.body.user_id+' | '+req.params.id);
 		var review_user_id = req.body.user_id;
         var review_id =  req.params.id;
         var missingFields = review_user_id==null || review_user_id=='';
@@ -164,9 +165,38 @@ let reviewController={
         }
 
     });
-  }  
+  },
+
+  clientViewReviews: function (req, res) {
 
 
+  	var BusID = req.params.businessownerID;
+
+  	var conditions = {
+  		"business_id": BusID
+  	};
+
+  	var reviews = Review.find(conditions, function (err, rev) {
+  		if (err) {
+
+  			res.json({
+  				success: false,
+  				message: err
+  			});
+
+  		} else {
+			
+  			res.json({
+  				success: true,
+  				message: 'Reviews has been retrieved successfully.',
+  				reviews: rev
+  			});
+
+  		}
+		  
+  	});
+
+  }
 
 };
 

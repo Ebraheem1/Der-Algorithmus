@@ -14,7 +14,6 @@ var authController = require('./controllers/AuthenticationController');
 var jwt = require('jsonwebtoken');
 var secret = 'DerAlgorithmus'
 
-
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
 var multer = require('multer')
@@ -138,7 +137,6 @@ router.post('/login', function(req, res) {
     
   });//done--
 
-
 //Routes
 
 //routing for creating a new Cient
@@ -191,9 +189,9 @@ router.get('/review/getReview/:id', reviewController.getReview);//done--
 router.post('/review/newReview', reviewController.newReview);//done--
 router.post('/review/editReview/:id', reviewController.editReview);//done--
 router.post('/review/deleteReview/:id', reviewController.deleteReview);//done--
-
+router.get('/client/review/view/:businessownerID', reviewController.clientViewReviews ); //////////////added NEW///////
 router.get('/review/view/:businessownerID', reviewController.viewBusinessReviews );//done--
-router.post('/business/rate', clientController.rateBusiness );//done--
+router.post('/client/rate/:businessownerID', clientController.rateBusiness );//Changed from /business/rate////
 
 router.get('/activity/getActivity/:id', activityController.getActivity);
 router.post('/activity/editActivityImage/:id', activityController.editActivityImage);
@@ -211,57 +209,6 @@ router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
 router.get('/removeBusiness/:businessId',administratorController.removeBusiness);//done--
 
 router.post('/createAdmin',administratorController.createAdmin);//done--
-
-
-
-
-router.post('/authenticate', function(req, res) {
-  var missingFields = req.body.username==null || req.body.username=='' || req.body.password==null || req.body.password=='';
-  if(missingFields){
-    res.json({ success: false, message: 'The fields (username, password) are required!' });
-    return;
-  }
-  User.findOne({ username: req.body.username }, function(err, user) {
-      if (err) {
-        res.json({ success: false, message: err });
-      }else {
-        if (!user) {
-            res.json({ success: false, message: 'No account with this username exists!' });
-            return;
-        } 
-        var validPassword = user.comparePassword(req.body.password);
-        if (!validPassword) {
-            res.json({ success: false, message: 'The password you entered is incorrect!' });
-        } else {
-          var token = jwt.sign({username: user.username, user_id:user._id}, secret, { expiresIn: '24h'});
-          res.json({ success: true, message: 'Successfully logged in.', token: token});
-        }
-        
-      }
-  });
-});﻿
-
-
-router.use(function(req, res, next){
-  var token = req.body.token || req.body.query || req.headers['x-access-token'];
-  if(token){
-    jwt.verify(token, secret, function(err, loggedInUser){
-        if(err){
-            res.json({success: false, message: 'Invalid Token!'});
-        } else{
-            req.loggedInUser = loggedInUser;
-            next();
-        }
-    });
-  } 
-  else{
-    res.json({success: false, message: 'No token exists!'});
-  }
-});
-
-router.post('/loggedIn', function(req, res, next){
-  res.send(req.loggedInUser);
-});
 
 
 //export router

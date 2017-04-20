@@ -159,16 +159,21 @@ updateInfo:function(req,res){
 
             });
     },
-    rateBusiness: function (req, res) {
-        //ID of the client object
-        var client = req.body.clientID;
-        //ID of the user of the businessOwner
-        var currentBusiness = req.body.businessID;
 
+    //This method takes the user_id and newRating from the req.body and takes the businessID from the req.params
+    //It then checks if the user has an old rating for this business and delete it if Found
+    //It then adds the new rating to the ratings of the business and update the new average rating
+    rateBusiness: function (req, res) {
+      
+console.log("I arrived rateBusiness function in controller");
+
+        var client = req.user.user_id;
+        var currentBusiness = req.params.businessownerID;
         var newRating = req.body.rate;
+
         if(newRating > 10 || newRating < 0)
         {
-          res.send("Not Valid rating");
+          res.send({success: false, message: "not a valid rating"});
           return;
         }
 
@@ -186,7 +191,7 @@ updateInfo:function(req,res){
         }, function (err) {
 
             if (err) {
-              res.send("Error");
+              res.send({success: false, message: err});
               return;
 
             }
@@ -201,7 +206,7 @@ updateInfo:function(req,res){
             }, function (err) {
 
                 if (err) {
-                    res.send("Error");
+                    res.json({success: false, message: err});
                     return;
                 } else {
                     
@@ -209,12 +214,12 @@ updateInfo:function(req,res){
                     BusinessOwner.findOne(condition, function (err, business) {
                       if(err)
                       {
-                        res.send(err);
+                        res.json({success: false, message: err});
                         return;
                       }
                       if(! business)
                       {
-                        res.send('No matched BusinessOwner found');
+                        res.json({success: false, message: 'No matched BusinessOwner found'});
                         return;
                       }
 
@@ -228,13 +233,15 @@ updateInfo:function(req,res){
 
                         var average = sum / ratings.length;
 
+                        console.log("new average is " + business.ratings);
+
                         BusinessOwner.update(condition, {
                             avgRating: average
                         }, function (err) {
                             if (err) {
-                                res.send("unsuccessful average update");
+                                res.json({success: false, message: "unsuccessful average update"});
                             } else {
-                                res.send("successful average update = " + average);
+                                res.json({success: true, message: "Rating successfully updated", avg: average});
                             }
                         });
 

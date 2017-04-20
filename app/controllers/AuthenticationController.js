@@ -71,7 +71,6 @@ let AuthenticationController = {
       }
       req.logout();
       return res.json({success:true, message:'You are logged Out Correctly'});
-
   }
 
 
