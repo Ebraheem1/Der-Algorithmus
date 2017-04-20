@@ -245,39 +245,25 @@ router.post('/authenticate', function(req, res) {
 });﻿
 
 
-// router.use(function(req, res, next){
-//   var token = req.body.token || req.body.query || req.headers['x-access-token'];
-//   if(token){
-//     jwt.verify(token, secret, function(err, loggedInUser){
-//         if(err){
-//             res.json({success: false, message: 'Invalid Token!'});
-//         } else{
-//             req.loggedInUser = loggedInUser;
-//             next();
-//         }
-//     });
-//   } 
-//   else{
-//     res.json({success: false, message: 'No token exists!'});
-//   }
-// });
+router.use(function(req, res, next){
+  var token = req.body.token || req.body.query || req.headers['x-access-token'];
+  if(token){
+    jwt.verify(token, secret, function(err, loggedInUser){
+        if(err){
+            res.json({success: false, message: 'Invalid Token!'});
+        } else{
+            req.loggedInUser = loggedInUser;
+            next();
+        }
+    });
+  } 
+  else{
+    res.json({success: false, message: 'No token exists!'});
+  }
+});
 
 router.post('/loggedIn', function(req, res, next){
-    var token = req.body.token || req.body.query || req.headers['x-access-token'];
-    if(token){
-      jwt.verify(token, secret, function(err, loggedInUser){
-          if(err){
-              res.json({success: false, message: 'Invalid Token!'});
-          } else{
-              req.loggedInUser = loggedInUser;
-              res.send(req.loggedInUser);
-
-          }
-      });
-    } 
-    else{
-      res.json({success: false, message: 'No token exists!'});
-    }
+  res.send(req.loggedInUser);
 });
 
 

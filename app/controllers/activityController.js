@@ -147,6 +147,16 @@ let activityController={
 			res.json({success:false, message: 'You should include start time and end time in the time slot!'});
 			return;
 		}
+
+		var startDate = new Date(startTime);
+		var endDate = new Date(endTime);
+		var startDateHours = (startDate.getHours()<10)? '0'+startDate.getHours(): startDate.getHours();
+		var startDateMins =	(startDate.getMinutes()<10)? '0'+startDate.getMinutes(): startDate.getMinutes();
+		var endDateHours = (endDate.getHours()<10)? '0'+endDate.getHours(): endDate.getHours();
+		var endDateMins =  (endDate.getMinutes()<10)? '0'+endDate.getMinutes(): endDate.getMinutes();
+		startTime = startDateHours+':'+startDateMins;
+		endTime =  endDateHours+':'+endDateMins;
+
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
 			if(err){
 				res.json({success:false, message: err});
@@ -363,9 +373,22 @@ let activityController={
 											res.json({success:false, message: err});
 										}else{
 											if(repeatableActivityReservation){
-												var people = repeatableActivityReservation.participants+1;
-												res.json({success:false, message: 'This activity is currently reserved by '+people+' person(s), You can only edit an ectivity when it is not reserved!'});
-												return;
+												var startTime, endTime;
+												for (var i =0; i<repeatableActivity.slots.length; i++){
+													if(repeatableActivity.slots[i]._id==repeatableActivityReservation.slot_id){
+														startTime = repeatableActivity.slots[i].startTime;
+														endTime = repeatableActivity.slots[i].endTime;
+													}
+												}
+												var reservationDate = new Date(repeatableActivityReservation);
+												reservationDate.setHours(endTime.substring(0,2));
+												reservationDate.setMinutes(endTime.substring(3,5));
+												var dateNow = new Date();
+												var reservationDateOnly = reservationDate.getDay()+'-'+reservationDate.getMonth()+'-'+reservationDate.getFullYear();
+												if(reservationDate>dateNow){
+													res.json({success:false, message: 'This activity is currently reserved. Reservation is on '+reservationDateOnly+', from '+startTime+' to '+endTime+'. You can only edit an ectivity when it is not reserved!'});
+													return;
+												}
 											}
 										}
 									});

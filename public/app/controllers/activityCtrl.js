@@ -71,15 +71,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 		app.slotErrMsg = false;
 		app.slotLoading = true;
 		var slotData = {};
-		var timeFormat = /^([0-9]{2})\:([0-9]{2})$/;
 		slotData.startTime = startTime;
 		slotData.endTime = endTime;
-
-		if(timeFormat.test(startTime) == false || timeFormat.test(endTime) == false){
-    		app.slotErrMsg = 'Time should be provided in the form HH:MM!'
-			app.slotLoading = false;
-			return;
-		}
 
 		Activity.addTimeSlot($routeParams.id,slotData).then(function(data){
 			if(data.data.success){
