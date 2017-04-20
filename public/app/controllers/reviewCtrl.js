@@ -1,6 +1,7 @@
-angular.module('reviewController', ['reviewServices', 'authServices'])
+angular.module('reviewController', ['reviewServices', 'authServices','businessOwnerServices'])
 
-.controller('reviewCtrl', function($http, $location, $timeout, Review, Authentication, $scope, $routeParams, AuthenticationToken){
+
+.controller('reviewCtrl', function($http,BusinessOwner, $location, $timeout, Review, Authentication, $scope, $routeParams, AuthenticationToken){
 
 	var app = this;
 	app.revData = {};
@@ -143,4 +144,6 @@ angular.module('reviewController', ['reviewServices', 'authServices'])
 		);
 	};
 
+
 });
+

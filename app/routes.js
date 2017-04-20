@@ -17,9 +17,57 @@ var secret = 'DerAlgorithmus'
 
 var jwt = require('jsonwebtoken');
 var secret = 'Der-Algorithmus-Team';
-var multer = require('multer')
 
+var multer = require('multer');
 require('./config/passport')(passport);
+
+
+
+//multer stuff, to upload a file
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/gallery/');
+  },
+  filename: function (req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpeg|jpg|mp4|mov|avi|flv|wmv)$/)) {
+      var err = new Error();
+      err.code = 'notAnImage';
+      return cb(err);
+    } else {
+      cb(null, Date.now()+'_'+file.originalname);
+    }
+  }
+});
+
+var upload = multer({ 
+  storage: storage
+}).single('myfile');
+
+//uploading files route
+router.post('/upload', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      if(err.code=='notAnImage'){
+        res.json({success:false, message: 'File should be an image of one of these extension (png, jpeg, jpg)!'});
+        return;
+      }
+      res.json({success:false, message: 'File Upload Error!'});
+    }
+    else{
+      if(!req.file){
+        res.json({success:false, message: 'No file was selected!'});
+      }
+      else{
+        res.json({success:true, message: 'File was uploaded successfully.', name: req.file.filename });
+      }
+
+    }
+
+  });
+});
+
+
+
 
 
 //here we have username and password as an input parameters
@@ -96,12 +144,6 @@ router.post('/login', function(req, res) {
     
   });//done--
 
-
-
-router.get('/dashboard', passport.authenticate('generalLogin', { session: false }), function(req, res) {
-  return res.json('It worked! User id is: ' + req.user._id + '.');
-});
-
 //Routes
 
 //routing for creating a new Cient
@@ -149,8 +191,8 @@ router.get('/logout',passport.authenticate('generalLogin', { session: false }),a
 
 router.get('/search/:keyword',userController.search);//done--
 
-router.post('/gallery', businessOwnerController.addMedia);//done--
-router.post('/offer', businessOwnerController.addOffer);//done--
+router.post('/gallery/:id', businessOwnerController.addMedia);//done--
+router.post('/offer/:activityID', multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addOffer);//done--
 router.get('/showReview/:businessownerID', businessOwnerController.showReview);//done--
 router.post('/reply/:reviewID', businessOwnerController.reply);//done--
 
@@ -166,8 +208,13 @@ router.get('/activity/getActivity/:id', activityController.getActivity);
 router.post('/activity/newActivity', activityController.newActivity);
 router.post('/activity/editActivity/:id', activityController.editActivity);//done--
 
-router.post('/addActivity/:BusinessOwnerId',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);//done --
-router.get('/deleteActivity/:activityId/:BusinessOwnerId',businessOwnerController.deleteActivity);//done--
+router.post('/addActivity',businessOwnerController.addActivity);
+router.get('/deleteNonRepeatableActivity/:activityId',businessOwnerController.deleteNonRepeatableActivity);
+router.get('/deleteRepeatableActivity/:activityId',businessOwnerController.deleteRepeatableActivity);
+router.get('/viewBusinessActivities', businessOwnerController.viewBusinessActivities);
+router.get('/viewNonRepeatableReservations/:activityId', businessOwnerController.viewNonRepeatableReservations);
+router.get('/viewRepeatableReservations/:activityId', businessOwnerController.viewRepeatableReservations);
+
 
 router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
 router.get('/removeBusiness/:businessId',administratorController.removeBusiness);//done--
@@ -175,69 +222,12 @@ router.get('/removeBusiness/:businessId',administratorController.removeBusiness)
 router.post('/createAdmin',administratorController.createAdmin);//done--
 
 
-
-
-router.post('/authenticate', function(req, res) {
-  var missingFields = req.body.username==null || req.body.username=='' || req.body.password==null || req.body.password=='';
-  if(missingFields){
-    res.json({ success: false, message: 'The fields (username, password) are required!' });
-    return;
-  }
-  User.findOne({ username: req.body.username }, function(err, user) {
-      if (err) {
-        res.json({ success: false, message: err });
-      }else {
-        if (!user) {
-            res.json({ success: false, message: 'No account with this username exists!' });
-            return;
-        } 
-        var validPassword = user.comparePassword(req.body.password);
-        if (!validPassword) {
-            res.json({ success: false, message: 'The password you entered is incorrect!' });
-        } else {
-          var token = jwt.sign({username: user.username, user_id:user._id}, secret, { expiresIn: '24h'});
-          res.json({ success: true, message: 'Successfully logged in.', token: token});
-        }
-        
-      }
-  });
-});﻿
-
-
-// router.use(function(req, res, next){
-//   var token = req.body.token || req.body.query || req.headers['x-access-token'];
-//   if(token){
-//     jwt.verify(token, secret, function(err, loggedInUser){
-//         if(err){
-//             res.json({success: false, message: 'Invalid Token!'});
-//         } else{
-//             req.loggedInUser = loggedInUser;
-//             next();
-//         }
-//     });
-//   } 
-//   else{
-//     res.json({success: false, message: 'No token exists!'});
-//   }
-// });
-
-router.post('/loggedIn', function(req, res, next){
-    var token = req.body.token || req.body.query || req.headers['x-access-token'];
-    if(token){
-      jwt.verify(token, secret, function(err, loggedInUser){
-          if(err){
-              res.json({success: false, message: 'Invalid Token!'});
-          } else{
-              req.loggedInUser = loggedInUser;
-              res.send(req.loggedInUser);
-
-          }
-      });
-    } 
-    else{
-      res.json({success: false, message: 'No token exists!'});
-    }
-});
+// Reservation controller
+router.post('/pay',passport.authenticate('clientLogin', { session: false }),reservationController.Pay);
+router.post('/reserve/:type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.reserveSlot);
+router.get('/reserve/activity/:activity_type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
+router.get('/getReservations/:client_id',passport.authenticate('clientLogin', { session: false }),reservationController.getAllReservations);
+router.get('/cancelReservation/:type/:reservation_id',passport.authenticate('clientLogin', { session: false }),reservationController.cancelReservation);
 
 
 //export router

@@ -1,4 +1,6 @@
 let BusinessOwner = require('../models/BusinessOwner');
+/*let NonRepeatableActivity = require('../models/NonRepeatableActivity');
+let RepeatableActivity = require('/../models/RepeatableActivity');*/
 let Review = require('../models/Review');
 var bcrypt = require('bcryptjs');
 var path = require('path');
@@ -13,83 +15,95 @@ let User = require('../models/User');
 let Activity = require('../models/Activity');
 let RepeatableActivity = require('../models/RepeatableActivity');
 let NonRepeatableActivity = require('../models/NonRepeatableActivity');
+let NonRepeatableActivityReservation= require('../models/NonRepeatableActivityReservation');
+let RepeatableActivityReservation= require('../models/RepeatableActivityReservation');
 
-var storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './public/gallery');
-    },
-    filename: function (req, file, callback) {
-        if(file.originalname != null || file.originalname !=''){
-            var filename = file.originalname;
-            var arr = filename.split(".");
-            var filetype = arr[arr.length-1];
-            //should be replaced when session is used
-            var businessownerID=req.body.BusinessOwnerId;
-            BusinessOwner.findById(businessownerID,function(err,businessowner){
-                if (err) 
-                    return ; 
-                else {
-                    if(!businessowner){
-                        return ;
-                    }else{
-                     var newfilename = businessowner.name + '-' + Date.now()+'.'+filetype;
-                     callback(null, newfilename);
-                     businessowner.gallery.push(newfilename);
-                     businessowner.save();
-                     checkUpload = 1;
-                    }
 
-                    
-                
-            
-                }
-
-            });
-       
-        }
-
-    }
-});
-var upload = multer({ storage: storage}).single('fileToUpload');
 
 let businessownerController={
 
-// this function for uploading pictures and videos to the gallery of the businessOwner
-    addMedia:function(req,res){
-        
+   addMedia:function(req,res){
+    BusinessOwner.findById(req.params.id,function(err,businessowner){
+                if (err) 
+                    res.json({success:false , message:'error'}) ; 
+                else {
+                    if(!businessowner || businessowner.length == 0){
+                        res.json({success:false , message :'Not found '});
+                    }else{
+                        res.json({success:true , message:'Your gallery updated successfully'});
+                        if(req.body.image.match(/\.(mp4|mov|avi|flv|wmv)$/)){
+                     businessowner.videos.push(req.body.image);
+                     businessowner.save();
+                     
+                 }
+                 else {
+                     businessowner.images.push(req.body.image);
+                     businessowner.save();
+                 }
 
-            upload(req,res,function(err){
-            if(err){
-                res.send(err); 
-            }
-            else if (checkUpload ==1)
-            {
-                res.send('Your gallery updated successfully');
-                checkUpload = 0;
-            }
-            else{
-                res.send('No Data entered');
-            }
-        });
-         }, 
-   
+                        }
+                        }
+                        });
+                        },   
 // this function for adding any offer (discount or bounse) by the businessOwner
     addOffer : function(req,res){
     
-        var offer = req.body.offer ;
-        var businessownerID = req.body.businessownerID;
-        BusinessOwner.findById(businessownerID,function(err,businessowner){
+        req.checkBody('offer', 'missingField').notEmpty();
+        req.checkBody('discount', 'missingField').notEmpty();
+        req.checkBody('exp_date', 'missingField').notEmpty();
+        var x = new Date();
+        var y = new Date(req.body.exp_date);
+        var errors = req.validationErrors();
+        if(errors){
+            res.json({success:false , message:"missingField"});
+            return ;
+        }
+      
+        if(x>y){
+            res.json({success:false , message:"Invalid Date"});
+            return ;
+        }
+        
+           if(req.body.discount<5){
+            res.json({success:false , message:"Invalid discount"});
+            return ;
+        }
+      
+        if(req.file != undefined)
+                req.body.image=req.file.filename;
+
+        var activityID = req.params.activityID;
+        NonRepeatableActivity.findById(activityID,function(err,nonrepeatableactivity){
             if (err) 
-                res.send(err) ; 
+                res.json({success:false , message:'Error occurred .. Try again'}) ; 
             else {
              
-                if(!businessowner){
-                    res.send('No businessowner');
-                    return ;
+                if(!nonrepeatableactivity || nonrepeatableactivity.length==0){
+
+                RepeatableActivity.findById(activityID,function(err,repeatableactivity){
+            if (err) 
+                res.json({success:false , message:'Error occurred .. Try again'}) ; 
+            else {
+             
+                if(!repeatableactivity || repeatableactivity.length==0){
+                 res.json({success:false , message:'No activity found'});   
+                    
                                   }
-                businessowner.offers.push(offer);
-                businessowner.save();   
-                res.send('Your offer has been posted successfully');
+                                  else{
+                            
+                repeatableactivity.offer = {offer: req.body.offer , image: req.body.image , discount : req.body.discount , exp_date : req.body.exp_date};
+                repeatableactivity.save();   
+                res.json({success:true , message:'Your offer has been posted successfully'});
+            }
+            }
+
+        });
+                                  }
+                                  else{
+                nonrepeatableactivity.offer = {offer: req.body.offer , image: req.body.image , discount : req.body.discount , exp_date : req.body.exp_date};
+                nonrepeatableactivity.save();   
+                res.json({success:true , message:'Your offer has been posted successfully'});
+            }
             }
 
         });
@@ -102,37 +116,45 @@ let businessownerController={
 
         var businessownerID=req.params.businessownerID;
         Review.find({business_id:businessownerID},function(err,reviews){
-        if (err) 
-            res.send(err) ; 
-        else {
-                if(!reviews){
-                    res.send('No reviews found');
-                    return ;
-                }
-                res.send(reviews);
 
+        if (err) 
+            res.json({success:false , message : 'An Error occurred .. Try again later'}); 
+
+        else {
+                if(!reviews || reviews.length == 0){
+                    res.json({success:false , message:'No reviews found'});
+                    
+                }
+                else{
+                res.json({success:true , reviews:reviews});
+                    }
             }
 
         });
     },
 
-//this function to reply on a specific review by the businessOwner
+    //this function to reply on a specific review by the businessOwner
     reply : function(req,res){
         var reply = req.body.reply;
 
         var reviewID=req.params.reviewID;
         Review.findById(reviewID,function(err,review){
-            if (err) res.send(err) ; 
-            else{
-                if(!review){
-                    res.send('No review found');
-                    return ;
-                }
 
+            if (err) res.json({success:false , message:'Error occurred ..try again'}) ; 
+
+            else{
+                if(!review ){
+                    res.json({success:false, message:'No review found'});
+                    
+                }
+                else{
+               
                 review.reply = reply;
+
                 review.save(); 
-                res.send('your reply has been posted successfully');
-            }
+                res.json({success:true , message:'your reply has been posted successfully'});
+            }}
+
 
         });
 
@@ -148,8 +170,10 @@ let businessownerController={
             businessOwner.types.push(addedType);
             businessOwner.save(function(err,businessOwner){
 
-                if(err)
-                    return res.send(err);
+                if(err){
+                    res.json({success:false, message: err});
+                    return;
+                }
             });
         }
 
@@ -157,72 +181,125 @@ let businessownerController={
 
     addActivity:function(req,res){
 
-        
-        var type=req.body.type;
-        
-        req.body.businessOwner_id=req.params.BusinessOwnerId;
+        // should be replaced with req.user._id
+        var businessOwnerId='58f499e6695f871fff9a7615';
 
-        BusinessOwner.findById(req.params.BusinessOwnerId,function(err,businessOwner){
+        var type=req.body.data.type;
 
-            if(!businessOwner)
-                return res.send('wrong ID for business owner');
+        req.body.data.businessOwner_id=businessOwnerId;
 
-            if(err)
-                return res.send(err);
+        BusinessOwner.findById(businessOwnerId,function(err,businessOwner){
 
-            if(req.file != undefined)
-                req.body.image=req.file.filename;
+            if(!businessOwner){
+                res.json({success:false, message: 'wrong ID for business owner'});
+                return;
+            }
+
+            if(err){
+                res.json({success:false, message: err});
+                return;
+            }
 
             if(type=='Trip' || type=='Safari')
             {
-                NonRepeatableActivity.create(req.body,function(err,nonRepeatableActivity){
+                NonRepeatableActivity.create(req.body.data,function(err,nonRepeatableActivity){
 
-                    if(err)
-                        return res.send(err);
-
+                    if(err){
+                        res.json({success:false, message: err.message});
+                        return;
+                    }
+/*                    
+                    var date=new Date(nonRepeatableActivity.travelingDate);
+                    console.log(date);
+                    var dateFormat=date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear();
+                    console.log(dateFormat); */
                     businessownerController.updateBusinessTypes(businessOwner,type);
-                    res.send('Activity has been created successfully!');
+
+                    res.json({success:true, message: 'Activity has been created successfully!'});
 
                 });
-            }
+            } 
+
             else if(type=='Room-Escaping' || type=='Paintball Fight' || type=='Battlefield' || type=='Playground')
             {
-                RepeatableActivity.create(req.body,function(err,repeatableActivity){
+                
+                RepeatableActivity.create(req.body.data,function(err,repeatableActivity){
 
-                    if(err)
-                        return res.send(err);
+                    if(err){
+                        res.json({success:false, message: err.message});
+                        return;
+                    }
+  
+                    var slots=req.body.slots;
+                    for(var i=0;i<slots.length;i++){
 
-                    for(var i=1;i<=req.body.pricePackagesCount;i++)
+                        var startTime=businessownerController.convertDateToTime(slots[i].startTime);
+                        var endTime=businessownerController.convertDateToTime(slots[i].endTime);
+                        repeatableActivity.slots.push(
+                            {
+                                startTime: startTime,
+                                endTime: endTime
+
+                            });
+                    } 
+                    
+                    var pricePackages=req.body.pricePackages;
+                    for(var i=0;i<pricePackages.length;i++)
                     {
 
                         repeatableActivity.pricePackages.push(
                             { 
-                                participants: req.body['participant' + i],
-                                price: req.body['price'+ i]
+                                participants: pricePackages[i].participants,
+                                price: pricePackages[i].price
                             });
                     }
-                    for(var i=1;i<=req.body.slotsCount;i++)
-                    {
-                        repeatableActivity.slots.push(
-                            {
-                                startTime: req.body['startTime'+i],
-                                endTime: req.body['endTime'+i]
-                            });
-
+                    
+                    if(req.body.data.Sunday){
+                        repeatableActivity.dayOffs.push(0);
+                        repeatableActivity.dayOffsNames.push("Sunday");
                     }
-                    for(var i=0;i<7;i++)
-                    {
-                        if(req.body['day'+i])
-                            repeatableActivity.dayOffs.push(i);
-
+  
+                    if(req.body.data.Monday){
+                        repeatableActivity.dayOffs.push(1);
+                        repeatableActivity.dayOffsNames.push("Monday");
                     }
-                    repeatableActivity.save(function(err){
-                        if(err)
-                            return res.send(err);
+
+                    if(req.body.data.Tuesday){
+                        repeatableActivity.dayOffs.push(2);
+                        repeatableActivity.dayOffsNames.push("Tuesday");
+                    }
+
+                    if(req.body.data.Wednesday){
+                        repeatableActivity.dayOffs.push(3);
+                        repeatableActivity.dayOffsNames.push("Wednesday");
+                    }
+
+                    if(req.body.data.Thursday){
+                        repeatableActivity.dayOffs.push(4);
+                        repeatableActivity.dayOffsNames.push("Thursday");
+                    }
+
+                    if(req.body.data.Friday){
+                        repeatableActivity.dayOffs.push(5);
+                        repeatableActivity.dayOffsNames.push("Friday");
+                    }
+
+                    if(req.body.data.Saturday){
+                        repeatableActivity.dayOffs.push(6);
+                        repeatableActivity.dayOffsNames.push("Saturday");
+                    }
+
+                    repeatableActivity.save(function(err,repeatableActivity){
+
+                        if(err){
+                            res.json({success:false, message: err.message});
+                            return;
+                        }
+        
                     });
                     
-                    businessownerController.updateBusinessTypes(businessOwner,type);
-                    return res.send('Activity has been created successfully!');
+                    businessownerController.updateBusinessTypes(businessOwner,type); 
+                    res.json({success:true, message: 'Activity has been created successfully!'});
 
                 });
 
@@ -234,40 +311,131 @@ let businessownerController={
        
     },
 
-   // business owner deletes an activity
-    deleteActivity: function(req,res){
+    convertDateToTime: function(dateEntry){
 
-        // should be replaced with req.user._id later 
-        var BusinessOwnerId=req.params.BusinessOwnerId;
+        var date=new Date(dateEntry);
+        var minutes=date.getMinutes();
+        var hours=date.getHours();
+        if(hours<10)
+            hours='0'+hours;
+        if(minutes<10)
+            minutes='0'+minutes; 
+        var time=hours+':'+minutes;
+        return time;  
+              
+    },
 
-        BusinessOwner.findById(BusinessOwnerId,function(err,businessOwner){
+    getBusinessActivities:function(businessOwnerId,res){
+
+        NonRepeatableActivity.find({businessOwner_id:businessOwnerId},function(err,nonRepeatableActivities){
+
+            if(err){
+                res.json( {success:false, message:err } );
+                return;
+            }
+
+            RepeatableActivity.find({businessOwner_id:businessOwnerId},function(err,repeatableActivities){
+
+                if(err){
+
+                    res.json({success:false, message:err });
+                    return;
+                }
+                if(nonRepeatableActivities.length==0 && repeatableActivities.length==0){
+
+                    res.json({ success:false, message:'Currently you have no acitivites',nonRepeatableActivities:nonRepeatableActivities, repeatableActivities:repeatableActivities});
+                }
+                else{
+
+                    res.json({ success:true, nonRepeatableActivities:nonRepeatableActivities, repeatableActivities:repeatableActivities });
+                }
+                
+            });
+
+        });
+    },
+    
+    viewBusinessActivities: function(req,res){
+
+        // should be replaced with req.user._id
+        var businessOwnerId='58f499e6695f871fff9a7615';
+        NonRepeatableActivity.find({businessOwner_id:businessOwnerId},function(err,nonRepeatableActivities){
+
+            if(err){
+                res.json( {success:false, message:err } );
+                return;
+            }
+
+            RepeatableActivity.find({businessOwner_id:businessOwnerId},function(err,repeatableActivities){
+
+                if(err){
+
+                    res.json({success:false, message:err });
+                    return;
+                }
+                if(nonRepeatableActivities.length==0 && repeatableActivities.length==0){
+
+                    res.json({ success:false, message:'Currently you have no acitivites',nonRepeatableActivities:nonRepeatableActivities, repeatableActivities:repeatableActivities});
+                }
+                else{
+
+                    res.json({ success:true, nonRepeatableActivities:nonRepeatableActivities, repeatableActivities:repeatableActivities });
+                }
+                
+            });
+
+        });
+
+        
+
+    },
+
+   // business owner deletes a non-repeatable activity
+    deleteNonRepeatableActivity: function(req,res){
+
+        // should be replaced with req.user._id
+        var businessOwnerId='58f499e6695f871fff9a7615';
+
+        BusinessOwner.findById(businessOwnerId,function(err,businessOwner){
 
             if(!businessOwner)
             {
-                res.send('wrong ID for business owner');
+                res.json({success:false, message:'wrong ID for business owner'});
                 return;
             }
 
-            Activity.findByIdAndRemove(req.params.activityId, function(err,activityDeleted){
+            NonRepeatableActivityReservation.find({nonRepeatableActivity_id:req.params.activityId}, function(err,reservations){
 
-            if(!activityDeleted){
-                res.send('wrong ID for activity');
-                return;
-            }
-            if(err){
+                if(err){
 
-                res.send(err);
+                    res.json({success:false, message:err});
+                    return;
+                }
+                if(reservations.length!=0){
 
-            }else{
+                    res.json({success:false, message:'You can not delete this activity, since reservation(s) have already been made.'});
+                    return;
+                }
+                NonRepeatableActivity.findByIdAndRemove(req.params.activityId, function(err,activityDeleted){
 
-                var deletedType=activityDeleted.type;
-                Activity.find({BusinessOwner_id:BusinessOwnerId, type:deletedType},function(err,activityArray){
-
+                    if(!activityDeleted){
+                        res.json({success:false, message:'wrong ID for activity'});
+                        return;
+                    }
                     if(err){
 
-                        res.send(err);
+                        res.json({success:false, message: err});
+                        return;
 
-                    }else{
+                    }
+                    var deletedType=activityDeleted.type;
+                    NonRepeatableActivity.find({businessOwner_id:businessOwnerId, type:deletedType},function(err,activityArray){
+
+                        if(err){
+
+                            res.json({success:false, message: err});
+                            return;
+                        }
                         //if the activity deleted was the last one of its type, then remove this type from the types array of the businessOwner
                         if(activityArray.length==0)
                         {
@@ -279,21 +447,18 @@ let businessownerController={
                             businessOwner.save(function(err,businessOwner){
                                 if(err){
 
-                                    res.send(err);
-
+                                    res.json({success:false, message:err});
+                                    return;
                                 }
 
                             }); 
-   
                         }
 
-                    }
-                    // should be replaced with page rendering in sprint 2
-                    res.send('Activity has been deleted successfully');
+                        businessownerController.getBusinessActivities(businessOwnerId,res);
+
+                    });
 
                 });
-            
-            }
 
             });
 
@@ -301,10 +466,198 @@ let businessownerController={
 
     },
 
+    // business owner deletes a repeatable activity
+    deleteRepeatableActivity: function(req,res){
 
+        // should be replaced with req.user._id
+        var businessOwnerId='58f499e6695f871fff9a7615';
+
+        BusinessOwner.findById(businessOwnerId,function(err,businessOwner){
+
+            if(!businessOwner)
+            {
+                res.json({success:false, message:'wrong ID for business owner'});
+                return;
+            }
+            RepeatableActivityReservation.find({repeatableActivity_id:req.params.activityId},function(err,reservations){
+
+                for(var i=0;i<reservations.length;i++){
+
+                    var reservationDate=new Date(reservations[i].date);
+                    var todayDate=new Date();
+                    todayDate.setHours(0);
+                    todayDate.setMinutes(0);
+                    todayDate.setSeconds(0);
+
+                    if(reservationDate>=todayDate)
+                    {
+                       res.json({success:false, message:'You can not delete this activity, since there are upcoming reservation(s)'});
+                       return;                        
+                    }
+                }
+                RepeatableActivity.findByIdAndRemove(req.params.activityId, function(err,activityDeleted){
+
+                    if(!activityDeleted){
+                        res.json({success:false, message:'wrong ID for activity'});
+                        return;
+                    }
+                    if(err){
+
+                        res.json({success:false, message: err});
+                        return;
+
+                    }
+                    var deletedType=activityDeleted.type;
+                    RepeatableActivity.find({businessOwner_id:businessOwnerId, type:deletedType},function(err,activityArray){
+
+                        if(err){
+
+                            res.json({success:false, message: err});
+                            return;
+                        }
+                        //if the activity deleted was the last one of its type, then remove this type from the types array of the businessOwner
+                        if(activityArray.length==0)
+                        {
+                            var typesArray=businessOwner.types;
+                            var index=typesArray.indexOf(deletedType);
+                            typesArray.splice(index, 1);
+
+                            businessOwner.types=typesArray;
+                            businessOwner.save(function(err,businessOwner){
+                                if(err){
+
+                                    res.json({success:false, message:err});
+                                    return;
+                                }
+                            }); 
+
+                        }
+
+                        businessownerController.getBusinessActivities(businessOwnerId,res);
+
+                    });
+
+                });
+
+            });
+
+        });
+
+    },
+
+    viewNonRepeatableReservations: function(req,res){
+
+        NonRepeatableActivityReservation
+        .find({nonRepeatableActivity_id: req.params.activityId})
+        .populate({
+            path:'client_id',
+            populate:{path:'user_id'}
+        })
+        .exec( function(err, reservations){
+
+            if(err){
+
+                res.json({success:false, message:err});
+                return;
+            }
+            if(reservations.length==0){
+
+                res.json({success:false, message:'There are no reservations yet'});
+            }
+            else{
+
+                var reservationsInfo=[];
+                for(var i=0;i<reservations.length;i++){
+
+                    reservationsInfo.push({
+                    participants: reservations[i].participants, 
+                    price: reservations[i].price,
+                    firstName: reservations[i].client_id.firstName,
+                    lastName: reservations[i].client_id.lastName,
+                    email: reservations[i].client_id.user_id.email,
+                    phoneNumber: reservations[i].client_id.user_id.phoneNumber 
+
+                    });                                   
+                }
+                res.json({success:true, reservations:reservationsInfo})                
+            }
+            
+        });
+
+    }, 
+
+    viewRepeatableReservations: function(req,res){
+
+        RepeatableActivityReservation
+        .find({repeatableActivity_id: req.params.activityId})
+        .populate('repeatableActivity_id')
+        .populate({
+            path:'client_id',
+            populate:{path:'user_id'}
+        })
+        .exec( function(err, reservations){
+
+            if(err){
+
+                res.json({success:false, message:err});
+                return;
+            }
+            if(reservations.length==0){
+
+                res.json({success:false, message:'There are no upcoming reservations'});
+            }
+            else{
+                var reservationsInfo=[];
+                var upcomingReservation=false;
+                for(var i=0;i<reservations.length;i++){
+
+                    var reservationDate=new Date(reservations[i].date);
+                    var todayDate=new Date();
+                    todayDate.setHours(0);
+                    todayDate.setMinutes(0);
+                    todayDate.setSeconds(0); 
+                
+                    if(reservationDate>=todayDate){
+
+                        upcomingReservation=true;
+
+                        var reservedSlot=reservations[i].repeatableActivity_id.slots.id(reservations[i].slot_id);
+
+                        reservationsInfo.push({
+                        reservedSlot: reservedSlot,
+                        participants: reservations[i].participants, 
+                        price: reservations[i].price,
+                        date: reservations[i].date,
+                        firstName: reservations[i].client_id.firstName,
+                        lastName: reservations[i].client_id.lastName,
+                        email: reservations[i].client_id.user_id.email,
+                        phoneNumber: reservations[i].client_id.user_id.phoneNumber 
+
+                        });
+                    }                 
+
+                }
+
+                if(upcomingReservation){
+
+                    res.json({success:true,reservations:reservationsInfo});
+                }
+                else{
+
+                    res.json({success:false,message:'There are no upcoming reservations'});
+
+                }
+                
+            }
+
+        });
+
+    },    
+
+
+    //this function updates the business owners info with that provided in the request
+    //if a field has no specified value to update it with, it is not changed at all
     getBusinessInfo: function(req, res){
-
-        console.log('a7a');
 
         BusinessOwner.findOne({_id: req.user._id}, function(err, businessOwner){
 
@@ -355,7 +708,7 @@ let businessownerController={
 
     updateInfo: function (req,res) {
 
-        console.log(req.body);
+       
 
         var email=req.body.email;
         var phoneNumber = req.body.phoneNumber;

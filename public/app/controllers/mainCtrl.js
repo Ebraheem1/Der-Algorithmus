@@ -1,3 +1,6 @@
+
+
+
 //the main controller is responsible for logged-in users, so it will be in the index page, not the routes
 var app = angular.module('mainController', ['authServices','businessOwnerServices'])
 

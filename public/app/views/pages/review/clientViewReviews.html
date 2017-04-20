@@ -7,8 +7,9 @@
 <div ng-repeat="rev in businessReviews" ng-show="review.reviewsFound">
 
     <div class="panel panel-default">
-        <div class="panel-heading">{{'User_ID: '+rev.user_id}}</div>
-        <div class="panel-body">{{rev.comment}}</div>
+         <div class="panel-heading" style="font-size: x-large; color: darkslategray; font-family: cursive"><strong> {{rev.user_id.user_id.username}} </strong></div>
+        <div class="panel-body" style="font-size: large">{{rev.comment}} </div>
+        <div class="panel-body" style="font-size: medium; color: darkgreen" ng-show="rev.reply"><strong>Reply: </strong>{{" " + rev.reply}} </div>
     </div>
 
 </div>
