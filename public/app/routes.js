@@ -1,5 +1,7 @@
 
+
 //the frontend routes is an angular module, the config contains the directing
+
 angular.module('appRoutes', ['ngRoute'])
 
 
@@ -12,6 +14,7 @@ angular.module('appRoutes', ['ngRoute'])
 		controller:'mainCtrl',
 		controllerAs:'main'
 	})
+
   .when('/businessOwnerHP',{
   templateUrl: 'app/views/pages/BusinessOwnerHomePage.html'
 })
@@ -51,7 +54,30 @@ angular.module('appRoutes', ['ngRoute'])
   controller:'viewActivityCtrl',
   controllerAs:'viewActivity'
 })
-	
+	 .when('/reserve/1/:activity_id',{
+       templateUrl: 'app/views/pages/reservationPageNR.html',
+       controller: "resCtrlNR",
+       controllerAs:"resCtrl" ,
+			 clientAuthenticated:true
+    })
+    .when('/reserve/0/:activity_id',{
+       templateUrl: 'app/views/pages/reservationPageR.html',
+       controller: "resCtrlR",
+       controllerAs:"resCtrl",
+			 clientAuthenticated:true
+    })
+    .when('/profile/reservations/',{
+      templateUrl:'app/views/pages/yourReservations.html',
+      controller:"yourReservations",
+      controllerAs: "yrCtrl",
+			clientAuthenticated:true
+    })
+
+    .when('/login/forgotPassword',{
+      templateUrl:'app/views/pages/forgotPasswordPage.html',
+      controller:"passwordController",
+      controllerAs:"Ctrl"
+    })
 	//This returns the page used for searchResults
 	//and assigns the controller to it
 	.when('/search/search/:keyword',{

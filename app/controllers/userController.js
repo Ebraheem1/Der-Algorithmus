@@ -117,6 +117,7 @@ let userController={
 
         res.json({success:false,message:'this is your current username'});
 
+
       }else{
 
             Application.findOne({username:newUsername},function(err,application)
@@ -128,6 +129,7 @@ let userController={
                 else
                 {
                   if(application){
+
 
                   res.json({success:false,message:'username Unavailable'});
                   }else{
@@ -191,6 +193,7 @@ let userController={
 
 
 
+
     },
 
 
@@ -199,27 +202,41 @@ let userController={
     forgotPassword: function(req, res) {
         var email = req.body.email;
         var username = req.body.username;
+
         req.checkBody('email', 'Email Required').notEmpty();
         req.checkBody('username', 'Username Required').notEmpty();
           var errors = req.validationErrors();
+          var missingFields = email==null ||email=='' ||
+           username==null || username=='';
+           if(missingFields)
+           {
+             res.json({succes:false,message:"Please enter an email and a username."});
+             return;
+           }
+
           if(!errors){
         User.findOne({
             username: username
         }, function(err, user) {
             if (user) {
                 if (user.email == email) {
-                    userController.changePassword(user,res);
+                  var response =  userController.changePassword(user,res);
+                    res.json({success:true,message:"A new password have been sent to your email!"});
+  
+
                 } else {
-                    res.send("You entered a wrong email ");
+
+                    res.json({success:false,message:"You entered a wrong email "});
                     return;
                 }
             } else {
-                res.send("Could not find user!");
+
+                  res.json({success:false,message:"Could not find user!"});
                 return;
             }
         });}
         else{
-          res.send(errors);
+          res.json({success:false,message:"Sorry ! An error occured .Please try again later"});
         }
 
     },
@@ -246,6 +263,7 @@ let userController={
         }else{
           
           res.json({success:true,businesses:businesses,message:'No matched Venues found'});
+
 
         }
 
@@ -314,14 +332,16 @@ let userController={
             _id: user._id
         }, function(err) {
             if (err) {
-                res.send(err);
-                return;
+
+                return false ;
             }
             user2.save(function(err) {
                 if (err) {
-                    res.send("error");
+                  return false
                 } else {
-                    res.send("Password changed Successfully");
+
+                  return true ;
+
                 }
             });
         });
