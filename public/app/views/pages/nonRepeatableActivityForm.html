@@ -16,12 +16,13 @@
 
   <form >
 
-    <div class="form-group custom">
-      <label>Type</label>
-      <select class="form-control" name="type" ng-model="activityData.type">
-        <option>Trip</option>
-        <option>Safari</option>
-      </select>
+    <div class="form-group custom"> 
+      <label>Upload an Image</label><br>
+      <label class="btn btn-success">
+          Browse
+          <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" style="display: none;">
+      </label>
+      <button ng-disabled="uploading" type="submit" class="btn btn-primary">Upload</button>
     </div>
 
     <div class="form-group custom">

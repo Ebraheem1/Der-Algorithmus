@@ -180,20 +180,21 @@ let businessownerController={
                 return;
             }
 
-            if(req.file != undefined){
-                req.body.data.image=req.file.filename;
-            }
-
             if(type=='Trip' || type=='Safari')
             {
                 NonRepeatableActivity.create(req.body.data,function(err,nonRepeatableActivity){
 
                     if(err){
-                        res.json({success:false, message: err});
+                        res.json({success:false, message: err.message});
                         return;
                     }
-
+/*                    
+                    var date=new Date(nonRepeatableActivity.travelingDate);
+                    console.log(date);
+                    var dateFormat=date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear();
+                    console.log(dateFormat); */
                     businessownerController.updateBusinessTypes(businessOwner,type);
+
                     res.json({success:true, message: 'Activity has been created successfully!'});
 
                 });
@@ -205,57 +206,62 @@ let businessownerController={
                 RepeatableActivity.create(req.body.data,function(err,repeatableActivity){
 
                     if(err){
-                        res.json({success:false, message: err});
+                        res.json({success:false, message: err.message});
                         return;
                     }
-
-                    console.log(req.body);   
+  
                     var slots=req.body.slots;
                     for(var i=0;i<slots.length;i++){
 
-                        var date=new Date(slots[i].value);
-                        var time=date.getHours()+':'+date.getMinutes();
+                        var startTime=businessownerController.convertDateToTime(slots[i].startTime);
+                        var endTime=businessownerController.convertDateToTime(slots[i].endTime);
                         repeatableActivity.slots.push(
                             {
-                                startTime: time
+                                startTime: startTime,
+                                endTime: endTime
 
                             });
-
                     } 
-/*
-                    for(var i=1;i<=req.body.pricePackagesCount;i++)
+                    
+                    var pricePackages=req.body.pricePackages;
+                    for(var i=0;i<pricePackages.length;i++)
                     {
 
                         repeatableActivity.pricePackages.push(
                             { 
-                                participants: req.body['participant' + i],
-                                price: req.body['price'+ i]
+                                participants: pricePackages[i].participants,
+                                price: pricePackages[i].price
                             });
                     }
-                    for(var i=1;i<=req.body.slotsCount;i++)
-                    {
+                    
+                    if(req.body.data.Sunday)
+                        repeatableActivity.dayOffs.push(0);
 
-                        repeatableActivity.slots.push(
-                            {
-                                startTime: req.body['startTime'+i],
-                                endTime: req.body['endTime'+i]
-                            });
-                        console.log(repeatableActivity.type+' '+repeatableActivity._id);
-                        console.log(repeatableActivity.slots[i-1]._id);
+                    if(req.body.data.Monday)
+                        repeatableActivity.dayOffs.push(1);
 
-                    }
-                    for(var i=0;i<7;i++)
-                    {
-                        if(req.body['day'+i])
-                            repeatableActivity.dayOffs.push(i);
+                    if(req.body.data.Tuesday)
+                        repeatableActivity.dayOffs.push(2);
 
-                    } */
+                    if(req.body.data.Wednesday)
+                        repeatableActivity.dayOffs.push(3);
+
+                    if(req.body.data.Thursday)
+                        repeatableActivity.dayOffs.push(4);
+
+                    if(req.body.data.Friday)
+                        repeatableActivity.dayOffs.push(5);
+
+                    if(req.body.data.Saturday)
+                        repeatableActivity.dayOffs.push(6);
+
                     repeatableActivity.save(function(err,repeatableActivity){
+
                         if(err){
-                            res.json({success:false, message: err});
+                            res.json({success:false, message: err.message});
                             return;
                         }
-
+        
                     });
                     
                     businessownerController.updateBusinessTypes(businessOwner,type); 
@@ -269,6 +275,20 @@ let businessownerController={
 
         });
        
+    },
+
+    convertDateToTime: function(dateEntry){
+
+        var date=new Date(dateEntry);
+        var minutes=date.getMinutes();
+        var hours=date.getHours();
+        if(hours<10)
+            hours='0'+hours;
+        if(minutes<10)
+            minutes='0'+minutes; 
+        var time=hours+':'+minutes;
+        return time;  
+              
     },
 
     getBusinessActivities:function(businessOwnerId,res){
@@ -300,6 +320,7 @@ let businessownerController={
 
         });
     },
+    
     viewBusinessActivities: function(req,res){
 
         // should be replaced with req.user._id
@@ -575,34 +596,6 @@ let businessownerController={
 
     },    
 
-
-    nonRepeatableReservation: function(req,res){
-
-        NonRepeatableActivityReservation.create(req.body,function(err,reservation){
-
-            if(err){
-
-                res.send(err);
-                return;
-            };
-            res.send('reservation created');
-        });
-
-    },
-
-    repeatableReservation: function(req,res){
-
-        RepeatableActivityReservation.create(req.body,function(err,reservation){
-
-            if(err){
-
-                res.send(err);
-                return;
-            };
-            res.send('reservation created');
-        });
-
-    },
 
     //this function updates the business owners info with that provided in the request
     //if a field has no specified value to update it with, it is not changed at all

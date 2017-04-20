@@ -1,49 +1,85 @@
-angular.module('repeatableActivityFormController',['businessActivitiesServices'])
+angular.module('repeatableActivityFormController',['businessActivitiesServices','fileModelDirective', 'fileUploadService'])
 
-.controller('repeatableActivityFormCtrl',function($scope,BusinessActivities){
+.controller('repeatableActivityFormCtrl',function($scope,$route, $routeParams,BusinessActivities,fileUpload){
 
 
-   $scope.choices = [{id: 'choice1'}];
+   $scope.slots = [{id: 'slot1'}];
+   $scope.pricePackages=[{id: 'pricePackage1'}];
 
-   $scope.addNewChoice = function() {
-     var newItemNo = $scope.choices.length+1;
-     $scope.choices.push({'id' : 'choice' + newItemNo});
+   $scope.addNewSlot = function() {
+     var newItemNo = $scope.slots.length+1;
+     $scope.slots.push({'id' : 'slot' + newItemNo});
    };
    
-   $scope.removeNewChoice = function() {
-     var newItemNo = $scope.choices.length-1;
+   $scope.removeNewSlot = function() {
+     var newItemNo = $scope.slots.length-1;
      if ( newItemNo !== 0 ) {
-      $scope.choices.pop();
+      $scope.slots.pop();
      }
    };
    
-   $scope.showAddChoice = function(choice) {
-     return choice.id === $scope.choices[$scope.choices.length-1].id;
+   $scope.showSlotButton = function(slot) {
+     return slot.id === $scope.slots[$scope.slots.length-1].id;
    };
 
-    $scope.addActivity = function() {
+  $scope.addNewPricePackage = function() {
+     var newItemNo = $scope.pricePackages.length+1;
+     $scope.pricePackages.push({'id' : 'pricePackage' + newItemNo});
+   };
+   
+   $scope.removeNewPricePackage = function() {
+     var newItemNo = $scope.pricePackages.length-1;
+     if ( newItemNo !== 0 ) {
+      $scope.pricePackages.pop();
+     }
+   };
+   
+   $scope.showPricePackageButton = function(pricePackage) {
+     return pricePackage.id === $scope.pricePackages[$scope.pricePackages.length-1].id;
+   };
 
-		$scope.loading=true;
-		$scope.successMsg=false;
-		$scope.errorMsg=false;
+   $scope.addActivity = function() {
 
-		BusinessActivities.create({slots: $scope.choices, data: $scope.activityData}).then(function(data){
+    $scope.loading=true;
+    $scope.successMsg=false;
+    $scope.errorMsg=false;
+    $scope.activityData.type=$routeParams.activityType;
+    
+        fileUpload.upload($scope.file).then(function(data) {
+            if (data.data.success) {
+                $scope.file = {};
+                $scope.activityData.image='gallery/'+data.data.name;
+                
+                BusinessActivities.create({
+                  slots: $scope.slots,
+                  pricePackages: $scope.pricePackages,
+                  data: $scope.activityData}
+                  ).then(function(data){
 
-			if(data.data.success){
+                  if(data.data.success){
 
-				$scope.successMsg=data.data.message;
-				$scope.loading=false;
-			}
-			else
-			{
-				$scope.errorMsg=data.data.message;
-				$scope.loading=false;
-			}
+                    $scope.successMsg=data.data.message;
+                    $scope.loading=false;
+                  }
+                  else
+                  {
+                    $scope.errorMsg=data.data.message;
+                    $scope.loading=false;
+                  }
 
-		});
+                });
+
+            } 
+            else 
+            {
+                $scope.errorMsg = data.data.message;
+                $scope.loading=false;
+                $scope.file = {};
+            }
+
+
+        });
 		
 	}
-
-
 
 }) ;

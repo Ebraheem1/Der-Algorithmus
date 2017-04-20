@@ -17,6 +17,49 @@ var multer = require('multer')
 
 require('./config/passport')(passport);
 
+//multer stuff, to upload a file
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/gallery/');
+  },
+  filename: function (req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
+      var err = new Error();
+      err.code = 'notAnImage';
+      return cb(err);
+    } else {
+      cb(null, Date.now()+'_'+file.originalname);
+    }
+  }
+});
+
+var upload = multer({ 
+  storage: storage
+}).single('myfile');
+
+//uploading files route
+router.post('/api/upload', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      if(err.code=='notAnImage'){
+        res.json({success:false, message: 'File should be an image of one of these extension (png, jpeg, jpg)!'});
+        return;
+      }
+      res.json({success:false, message: 'File Upload Error!'});
+    }
+    else{
+      if(!req.file){
+        res.json({success:false, message: 'No file was selected!'});
+      }
+      else{
+        res.json({success:true, message: 'File was uploaded successfully.', path: req.file.path, name: req.file.filename});
+      }
+
+    }
+
+  });
+});
+
 
 //here we have username and password as an input parameters
 //we search if a client exists with in the Client table so we authenticate the client
@@ -27,7 +70,7 @@ require('./config/passport')(passport);
 //table, if we found a matched tuple then the authentication would be done for 
 //BusinessOwner, if not found then the data entered doesn't exist in my system
 //an error message is displayed accordingly.
-router.post('/login', function(req, res) {
+  router.post('/login', function(req, res) {
   //These extra checks to maintain the code secure 
   req.checkBody('username',' Username Required').notEmpty();
   req.checkBody('password',' Password Required').notEmpty();
@@ -154,16 +197,13 @@ router.post('/business/rate', clientController.rateBusiness );//done--
 
 router.put('/activity/editActivity/:id', activityController.editActivity);//done--
 
-router.post('/api/addActivity',multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addActivity);
+router.post('/api/addActivity',businessOwnerController.addActivity);
 router.get('/api/deleteNonRepeatableActivity/:activityId',businessOwnerController.deleteNonRepeatableActivity);
 router.get('/api/deleteRepeatableActivity/:activityId',businessOwnerController.deleteRepeatableActivity);
 router.get('/api/viewBusinessActivities', businessOwnerController.viewBusinessActivities);
 router.get('/api/viewNonRepeatableReservations/:activityId', businessOwnerController.viewNonRepeatableReservations);
 router.get('/api/viewRepeatableReservations/:activityId', businessOwnerController.viewRepeatableReservations);
 
-
-router.post('/nonRepeatableReservation',businessOwnerController.nonRepeatableReservation);
-router.post('/repeatableReservation',businessOwnerController.repeatableReservation);
 
 router.get('/viewBusinesses',administratorController.viewBusinesses);//done--
 router.get('/removeBusiness/:businessId',administratorController.removeBusiness);//done--

@@ -52,7 +52,7 @@
             </tr>
             <tr ng-repeat="activity in nonRepeatableActivities ">
                 <td>
-                    <img class="picture img-circle"  src="/gallery/{{activity.image}}">
+                    <img class="picture img-circle"  src="{{activity.image}}">
                 </td>
                 <td >
                     <strong><i>{{activity.type}}</i></strong><br><br>
@@ -82,7 +82,7 @@
 
             <tr ng-repeat="activity in repeatableActivities ">
                 <td>
-                    <img class="picture img-circle"  src="/gallery/{{activity.image}}">
+                    <img class="picture img-circle"  src="{{activity.image}}">
                 </td>
                 <td >
                     <strong><i>{{activity.type}}</i></strong><br><br>
@@ -98,7 +98,7 @@
                         <strong>End Time: </strong>{{slot.endTime}}
                     </div> <br>
                     <div ng-if="activity.dayOffs.length>0">
-                        <strong>Day Off: </strong>
+                        <strong>Days Off: </strong>
                         <div ng-repeat="day in activity.dayOffs">
                             <div ng-if="day==0">Sunday</div>
                             <div ng-if="day==1">Monday</div>

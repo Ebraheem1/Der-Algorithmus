@@ -29,11 +29,11 @@ angular.module('businessActivitiesController',['businessActivitiesServices'])
 		var type=$scope.type;
 		if(type=='Room-Escaping' || type=='Paintball Fight' || type=='Battlefield' || type=='Playground'){
 
-			$location.path('/repeatableActivityForm');
+			$location.path('/repeatableActivityForm/'+type);
 		}
 		else if(type=='Trip' || type=='Safari'){
 
-			$location.path('/nonRepeatableActivityForm');
+			$location.path('/nonRepeatableActivityForm/'+type);
 		}
 
 	};
