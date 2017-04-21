@@ -1,0 +1,17 @@
+<br><br>
+<div ng-hide="view.errMsg" ng-repeat="BusinessOwner in view.BusinessOwners">
+<figure class="snip1336">
+    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample87.jpg" alt="sample87" />
+    <img src="{{BusinessOwner.images[0]}}" ng-show="BusinessOwner.images.length"/>
+    <figcaption>
+     	<h2>{{BusinessOwner.name}}</h2>
+        <p>{{BusinessOwner.description}}</p>
+        <a href="/viewDetailed/{{BusinessOwner._id}}" class="follow">more Details</a>
+        <a href="/viewDetailedActivities/{{businessOwner._id}}" class="info">View Activities</a>
+    </figcaption>
+</figure>
+</div>
+<br><br>
+<div class="alert alert-danger" ng-show="view.errMsg">
+    <span class="glyphicon glyphicon-remove"></span><strong> Error! {{view.errMsg}}</strong>
+</div>

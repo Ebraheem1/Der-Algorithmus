@@ -1,0 +1,46 @@
+<br>
+<br>
+<br>
+<div class="container">
+<h1 style="color: white" class="page-header"> Reviews </h1>
+
+<div ng-repeat="rev in businessReviews" ng-show="review.reviewsFound">
+
+    <div class="panel panel-default">
+         <div class="panel-heading" style="font-size: x-large; color: darkslategray; font-family: cursive"><strong> {{rev.user_id.user_id.username}} </strong></div>
+        <div class="panel-body" style="font-size: large">{{rev.comment}} </div>
+        <div class="panel-body" style="font-size: medium; color: darkgreen" ng-show="rev.reply"><strong>Reply: </strong>{{" " + rev.reply}} </div>
+    </div>
+
+</div>
+
+   <!-- pager: keep it as it is -->
+        <ul ng-if="review.pager.pages.length" class="pagination">
+            <li ng-class="{disabled:review.pager.currentPage === 1}">
+                <a ng-click="review.setPage(1)">First</a>
+            </li>
+            <li ng-class="{disabled:review.pager.currentPage === 1}">
+                <a ng-click="review.setPage(review.pager.currentPage - 1)">Previous</a>
+            </li>
+            <li ng-repeat="page in review.pager.pages" ng-class="{active:review.pager.currentPage === page}">
+                <a ng-click="review.setPage(page)">{{page}}</a>
+            </li>
+            <li ng-class="{disabled:review.pager.currentPage === review.pager.totalPages}">
+                <a ng-click="review.setPage(review.pager.currentPage + 1)">Next</a>
+            </li>
+            <li ng-class="{disabled:review.pager.currentPage === review.pager.totalPages}">
+                <a ng-click="review.setPage(review.pager.totalPages)">Last</a>
+            </li>
+        </ul>
+
+
+<div class="row show-hide-message" ng-hide="review.reviewsFound">
+    <div class="alert alert-danger"> {{"This Business has no reviews yet !!"}} </div>
+</div>
+
+</div>
+
+
+
+<br><br>
+

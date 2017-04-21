@@ -1,0 +1,29 @@
+<br>
+<br><br>
+
+<div class="container-fluid text-center bg-grey" >
+
+<h2><strong>Search Results</strong></h2><br>
+
+<div class="col-sm-4" ng-hide="search.errMsg" ng-repeat="venue in search.venues">
+<figure class="snip1336" >
+<img src="{{venue.images[0]}}" ng-show="venue.images.length"/>
+<img src="http://www.planwallpaper.com/static/images/3d-balls-hd-wallpapers-free.jpg" ng-hide="venue.images.length" />
+    <figcaption>
+        <h2>{{venue.name}}</h2>
+        <p ng-show="venue.description">{{venue.description}}</p>
+        <a href="/viewDetailed/{{venue._id}}" class="follow">more Details</a>
+        <a href="/viewDetailedActivities/{{venue._id}}" class="info">View Activities</a>
+    </figcaption>
+</figure>
+</div>
+
+<div class="row show-hide-message text-center bg-grey" ng-show = "search.errMsg" >
+    <div class="alert alert-danger">
+        {{search.errMsg}}
+    </div>
+</div>
+
+
+
+</div>

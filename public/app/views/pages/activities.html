@@ -1,0 +1,14 @@
+<div ng-hide="viewDetailed.errMsg" ng-repeat="activity in viewDetailed.activities">
+<figure class="snip1336">
+    <img src={{activity.image}} alt="sample87" />
+    <figcaption>
+        <h2>{{activity.type}}</h2>
+        <p><strong>Description: </strong>{{activity.description}}</p>
+        <a href="/viewDetailedActivity/{{activity._id}}" class="follow">view Details</a>
+    </figcaption>
+</figure>
+</div>
+<br><br>
+<div class="alert alert-danger" ng-show="viewDetailed.errAMsg">
+    <span class="glyphicon glyphicon-remove"></span><strong> Error! {{viewDetailed.errAMsg}}</strong>
+</div>

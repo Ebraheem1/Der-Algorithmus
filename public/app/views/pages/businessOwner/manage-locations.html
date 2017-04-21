@@ -1,0 +1,55 @@
+<style type="text/css">
+	div.div-centered {
+	  	padding-left: 350px;
+	}
+	input.input-red{
+		border-color: red;
+	}
+</style>
+
+<br><br>
+
+<div ng-controller = "locationsCtrl as locations">
+	<div class="page-header">
+		<h1>Manage Locations</h1>
+	</div>
+
+	<div class = "div-centered">
+		<div>	
+			<div class = "inline-block"  data-ng-repeat="location in business.locations">
+		      	<label style="color: #ffffff">
+		      		<h3>{{location}}
+		      			<a href="" class="remove" ng-show="business.locations.length>1" ng-click="locations.removeLocation(location)">-</a>
+		      		</h3>
+		      	</label>	
+		    </div>
+	    </div> 
+
+		<form class = "form-horizontal" role = "form" name = "data" ng-submit="locations.addLocation(locations.location)">
+			<div class="form-group">
+                <div class="col-md-6">
+                    <input class="form-control" type = "text" name="location" placeholder="location" ng-model="locations.location" ng-change = "data.location.$dirty && locations.checkLocation()"
+					required>
+                </div>
+                <label for="location" style="color: #ffffff" ng-show = "data.location.$dirty && !locations.isEmpty()">{{(locationExists)? "location already exists!": "✔";}}</label>
+            </div>
+            <br>
+            <div class = "inline-block">
+				<button class="btn btn-primary" ng-disabled = "data.$invalid || locationExists" type="submit">Add Location</button>
+				<a href="/business/update-info" class="remove">back to info</a>
+			</div>	
+		</form>
+	</div>	
+
+	<br>
+
+	<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	    <strong>{{errMsg}}</strong>
+	</div>
+
+	<div class="alert alert-success fade in alert-dismissable" ng-show = "successMsg">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	    <strong>{{successMsg}}</strong>
+	</div>
+</div>	

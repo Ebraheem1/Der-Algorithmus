@@ -1,0 +1,110 @@
+<br> <br>
+<br />
+<br />
+<h1 style="color: white; position: fixed;left:40%;"><i><u><strong>Your Reservations</strong></u></i></h1>
+<br />
+<br />
+<br />
+<div class="container" ng-show="success">
+    <div class="row">
+
+        <div class=".col-md-6 ">
+
+            <br />
+            <hr />
+            <ul class="list-group">
+                <!-- for each -->
+                <div ng-if= "items.length>0" ng-repeat="x in items">
+                  <br />
+
+                    <div ng-if = "x.nonRepeatableActivity_id">
+
+
+
+                    <li class="list-group-item"><strong>{{x.nonRepeatableActivity_id.type}}|| {{x.nonRepeatableActivity_id.destination}} ||
+                       {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}} ||  {{x.price/100}}$</strong> <br />
+                        <div class="pull-right">
+                          <button class="btn btn-primary" style=" position: relative;
+        top: -27px; left:16px " ng-click="Delete(1,x._id)">Cancel Reservation</button>
+                        </div>
+
+
+                    </li>
+
+                              </div>
+
+
+                          <div ng-if ="x.repeatableActivity_id">
+
+                            <div ng-repeat="z in x.repeatableActivity_id.slots">
+
+                                <div ng-if="z._id ==x.slot_id">
+
+
+                                    <li class="list-group-item"><strong>{{x.repeatableActivity_id.type}}  ||  {{x.date| limitTo : 10 : 0}}      ||      {{z.startTime}}
+                                      || {{z.endTime}}  ||  {{x.price/100}}$</strong> <br />
+                                </div>
+                            </div>
+                            <div class="pull-right">
+
+                                <button class="btn btn-primary" style=" position: relative;
+              top: -37px; " ng-click="Delete(0,x._id) ">Cancel Reservation</button>
+
+                            </div>
+
+
+
+                            </li>
+
+                                </div>
+                                <br />
+
+                                <hr />
+                </div>
+
+
+
+
+
+            </ul>
+
+            <hr>
+
+
+        </div>
+    </div>
+
+    <ul ng-if="yrCtrl.pager.pages.length" class="pagination">
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
+               <a ng-click="yrCtrl.setPage(1)">First</a>
+           </li>
+
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
+               <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage - 1)">Previous</a>
+           </li>
+           <li ng-repeat="page in yrCtrl.pager.pages" ng-class="{active:yrCtrl.pager.currentPage === page}">
+               <a ng-click="yrCtrl.setPage(page)">{{page}}</a>
+           </li>
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
+               <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage + 1)">Next</a>
+           </li>
+           <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
+               <a ng-click="yrCtrl.setPage(yrCtrl.pager.totalPages)">Last</a>
+           </li>
+       </ul>
+
+</div>
+
+
+<div class="col-lg-10 col-md-push-1" ng-show="!success">
+    <div class="col-md-12">
+
+        <div class="alert alert-danger">
+            <span ></span><strong> You have no reservations currently !</strong>
+        </div>
+    </div>
+</div>
+</div>
+<!-- <modal-dialog show='modalShown' width='740px  ' height='40%'>
+
+</modal-dialog> -->
