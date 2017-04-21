@@ -153,7 +153,7 @@ let userController={
                               if(currentUser){
 
                                   currentUser.username = newUsername;
-                                  
+
                                    User.update({_id:currentUser._id},{$set :{username:newUsername}},function(err){
                                     if(err){
 
@@ -199,6 +199,7 @@ let userController={
   // This function is used in case of the user forgetting the password . we go search for the user by the username
   //then we check that the email inserted is equal to the mail of the user you want to change the password for .
     forgotPassword: function(req, res) {
+      console.log("mashy");
         var email = req.body.email;
         var username = req.body.username;
 
@@ -221,7 +222,7 @@ let userController={
                 if (user.email == email) {
                   var response =  userController.changePassword(user,res);
                     res.json({success:true,message:"A new password have been sent to your email!"});
-  
+
 
                 } else {
 
@@ -256,11 +257,11 @@ let userController={
         }
 
         if(businesses.length > 0){
-          
+
           res.json({success:true,businesses:businesses});
-            
+
         }else{
-          
+
           res.json({success:true,businesses:businesses,message:'No matched Venues found'});
 
 
