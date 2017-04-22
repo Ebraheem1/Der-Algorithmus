@@ -13,7 +13,7 @@ angular.module('authServices', [])
 		AuthenticationToken.setType();
 		AuthenticationToken.setUsername();
 		AuthenticationToken.setId();
-		$location.path('/loginPage');
+		//$location.path('/loginPage');
 		location.reload();
 	};
 	//This function checks whether there is a logged In user in

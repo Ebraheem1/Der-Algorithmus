@@ -44,7 +44,7 @@ let businessownerController={
    */
 
    addMedia:function(req,res){
-    BusinessOwner.findById(req.params.id,function(err,businessowner){
+    BusinessOwner.findById(req.user._id,function(err,businessowner){
                 if (err) 
                     res.json({success:false , message:'error'}) ; 
                 else {
@@ -169,7 +169,7 @@ let businessownerController={
                     
                 }
                 else{
-                console.log('Wslt');
+                
                 review.reply = reply;
 
                 review.save(); 
@@ -204,7 +204,7 @@ let businessownerController={
 
         // should be replaced with req.user._id
         var businessOwnerId=req.user._id;
-        console.log(req.user);
+        
 
         var type=req.body.data.type;
 
@@ -679,8 +679,6 @@ let businessownerController={
 
  getBusinessInfo: function(req, res){
 
-        console.log('a7a');
-
         BusinessOwner.findOne({_id: req.user._id}, function(err, businessOwner){
 
             if(err){
@@ -784,7 +782,7 @@ let businessownerController={
 
                                             if(errors){
 
-                                                res.json({success: false, message: errors});
+                                                res.json({success: false, errors: errors});
                                                 return;
 
                                             }else{
@@ -807,7 +805,7 @@ let businessownerController={
 
                                             if(errors){
 
-                                                res.json({success: false, message: errors});
+                                                res.json({success: false, errors: errors});
                                                 return;
 
                                             }else{
@@ -824,8 +822,6 @@ let businessownerController={
 
                                     
                                         User.update({_id: businessOwner.user_id}, {$set: {email: email, phoneNumber: phoneNumber}} ,function(err, userx){
-                                            
-                                            console.log(userx);
 
                                             if(err){
                                         
@@ -998,10 +994,8 @@ let businessownerController={
 
     changePassword: function(req, res){
 
-        var loginUsername = req.body.username;
-        console.log(req.body.password);
-        console.log(req.body.confirmPassword);
-        var conditions = { username: loginUsername };
+        var loginId = req.user._id;
+        var conditions = { _id: loginId };
 
         req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);

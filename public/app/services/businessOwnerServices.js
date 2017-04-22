@@ -18,7 +18,7 @@ angular.module('businessOwnerServices', [])
 
 	businessOwnerFactory.uploadMedia = function(image){
                     
-		return $http.post('/api/gallery/58f4eb666bcaf119ca23f201',image);
+		return $http.post('/api/gallery',image);
 	};
 	businessOwnerFactory.reply = function(replyData,reviewID){
 
@@ -27,7 +27,7 @@ angular.module('businessOwnerServices', [])
 
     businessOwnerFactory.addOffer = function(offerData){
 
-		return $http.post('/api/offer/58f8c200c2dfe324dda73f14',offerData);
+		return $http.post('/api/offer/58fb49ada0dc050ecb138a16',offerData);
 	};
 
 	businessOwnerFactory.getInfo = function(id){

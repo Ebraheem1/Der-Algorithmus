@@ -70,7 +70,7 @@ let applicationController = {
                 }
             });
         } else {
-            res.json({success:true, message: errors});
+            res.json({success:true, errors: errors});
             return;
         }
 
@@ -195,7 +195,16 @@ let applicationController = {
         req.checkBody('description', 'description Required').notEmpty();
         req.checkBody('phoneNumber', 'phoneNumber Required').notEmpty();
 
-        var errors = req.validationErrors();
+        var errors = [];
+        errors = req.validationErrors();
+
+        if(isNaN(req.body.phoneNumber)){
+            console.log()
+
+            errors.push({message: 'Not a valid phone Number!'});
+            console.log(error);
+
+        }
 
         if (!errors){
             
@@ -274,7 +283,7 @@ let applicationController = {
 
         }else{
 
-            res.json({success:false, message: errors});
+            res.json({success:false, errors: errors});
 
         }
 

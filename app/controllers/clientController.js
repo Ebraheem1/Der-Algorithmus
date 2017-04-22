@@ -143,15 +143,15 @@ updateInfo:function(req,res){
               else {
                 console.log(Ractivities);
                 var activities=NRactivities.concat(Ractivities);
-                Reviews.find({business_id:req.params.id},function(err,reviews){
+                if(activities.length==0){
+                  res.json({success:true,businessOwner:BusinessOwner,message:'No activities'});
 
-                  if(err){
-                    res.json({success:false,message:err, activities:activities});
-                  }
-                  else {
-                    res.json({success:true,businessOwner:BusinessOwner,activities:activities,reviews:reviews});
-                  }
-                });
+                }
+                else
+                {
+                  res.json({success:true,businessOwner:BusinessOwner,activities:activities});
+
+                }
 
               }
             });

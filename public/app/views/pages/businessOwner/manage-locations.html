@@ -43,6 +43,10 @@
 
 	<br>
 
+	<div ng-repeat = "error in errors" class="alert alert-danger fade in alert-dismissable" ng-show = "errors">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	    <strong>{{error.message}}</strong>
+	</div>
 	<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
 	    <strong>{{errMsg}}</strong>
@@ -50,6 +54,6 @@
 
 	<div class="alert alert-success fade in alert-dismissable" ng-show = "successMsg">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-	    <strong>{{successMsg}}</strong>
+	    {{successMsg}}
 	</div>
 </div>	

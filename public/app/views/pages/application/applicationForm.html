@@ -36,7 +36,8 @@
                     <input class="form-control" type="email" name="email" placeholder="email@example.com" ng-model="applicationForm.application.email" ng-change = "data.email.$dirty && applicationForm.checkEmail()"
 					required> 
                 </div>
-                <label for="email" style="color: #ffffff" ng-show = "data.email.$dirty">{{emailAvailable?"✔":"email not available!"}}</label>
+                <label style="color: #ffffff" for="email" ng-show = "applicationForm.application.email.length>0 && isEmail()">{{emailAvailable?"✔":"email not available!"}}</label>
+                <label style="color: #ffffff" for="email" ng-show = "applicationForm.application.email.length>0 && !isEmail()">{{"Not valid Email Address"}}</label>
             </div>
 			<br>
 
@@ -49,8 +50,9 @@
 
 			<div class="form-group">
                 <div class="col-md-6">
-                    <input class="form-control" type="number" name="phoneNumber" placeholder="phone number" ng-model="applicationForm.application.phoneNumber" required>
+                    <input class="form-control" type="text" name="phoneNumber" placeholder="phone number" ng-model="applicationForm.application.phoneNumber" ng-change = "applicationForm.isPhoneNumber()" required>
                 </div>
+                <label style="color: #ffffff" for="phoneNumber" ng-show = "applicationForm.application.phoneNumber.length>0">{{isPhoneNumber?"✔":"Not a valid phone number!"}}</label>
             </div>
             <br>
 			
@@ -74,6 +76,10 @@
 		<h2>Loading...</h2>
 	</div>
 
+	<div ng-repeat = "error in errors" class="alert alert-danger fade in alert-dismissable" ng-show = "errors">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	    <strong>{{error.message}}</strong>
+	</div>
 	<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
 	    <strong>{{errMsg}}</strong>

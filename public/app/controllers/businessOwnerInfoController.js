@@ -23,7 +23,7 @@
 			}else{
 				
 				$scope.errMsg = business.data.message;
-			
+				$scope.errors = business.data.errors;			
 			}
 		
 		}, function(err){
@@ -35,8 +35,6 @@
 			});
 
 		this.updateInfo = function(){
-
-			console.log(controller.info);
 
 			if(!($scope.editName)){
 
@@ -71,10 +69,10 @@
 		          controller.info = {};
 		                  
 		        }else{
-		          
-		          $scope.errMsg = response.data.message;
-		          console.log(response.data.message);
-		        
+			          
+					$scope.errMsg = response.data.message;
+					$scope.errors = response.data.errors;		        
+		       
 		        }
 	  
 	        }, function(err){
