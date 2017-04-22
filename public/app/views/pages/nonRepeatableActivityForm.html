@@ -20,7 +20,7 @@
     <h1> Add Activity </h1>
   </div>
 
-  <form >
+  <form  ng-submit="addActivity()">
 
     <div class="form-group custom"> 
       <label>Upload an Image</label><br>
@@ -32,12 +32,12 @@
 
     <div class="form-group custom">
       <label>Destination</label>
-      <input type="text" class="form-control" placeholder="Where will this activity take place?" name="destination" ng-model="activityData.destination">
+      <input type="text" class="form-control" placeholder="Where will this activity take place?" name="destination" ng-model="activityData.destination" required>
     </div>
 
     <div class="form-group custom">
       <label>Transportation</label>
-      <select class="form-control" name="transportation" ng-model="activityData.transportation">
+      <select class="form-control" name="transportation" ng-model="activityData.transportation" required>
         <option>Airplane</option>
         <option>Bus</option>
         <option>Car</option>
@@ -48,43 +48,43 @@
     <div class="form-group custom">
       <label>Traveling Date</label>
       <div class="col-10">
-        <input class="form-control" type="date" name="travelingDate" ng-model="activityData.travelingDate">
+        <input class="form-control" type="date" name="travelingDate" ng-model="activityData.travelingDate" required>
       </div>
     </div>
 
     <div class="form-group custom">
       <label>Return Date</label>
       <div class="col-10">
-        <input class="form-control" type="date" name="returnDate" ng-model="activityData.returnDate">
+        <input class="form-control" type="date" name="returnDate" ng-model="activityData.returnDate" required>
       </div>
       
     </div>
     <div class="form-group custom">
       <label>Accommodation</label>
-      <textarea class="form-control" name="Accommodation" rows="5" placeholder="Write about the accommodations provided throughout the activity." ng-model="activityData.Accommodation"></textarea>
+      <textarea class="form-control" name="Accommodation" rows="5" placeholder="Write about the accommodations provided throughout the activity." ng-model="activityData.Accommodation" required></textarea>
     </div>
 
     <div class="form-group custom">
       <label>Description</label>
-      <textarea class="form-control" name="description" rows="5" placeholder="Write about the activity you are offering." ng-model="activityData.description"></textarea>
+      <textarea class="form-control" name="description" rows="5" placeholder="Write about the activity you are offering." ng-model="activityData.description" required></textarea>
     </div>
 
     <div class="form-group custom">
       <label>Maximum Number of Participants</label>
-      <input type="text" class="form-control" placeholder="This is the maximum number of participants allowed in this activity." name="maxParticipants" ng-model="activityData.maxParticipants">
+      <input type="number" min="1" class="form-control" placeholder="This is the maximum number of participants allowed in this activity." name="maxParticipants" ng-model="activityData.maxParticipants" required >
     </div>
 
     <div class="form-group custom">
-      <label>Price Per Person</label>
-      <input type="text" class="form-control" placeholder="This is the price to be paid by each person participating in the activity." name="pricePerPerson" ng-model="activityData.pricePerPerson">
+      <label>Price Per Person ($) </label>
+      <input type="number" min="1" class="form-control" placeholder="This is the price to be paid by each person participating in the activity." name="pricePerPerson" ng-model="activityData.pricePerPerson" required>
     </div>
 
     <div class="form-group custom">
       <label>Cancellation Window</label>
-      <input type="text" class="form-control" placeholder="This is the number of days allowed for participants to cancel their reservations." name="cancellationWindow" ng-model="activityData.cancellationWindow">
+      <input type="number" min="0" class="form-control" placeholder="This is the number of days allowed for participants to cancel their reservations." name="cancellationWindow" ng-model="activityData.cancellationWindow" required>
     </div>
 
-    <button type="submit" class="btn btn-primary" ng-click="addActivity()">Submit</button>
+    <button type="submit" class="btn btn-primary" >Submit</button>
 
   </form>
 

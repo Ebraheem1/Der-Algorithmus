@@ -1,6 +1,6 @@
 angular.module('businessOwnerController', ['businessOwnerServices','authServices', 'fileUploadService','fileModelDirective'])
 
-.controller('businessCtrl', function(Authentication, AuthenticationToken, $scope, $location,BusinessOwner,fileUpload ){
+.controller('businessCtrl', function($route, $routeParams,Authentication, AuthenticationToken, $scope, $location,BusinessOwner,fileUpload ){
 
 	var app = this;
 	
@@ -35,15 +35,19 @@ angular.module('businessOwnerController', ['businessOwnerServices','authServices
             var imageData = {};
             imageData.image = 'gallery/'+data.data.name;
             
-		BusinessOwner.addOffer({offer : $scope.offerData.offer ,exp_date: $scope.offerData.exp_date , discount:offerData.discount, image:imageData.image}).then(function(data){
+		BusinessOwner.addOffer({offer : $scope.offerData.offer ,exp_date: $scope.offerData.exp_date , discount:offerData.discount, image:imageData.image},$routeParams.activityId).then(function(data){
 			
 			if(data.data.success){
+
 				$scope.errMsg = false ;
 				$scope.successMsg = data.data.message;
 		          
 				$scope.offerData= null;
 				imageData = {};
 				$scope.file={};
+				$location.path('/viewBusinessActivities');
+
+		
 
 				}
 			else{

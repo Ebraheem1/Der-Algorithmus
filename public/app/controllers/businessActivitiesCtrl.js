@@ -53,8 +53,8 @@ angular.module('businessActivitiesController',['businessActivitiesServices','aut
 		$scope.successMsg=false;
 		$scope.errorMsg=false;
 		$scope.deletingErrorMsg=false;
-		
 
+		
 		BusinessActivities.deleteNonRepeatableActivity(activityId).then(function(data){
 			
 			if(data.data.success){
@@ -64,6 +64,7 @@ angular.module('businessActivitiesController',['businessActivitiesServices','aut
 				$scope.loading=false;
 				$scope.nonRepeatableActivities=data.data.nonRepeatableActivities;
 				$scope.repeatableActivities=data.data.repeatableActivities;
+				
 
 			}
 			else{
@@ -140,6 +141,12 @@ angular.module('businessActivitiesController',['businessActivitiesServices','aut
 	$scope.editRep = function(activityId) {
 
 		$location.path('/activity/repeatableActivityDetails/'+activityId);
+
+	};
+
+	$scope.addOffer = function(activityId) {
+
+		$location.path('/offers/'+activityId);
 
 	};	
 
