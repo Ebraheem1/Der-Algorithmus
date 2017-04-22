@@ -71,16 +71,28 @@ let activityController={
 							}else{
 								if(repeatableActivityReservation){
 									var reservationDate = new Date(repeatableActivityReservation.date);
-									reservationDate.setHours(0);
-									reservationDate.setMinutes(0);
-									reservationDate.setSeconds(0);
+									reservationDate.setUTCHours(0);
+									reservationDate.setUTCMinutes(0);
+									reservationDate.setUTCSeconds(0);
 									var dateNow = new Date();
+									dateNow.setUTCHours(0);
+									dateNow.setUTCMinutes(0);
+									dateNow.setUTCSeconds(0);
+									dateNow.setUTCMilliseconds(0);
 									if(reservationDate>=dateNow){
 										res.json({success:false, message: 'This activity is currently reserved. You can only edit an ectivity when it is not reserved!'});
 										return;
 									}
 								}
 								else{
+					                for(var i=0;i< repeatableActivity.pricePackages.length;i++){
+					                        var currentParticipants=repeatableActivity.pricePackages[i].participants;
+					                        if(currentParticipants==participants){
+					                            res.json({ success:false, message: 'You can not have 2 different price packages with the same number of participants!'} );
+					                            return;
+					                        }
+
+					                }
 									repeatableActivity.pricePackages.push({ participants: participants,  price: price });
 									repeatableActivity.save(function(err) {
 						                if (err) {
@@ -126,10 +138,14 @@ let activityController={
 							}else{
 								if(repeatableActivityReservation){
 									var reservationDate = new Date(repeatableActivityReservation.date);
-									reservationDate.setHours(0);
-									reservationDate.setMinutes(0);
-									reservationDate.setSeconds(0);
+									reservationDate.setUTCHours(0);
+									reservationDate.setUTCMinutes(0);
+									reservationDate.setUTCSeconds(0);
 									var dateNow = new Date();
+									dateNow.setUTCHours(0);
+									dateNow.setUTCMinutes(0);
+									dateNow.setUTCSeconds(0);
+									dateNow.setUTCMilliseconds(0);
 									if(reservationDate>=dateNow){
 										res.json({success:false, message: 'This activity is currently reserved. You can only edit an ectivity when it is not reserved!'});
 										return;
@@ -174,8 +190,8 @@ let activityController={
 		var startDateMins =	(startDate.getMinutes()<10)? '0'+startDate.getMinutes(): startDate.getMinutes();
 		var endDateHours = (endDate.getHours()<10)? '0'+endDate.getHours(): endDate.getHours();
 		var endDateMins =  (endDate.getMinutes()<10)? '0'+endDate.getMinutes(): endDate.getMinutes();
-		startTime = startDateHours+':'+startDateMins;
-		endTime =  endDateHours+':'+endDateMins;
+		startTimeString = startDateHours+':'+startDateMins;
+		endTimeString =  endDateHours+':'+endDateMins;
 
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
 			if(err){
@@ -193,17 +209,25 @@ let activityController={
 							}else{
 								if(repeatableActivityReservation){
 									var reservationDate = new Date(repeatableActivityReservation.date);
-									reservationDate.setHours(0);
-									reservationDate.setMinutes(0);
-									reservationDate.setSeconds(0);
+									reservationDate.setUTCHours(0);
+									reservationDate.setUTCMinutes(0);
+									reservationDate.setUTCSeconds(0);
 									var dateNow = new Date();
+									dateNow.setUTCHours(0);
+									dateNow.setUTCMinutes(0);
+									dateNow.setUTCSeconds(0);
+									dateNow.setUTCMilliseconds(0);
 									if(reservationDate>=dateNow){
 										res.json({success:false, message: 'This activity is currently reserved. You can only edit an ectivity when it is not reserved!'});
 										return;
 									}
 								}
 								else{
-									repeatableActivity.slots.push({ startTime: startTime,  endTime: endTime });
+							        if(endTime <= startTime){
+							            res.json({ success: false, message: 'End Time must be greater than Start Time!'});
+							           return;
+							        }
+									repeatableActivity.slots.push({ startTime: startTimeString,  endTime: endTimeString });
 									repeatableActivity.save(function(err) {
 						                if (err) {
 						                	res.json({success:false, message: err});
@@ -251,10 +275,14 @@ let activityController={
 							}else{
 								if(repeatableActivityReservation){
 									var reservationDate = new Date(repeatableActivityReservation.date);
-									reservationDate.setHours(0);
-									reservationDate.setMinutes(0);
-									reservationDate.setSeconds(0);
+									reservationDate.setUTCHours(0);
+									reservationDate.setUTCMinutes(0);
+									reservationDate.setUTCSeconds(0);
 									var dateNow = new Date();
+									dateNow.setUTCHours(0);
+									dateNow.setUTCMinutes(0);
+									dateNow.setUTCSeconds(0);
+									dateNow.setUTCMilliseconds(0);
 									if(reservationDate>=dateNow){
 										res.json({success:false, message: 'This activity is currently reserved. You can only edit an ectivity when it is not reserved!'});
 										return;
@@ -316,10 +344,14 @@ let activityController={
 										}else{
 											if(repeatableActivityReservation){
 												var reservationDate = new Date(repeatableActivityReservation.date);
-												reservationDate.setHours(0);
-												reservationDate.setMinutes(0);
-												reservationDate.setSeconds(0);
-												var dateNow = new Date();;
+												reservationDate.setUTCHours(0);
+												reservationDate.setUTCMinutes(0);
+												reservationDate.setUTCSeconds(0);
+												var dateNow = new Date();
+												dateNow.setUTCHours(0);
+												dateNow.setUTCMinutes(0);
+												dateNow.setUTCSeconds(0);
+												dateNow.setUTCMilliseconds(0);
 												if(reservationDate>=dateNow){
 													res.json({success:false, message: 'This activity is currently reserved. You can only edit an ectivity when it is not reserved!'});
 													return;
@@ -413,6 +445,33 @@ let activityController={
 			return;
 		}
 
+		if(travelingDate!=null && travelingDate!=''){
+			var dateNow = new Date();
+			dateNow.setUTCHours(0);
+			dateNow.setUTCMinutes(0);
+			dateNow.setUTCSeconds(0);
+			dateNow.setUTCMilliseconds(0);
+			var travelingDateObject = new Date(travelingDate);
+			if(travelingDateObject<dateNow){
+				res.json({success:false, message: 'Traveling Date should be today or later!'});
+				return;
+			}
+		}
+
+		if(returnDate!=null && returnDate!=''){
+			var dateNow = new Date();
+			dateNow.setUTCHours(0);
+			dateNow.setUTCMinutes(0);
+			dateNow.setUTCSeconds(0);
+			dateNow.setUTCMilliseconds(0);
+			var returnDateObject = new Date(returnDate);
+			if(returnDateObject<dateNow){
+				res.json({success:false, message: 'Return Date should be today or later!'});
+				return;
+			}
+		}
+		
+
 		NonRepeatableActivity.findOne({_id:activity_id}, function(err, nonRepeatableActivity){
 			if(err){
 				res.json({success:false, message: err});
@@ -434,10 +493,14 @@ let activityController={
 										}else{
 											if(repeatableActivityReservation){
 												var reservationDate = new Date(repeatableActivityReservation.date);
-												reservationDate.setHours(0);
-												reservationDate.setMinutes(0);
-												reservationDate.setSeconds(0);
+												reservationDate.setUTCHours(0);
+												reservationDate.setUTCMinutes(0);
+												reservationDate.setUTCSeconds(0);
 												var dateNow = new Date();
+												dateNow.setUTCHours(0);
+												dateNow.setUTCMinutes(0);
+												dateNow.setUTCSeconds(0);
+												dateNow.setUTCMilliseconds(0);
 												if(reservationDate>=dateNow){
 													res.json({success:false, message: 'This activity is currently reserved. You can only edit an ectivity when it is not reserved!'});
 													return;
