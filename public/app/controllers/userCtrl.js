@@ -266,5 +266,29 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	});
 	
 
+})
+.controller('adminCtrl',function($http,Admin,$location)
+{	//This controller ensures that the admin of the website is created only once
+	//Its link is known only by the team members and anyone tries to hack it
+	//It will be give him/her access denied
+	var app = this;
+	
+	app.doReg=function(regData){
+		app.errMsg = false;
+		Admin.addAdmin(app.regData).then(function(data)
+		{
+			if(data.data.success)
+			{
+				
+				$location.path('/');
+			}
+			else{
+				app.errMsg = data.data.message;
+				app.regData={};
+			}
+		});
+	}
+
 });
+
 

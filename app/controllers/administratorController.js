@@ -23,21 +23,19 @@ let administratorController={
 		BusinessOwner.find( {}, function(err,BusinessesArray){
 
 			if(err){
-        
+
         	res.json({success: false, message:err});
-        
+
       		}else{
         	// should be replaced with page rendering in sprint 2
 			res.json({success: true, message:"All Businesses retrieved successfully", business:BusinessesArray});
-       
+
       		}
 		});
 	},
 
 	// Administrator removes business from the directory
 	removeBusiness: function(req,res){
-		console.log(req.params.businessId);
-
 		BusinessOwner.find( {_id:req.params.businessId}, function(err,bus){ //edited conditions
 
 			if(err){
@@ -78,19 +76,19 @@ let administratorController={
 				});
 
 			});
-			
+
 		});
 	},
 
 	viewApplicationsIndex: function(req, res){
 
 		Application.find(function(err, applications){
-			
-            
+
+
             if(err){
 
-                res.json({authenticated: true, success: false, message: err.message});	
-            
+                res.json({authenticated: true, success: false, message: err.message});
+
             }else{
 
             	if(!applications){
@@ -110,10 +108,10 @@ let administratorController={
             		}
 
             	}
-           		
+
             }
 
-        });  
+        });
 
 	},
 
@@ -142,7 +140,7 @@ let administratorController={
 		});
 
 	},
-	
+
 
 //check the entered password against the entered one
 comparePassword:function(candidatePassword, callback){
@@ -162,7 +160,7 @@ comparePassword:function(candidatePassword, callback){
 		});
 		}
 		else{
-			callback(null,false);	
+			callback(null,false);
 		}
 
 	});
@@ -172,28 +170,33 @@ getAdmin:function(callback)
 	Administrator.find(callback);
 },
 createAdmin:function(req,res){
-		var password = req.body.password;
-		Administrator.find(function(err,admins)
+	var password = req.body.password;
+	Administrator.find(function(err,admins)
+	{
+		if(err)
 		{
-			if(admins.length > 0)
-			{
-				res.send("Admin already created");
-				return;
-			}
-			else{
-				bcrypt.genSalt(10, function(err, salt) {
-	    		bcrypt.hash(password, salt, function(err, hash) {
-	    			var newAdmin = new Administrator({
-	    				password:hash
-	    			});
-	    			res.send("Administrator is successfully created!");
-	        		newAdmin.save();
-	        		return;
-	    		});
-			});
-			}
-
+			return res.json({success: false, message: 'Access Denied'});
+		}
+		if(admins.length > 0)
+		{
+			return res.json({success: false, message: 'Access Denied'});
+			
+		}
+		else{
+			bcrypt.genSalt(10, function(err, salt) {
+    		bcrypt.hash(password, salt, function(err, hash) {
+    			var newAdmin = new Administrator({
+    				password:hash
+    			});
+    			
+        		newAdmin.save();
+        		return res.json({success: true, message: 'Admin created successfully'});
+        		
+    		});
 		});
+		}
+
+	});
         
 }
 

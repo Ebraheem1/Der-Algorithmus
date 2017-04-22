@@ -285,7 +285,7 @@ router.post('/createAdmin',administratorController.createAdmin);//done--
 router.post('/pay',reservationController.Pay);
 router.post('/reserve/:type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.reserveSlot);
 router.get('/reserve/activity/:activity_type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
-router.get('/getReservations/:client_id',passport.authenticate('clientLogin', { session: false }),reservationController.getAllReservations);
+router.get('/getReservations/',passport.authenticate('clientLogin', { session: false }),reservationController.getAllReservations);
 router.get('/cancelReservation/:type/:reservation_id',passport.authenticate('clientLogin', { session: false }),reservationController.cancelReservation);
 
 

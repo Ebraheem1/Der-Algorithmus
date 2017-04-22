@@ -31,9 +31,9 @@ angular.module('reservationServices', [])
             return $http.post('api/reserve/0/' + activity_id, parameters);
         }
 
-        reservationFactory.getAllReservation = function(client_id) {
+        reservationFactory.getAllReservation = function() {
 
-            return $http.get('api/getReservations/' + client_id);
+            return $http.get('api/getReservations/');
         }
         reservationFactory.cancelReservationR = function(reservation_id) {
             return $http.get('api/cancelReservation/0/' + reservation_id);

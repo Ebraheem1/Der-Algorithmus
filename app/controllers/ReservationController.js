@@ -6,7 +6,7 @@ let stripe = require("stripe")("sk_test_Hr41ZUg64PJe2duUepC7ruyr");
 let ReservationController={
 
     reserveSlot:function(req,res){
-       console.log(req.user);
+      
       if(req.params.type==0)
       return ReservationController.repeatableReserveSlot(req,res);
       else{
@@ -17,8 +17,7 @@ let ReservationController={
 
     repeatableReserveSlot:function(req,res){//TODO : User is in request params according to session ? / CLEAN
 
-      var client_id = req.body.client_id ; //TODO : to be changed to user._id;
-
+      var client_id = req.user._id;  //TODO : to be changed to user._id;
       var slot_id = req.body.slot_id;
       var package_id = req.body.package_id;
       var date = req.body.date;
@@ -76,7 +75,7 @@ let ReservationController={
     nonRepeatableReserveSlot:function(req,res){
 
       var nonRepeatableActivity_id = req.params.activity_id;
-      var client_id = req.body.client_id ;// TODO : client._id;
+      var client_id = req.user._id ;// TODO : client._id;
       var participants = req.body.participants;
       var price = req.body.price;
       if(Number(participants)<1){
@@ -244,7 +243,7 @@ var found = false ;
       getAllReservations:function(req,res){
 
 
-        var client_id = req.params.client_id;
+        var client_id = req.user._id;
 
 
         NonRepeatableActivityReservation.find({client_id:client_id}).populate('nonRepeatableActivity_id').exec(function(err,reservations1){

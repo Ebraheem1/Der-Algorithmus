@@ -105,8 +105,7 @@ angular.module('reservationController', ['authServices','reservationServices', '
         var app = this;
         $scope.success = true;
         $scope.errorMessage = "You have no reservations currently !";
-        var client_id = "58f24bf50a785f677525f8f1" // TODO : to be changed to authentication id
-
+            console.log()
         $scope.currentPage = 1;
         $scope.itemsPerPage = 6;
 
@@ -115,7 +114,7 @@ angular.module('reservationController', ['authServices','reservationServices', '
           $scope.modalShown = !$scope.modalShown;
         }
 
-        Reservation.getAllReservation(client_id).then(function(data) {
+        Reservation.getAllReservation().then(function(data) {
 
             if (data.data.success && (data.data.repeatable.length > 0 || data.data.nonRepeatable.length > 0)) {
                 $scope.success = true;

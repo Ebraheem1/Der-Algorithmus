@@ -48,9 +48,6 @@
             </div>
             <div style="position : relative; left:170px;">
 
-                <p ng-show="Successful && Output">
-                  SH8ala ya joe
-                </p>
                 <form action="/api/pay" method="post" ng-show="Successful && Output">
                     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Aa5qI8FtYYlEKwkWjwQ2pzTI" data-amount={{price}} data-name="Stripe Secure Payment" data-description="Pay for reservation" data-locale="auto" data-currency="gbp">
                     </script>

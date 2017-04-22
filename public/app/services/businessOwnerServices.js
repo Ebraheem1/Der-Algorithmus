@@ -25,9 +25,11 @@ angular.module('businessOwnerServices', [])
 		return $http.post('/api/reply/'+reviewID,replyData);
 	};
 
-    businessOwnerFactory.addOffer = function(offerData){
+    businessOwnerFactory.addOffer = function(offerData,activityID){
 
-		return $http.post('/api/offer/58fb49ada0dc050ecb138a16',offerData);
+
+		return $http.post('/api/offer/'+activityID,offerData);
+
 	};
 
 	businessOwnerFactory.getInfo = function(id){
