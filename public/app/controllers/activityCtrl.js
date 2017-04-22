@@ -62,6 +62,9 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			if(data.data.success){
 				app.successMsg = data.data.message;
 				app.loading = false;
+				if(app.activityData.None==true){
+					app.activityData.dayOffsNames = [];
+				}
 			}
 			else{
 				app.errMsg = data.data.message;
