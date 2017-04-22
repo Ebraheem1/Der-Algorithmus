@@ -1,5 +1,5 @@
 
-angular.module('userControllers', ['userServices','clientServices','businessOwnerServices', 'authServices'])
+angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientServices','businessOwnerServices', 'authServices'])
 .controller('regCtrl', function($http, $location, $timeout, User){
 
 	var app = this;
@@ -17,6 +17,9 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 			else{
 				if(data.data.errors){
 					app.errors=data.data.errors;
+				}
+				else {
+					app.errMsg=data.data.message;
 				}
 			}
 		},function(err)
@@ -57,20 +60,20 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 		});
 	}
 
+})
+
+.controller('usernameCtrl',function($http,$location,User, Authentication, AuthenticationToken){
+	var app=this;
 	app.updateUsername=function(Edata){
 		app.successMsg = false;
 		app.errMsg = false;
-
 
 		User.updateUsername(app.Edata).then(function(data){
 			if(data.data.success){
 				app.successMsg=data.data.message;
 				app.sucessMsg=false;
 				AuthenticationToken.setUsername(app.Edata.username);
-				$timeout(function() {
-					$location.path('/');
-					location.reload();
-				}, 150);
+					$location.path('/updateInfo');
 
 			}else {
 				app.errMsg=data.data.message;
@@ -84,6 +87,9 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 		});
 	}
 
+})
+.controller('PasswordCtrl',function($http,$location,User, Authentication, AuthenticationToken){
+	var app=this;
 	app.updatePassword=function(Edata){
 		app.successMsg = false;
 		app.errMsg = false;
@@ -91,7 +97,13 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 		User.updatePassword(app.Edata).then(function(data){
 			if(data.data.success){
 				app.successMsg=data.data.message;
-				$location.path('/');
+				if(Authentication.isClient()){
+				$location.path('/updateInfo');
+				}
+					else {
+						$location.path('/business/update-info');
+
+					}
 				app.sucessMsg=false;
 
 			}else {
@@ -105,7 +117,6 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 			}
 		});
 	}
-
 
 })
 
@@ -122,21 +133,52 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 			}
 		});
 })
-.controller('viewDetailedCtrl',function($http,$location,$timeout,Client,$routeParams, AuthenticationToken, Authentication){
+.controller('viewDetailedCtrl',function($scope,$http,$location,$timeout,Client,$routeParams, AuthenticationToken, Authentication){
 	var app=this;
-	app.errAMsg=false;
 	app.errMsg=false;
+	app.errAMsg=false;
+
 	app.activities=[];
 	app.client = Authentication.isClient();
 	app.id=$routeParams.id;
 	Client.viewDetailed(app.id).then(function(data){
 		if(data.data.success){
 			app.businessOwner=data.data.businessOwner;
-			if(!data.data.activities)
+			console.log(app.businessOwner.images);
+
+
+		$scope.photos = app.businessOwner.images;
+		// initial image index
+		$scope._Index = 0;
+		// if a current image is the same as requested image
+		$scope.isActive = function (index) {
+		return $scope._Index === index;
+		};
+		// show prev image
+		$scope.showPrev = function () {
+		$scope._Index = ($scope._Index > 0) ? --$scope._Index : $scope.photos.length - 1;
+		};
+		// show next image
+		$scope.showNext = function () {
+		$scope._Index = ($scope._Index < $scope.photos.length - 1) ? ++$scope._Index : 0;
+		};
+		// show a certain image
+		$scope.showPhoto = function (index) {
+		$scope._Index = index;
+		};
+
+
+
+
+
+
+
+			if(data.data.activities)
 			{
-				app.errAMsg='No activities';
+				app.activities=data.data.activities;
+
 			}else{
-			app.activities=data.data.activities;
+				app.errAMsg=data.data.message;
 		}
 		}
 		else {
@@ -148,6 +190,7 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 			Authentication.handleError();
 			}
 		});
+	
 })
 .controller('ViewBOhomepageCtrl',function($http,Client,AuthenticationToken){
 	var app=this;
@@ -223,5 +266,29 @@ angular.module('userControllers', ['userServices','clientServices','businessOwne
 	});
 	
 
+})
+.controller('adminCtrl',function($http,Admin,$location)
+{	//This controller ensures that the admin of the website is created only once
+	//Its link is known only by the team members and anyone tries to hack it
+	//It will be give him/her access denied
+	var app = this;
+	
+	app.doReg=function(regData){
+		app.errMsg = false;
+		Admin.addAdmin(app.regData).then(function(data)
+		{
+			if(data.data.success)
+			{
+				
+				$location.path('/');
+			}
+			else{
+				app.errMsg = data.data.message;
+				app.regData={};
+			}
+		});
+	}
+
 });
+
 

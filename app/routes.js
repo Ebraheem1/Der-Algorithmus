@@ -242,7 +242,7 @@ router.get('/logout',passport.authenticate('generalLogin', { session: false }),a
 
 router.get('/search/:keyword',userController.search);//done--
 
-router.post('/gallery/:id',passport.authenticate('businessLogin', { session: false }), businessOwnerController.addMedia);//done--
+router.post('/gallery',passport.authenticate('businessLogin', { session: false }), businessOwnerController.addMedia);//done--
 
 //We have added authentication request
 router.post('/offer/:activityID', passport.authenticate('businessLogin', { session: false }),multer({ dest: './public/gallery'}).single('image'),businessOwnerController.addOffer);//done--

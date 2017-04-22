@@ -22,6 +22,13 @@ var app = angular.module('applicationFormController', ['applicationServices']);
     
     };
 
+    $scope.isEmail = function(){
+
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(controller.application.email);
+
+    };
+
     this.apply = function(){
 
       controller.application.locations = [];
@@ -44,8 +51,9 @@ var app = angular.module('applicationFormController', ['applicationServices']);
                   
         }else{
           
-                
           $scope.errMsg = response.data.message;
+          $scope.errors = response.data.errors;
+          console.log($scope.errors);
         
         }
     
@@ -90,9 +98,13 @@ var app = angular.module('applicationFormController', ['applicationServices']);
 
     };
 
-    this.isEmpty = function(string){
+    this.isPhoneNumber = function(){
 
-        console.log(string);
+      $scope.isPhoneNumber = !isNaN(controller.application.phoneNumber);
+
+    };
+
+    this.isEmpty = function(string){
 
         if(string.$viewValue != null && string.$viewValue != ''){
 

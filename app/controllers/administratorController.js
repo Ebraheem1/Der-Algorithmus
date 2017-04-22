@@ -151,29 +151,34 @@ getAdmin:function(callback)
 	Administrator.find(callback);
 },
 createAdmin:function(req,res){
-		var password = req.body.password;
-		Administrator.find(function(err,admins)
+	var password = req.body.password;
+	Administrator.find(function(err,admins)
+	{
+		if(err)
 		{
-			if(admins.length > 0)
-			{
-				res.send("Admin already created");
-				return;
-			}
-			else{
-				bcrypt.genSalt(10, function(err, salt) {
-	    		bcrypt.hash(password, salt, function(err, hash) {
-	    			var newAdmin = new Administrator({
-	    				password:hash
-	    			});
-	    			res.send("Administrator is successfully created!");
-	        		newAdmin.save();
-	        		return;
-	    		});
-			});
-			}
-
+			return res.json({success: false, message: 'Access Denied'});
+		}
+		if(admins.length > 0)
+		{
+			return res.json({success: false, message: 'Access Denied'});
+			
+		}
+		else{
+			bcrypt.genSalt(10, function(err, salt) {
+    		bcrypt.hash(password, salt, function(err, hash) {
+    			var newAdmin = new Administrator({
+    				password:hash
+    			});
+    			
+        		newAdmin.save();
+        		return res.json({success: true, message: 'Admin created successfully'});
+        		
+    		});
 		});
+		}
 
+	});
+        
 }
 
 };

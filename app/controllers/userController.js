@@ -112,7 +112,7 @@ let userController={
   changeUsername:function(req,res){
 
       var newUsername=req.body.username;
-      if(req.body.oldUsername == newUsername){
+      if(req.user.username == newUsername){
 
         res.json({success:false,message:'this is your current username'});
 
@@ -142,7 +142,7 @@ let userController={
                         if(!user)
                         {
 
-                          User.findOne({username:req.body.oldUsername}, function(err, currentUser){
+                          User.findOne({_id:req.user._id}, function(err, currentUser){
 
                             if(err){
 

@@ -14,8 +14,9 @@
 			
 			}else{
 				
-				$scope.errMsg = business.data.message;
-			
+				$scope.errMsg = application.data.message;
+				$scope.errors = application.data.errors;
+
 			}
 		
 		}, function(err){
@@ -40,8 +41,9 @@
 		                  
 		        }else{
 		            
-		          $scope.errMsg = response.data.message;
-		      		        
+				$scope.errMsg = application.data.message;
+				$scope.errors = application.data.errors;
+						      		        
 		        }
 	  
 	        }, function(err){
@@ -67,7 +69,8 @@
 		                  
 		        }else{
 		               
-		          $scope.errMsg = response.data.message;
+				$scope.errMsg = application.data.message;
+				$scope.errors = application.data.errors;
 		      		        
 		        }
 	  

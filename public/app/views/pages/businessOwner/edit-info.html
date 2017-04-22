@@ -44,7 +44,7 @@
 	                    <label ng-show = "!editNumber" for="phoneNumber" style="color: #ffffff">
 	                		phone number: {{user.phoneNumber}}
 	                	</label>
-						<input class="form-control" type="number" name="phoneNumber" placeholder = "{{user.phoneNumber}}" ng-show = "editNumber" ng-model = "businessOwnerInfo.info.phoneNumber">
+						<input class="form-control" type="text" name="phoneNumber" placeholder = "{{user.phoneNumber}}" ng-show = "editNumber" ng-model = "businessOwnerInfo.info.phoneNumber">
 						<a href="" ng-click = "editNumber = !editNumber">{{editNumber? "cancel": "edit";}}</a> 
 	                </div>
 	            </div>
@@ -59,7 +59,11 @@
 						<a href="" ng-click = "editDescription = !editDescription">{{editDescription? "cancel": "edit";}}</a>
 	                </div>
 	            </div>	
-	            <a href="/business/manage-locations">manage locations</a>		
+	            <ul>
+	            	<li><a href="/business/manage-locations">manage locations</a></li>
+	            	<li><a href="/change-password">change password</a></li>
+	            	<li><a href="/change-username">change username</a></li>
+	            </ul>	
 				<br>
 				<div class = "inline-block">
 					<button class="btn btn-primary" ng-disabled = "data.$invalid || (!emailAvailable && editEmail) || !(editEmail || editDescription || editNumber || editName)" type="submit">Update Info</button>
@@ -71,6 +75,9 @@
 
 
 
+	<div ng-repeat = "error in errors" class="alert alert-danger fade in alert-dismissable" ng-show = "errors">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	    <strong>{{error.message}}</strong>
 	</div>
 	<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
