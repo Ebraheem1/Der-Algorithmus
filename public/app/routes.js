@@ -57,6 +57,12 @@ angular.module('appRoutes', ['ngRoute'])
 	  controller:'viewActivityCtrl',
 	  controllerAs:'viewActivity'
 	})
+	.when('/security/admin/derAlgorithmus',{
+		templateUrl: 'app/views/pages/admin.html',
+		controller: 'adminCtrl',
+		controllerAs: 'admin',
+		authenticated: false
+	})
 	 .when('/reserve/1/:activity_id',{
        templateUrl: 'app/views/pages/reservationPageNR.html',
        controller: "resCtrlNR",
@@ -176,7 +182,7 @@ angular.module('appRoutes', ['ngRoute'])
 		businessAuthenticated: true
 	})
 
-	  .when('/offers',{
+	  .when('/offers/:activityId',{
 		templateUrl:'app/views/pages/offer.html',
 		controller: 'businessCtrl',
 		controllerAs : 'business'

@@ -18,16 +18,16 @@ angular.module('businessOwnerServices', [])
 
 	businessOwnerFactory.uploadMedia = function(image){
                     
-		return $http.post('/api/gallery/58f4eb666bcaf119ca23f201',image);
+		return $http.post('/api/gallery',image);
 	};
 	businessOwnerFactory.reply = function(replyData,reviewID){
 
 		return $http.post('/api/reply/'+reviewID,replyData);
 	};
 
-    businessOwnerFactory.addOffer = function(offerData){
+    businessOwnerFactory.addOffer = function(offerData,activityID){
 
-		return $http.post('/api/offer/58f8c200c2dfe324dda73f14',offerData);
+		return $http.post('/api/offer/'+activityID,offerData);
 	};
 
 	businessOwnerFactory.getInfo = function(id){

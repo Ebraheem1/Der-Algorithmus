@@ -11,12 +11,14 @@
 <br> -->
      <form ng-submit="addOffer(offerData);">
      <input name="offer" type="text" placeholder="Write Description Here!" ng-required="true" ng-model="offerData.offer"><br><br>
-
+      <label>expiry date</label>
      <input name="exp_date" type="date" ng-required="true" ng-model="offerData.exp_date" format ="YYYY-MM-DD"><br><br>
+       <div style="float: left;">
+       <input name="discount" type="number" min="5" step="5" ng-required="true" ng-model="offerData.discount" placeholder="discount in percentage"></div>
+       <div style="float: right; position:relative; top : 10px;">%
+       </div>
 
-       <input name="discount" type="number" min="5" step="5" ng-required="true" ng-model="offerData.discount" placeholder="discount in percentage"> <p>%</p>
-       
-            <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile">
+      <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" style ="position :relative ; top : 10px;">
         
         <button ng-disabled="uploading" type="submit" class="btn btn-info btn-block login">Add Offer</button>
     </form>
