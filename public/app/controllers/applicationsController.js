@@ -39,9 +39,8 @@ app.controller('applicationsCtrl', function(Application, AuthenticationToken, Pa
 
 			}else{
 
-				console.log('a7a');
 				$scope.errMsg = applications.data.message;
-			
+				$scope.errors = applications.data.errors;			
 			}
 
 		}else{

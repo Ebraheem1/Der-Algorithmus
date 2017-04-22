@@ -13,14 +13,18 @@
 			}else{
 				
 				$scope.errMsg = application.data.message;
+				$scope.errors = application.data.errors;
 			
 			}
 		
 		}, function(err){
 
 				if(err.data){
+
 					Authentication.handleError();
+				
 				}
+			
 			});
 
 		this.accept = function(id){
@@ -30,19 +34,21 @@
 				if(application.data.success){
 
 					$scope.successMsg = 'Business owner added to directory!'
-
 					$window.location.href = '/applications';
 				
 				}else{
 					
 					$scope.errMsg = application.data.message;
+					$scope.errors = application.data.errors;
 				
 				}
 		
 			}, function(err){
 
 				if(err.data){
+
 					Authentication.handleError();
+				
 				}
 			
 			});
@@ -56,19 +62,21 @@
 				if(application.data.success){
 
 					$scope.successMsg = 'Application rejected!'
-
 					$window.location.href = '/applications';
 				
 				}else{
 					
 					$scope.errMsg = application.data.message;
+					$scope.errors = application.data.errors;
 				
 				}
 		
 			}, function(err){
 
 				if(err.data){
+				
 					Authentication.handleError();
+				
 				}
 			
 			});

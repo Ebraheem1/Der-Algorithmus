@@ -262,6 +262,18 @@ angular.module('appRoutes', ['ngRoute'])
 	
 	})
 
+	.when('/change-password',{
+		templateUrl:'app/views/pages/changePassword.html',
+		controller:'PasswordCtrl',
+		controllerAs:'password'
+	})
+	.when('/change-username',{
+		templateUrl:'app/views/pages/changeUsername.html',
+		controller:'usernameCtrl',
+		controllerAs:'username'
+	})
+
+
 	
 	.otherwise({
 		redirectTo: '/error404'

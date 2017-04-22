@@ -27,7 +27,9 @@ angular.module('businessOwnerServices', [])
 
     businessOwnerFactory.addOffer = function(offerData,activityID){
 
+
 		return $http.post('/api/offer/'+activityID,offerData);
+
 	};
 
 	businessOwnerFactory.getInfo = function(id){

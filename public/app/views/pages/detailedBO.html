@@ -1,3 +1,120 @@
+<style type="text/css">
+    
+.arrow {
+cursor: pointer;
+display: block;
+height: 64px;
+margin-top: -35px;
+outline: medium none;
+position: absolute;
+top: 50%;
+width: 64px;
+z-index: 5;
+}
+.arrow.prev {
+background-image: url("../images/prev.png");
+left: 20px;
+opacity: 0.2;
+transition: all 0.2s linear 0s;
+}
+.arrow.next {
+background-image: url("../images/next.png");
+opacity: 0.2;
+right: 20px;
+transition: all 0.2s linear 0s;
+}
+.arrow.prev:hover{
+opacity:1;
+}
+.arrow.next:hover{
+opacity:1;
+}
+.nav1 {
+bottom: -90px;
+display: block;
+height: 48px;
+left: 0;
+margin: 0 auto;
+padding: 1em 0 0.8em;
+position: absolute;
+right: 0;
+text-align: center;
+width: 100%;
+z-index: 5;
+}
+.nav1 li {
+border: 4px solid white;
+border-radius: 10px;
+cursor: pointer;
+display: inline-block;
+height: 30px;
+margin: 3px;
+position: relative;
+width: 50px;
+}
+.nav1 li.active {
+border: 5px solid orange;
+}
+.nav1 li img {
+width: 100%;
+}
+.slider {
+border: 15px solid #FFFFFF;
+border-radius: 20px;
+height: 500px;
+margin: 20px auto;
+position: relative;
+width: 800px;
+-webkit-perspective: 1000px;
+-moz-perspective: 1000px;
+-ms-perspective: 1000px;
+-o-perspective: 1000px;
+perspective: 1000px;
+-webkit-transform-style: preserve-3d;
+-moz-transform-style: preserve-3d;
+-ms-transform-style: preserve-3d;
+-o-transform-style: preserve-3d;
+transform-style: preserve-3d;
+}
+.slide {
+position: absolute;
+top: 0;
+left: 0;
+}
+.slide.ng-hide-add {
+opacity:1;
+-webkit-transition:1s linear all;
+-moz-transition:1s linear all;
+-o-transition:1s linear all;
+transition:1s linear all;
+-webkit-transform: rotateX(50deg) rotateY(30deg);
+-moz-transform: rotateX(50deg) rotateY(30deg);
+-ms-transform: rotateX(50deg) rotateY(30deg);
+-o-transform: rotateX(50deg) rotateY(30deg);
+transform: rotateX(50deg) rotateY(30deg);
+-webkit-transform-origin: right top 0;
+-moz-transform-origin: right top 0;
+-ms-transform-origin: right top 0;
+-o-transform-origin: right top 0;
+transform-origin: right top 0;
+}
+.slide.ng-hide-add.ng-hide-add-active {
+opacity:0;
+}
+.slide.ng-hide-remove {
+-webkit-transition:1s linear all;
+-moz-transition:1s linear all;
+-o-transition:1s linear all;
+transition:1s linear all;
+display:block!important;
+opacity:0;
+}
+.slide, .slide.ng-hide-remove.ng-hide-remove-active {
+opacity:1;
+}
+</style>
+
+
 
 <br> <br> <br>
 <div class="container">
@@ -15,7 +132,7 @@
     <div class="row">
 
         <div class="col-md-6">
-            <img class="img-responsive" src="http://placehold.it/750x500" alt="" width="400" height="400">
+            <img class="img-responsive" src="{{viewDetailed.businessOwner.images[0]}}" alt="" width="200" height="200">
         </div>
 
         <div class="col-md-6">
@@ -27,7 +144,9 @@
             </ul>
             <h3 style="color:#1a75ff" ng-show="viewDetailed.businessOwner.avgRating">Rating: <span style="color:white">{{viewDetailed.businessOwner.avgRating}}</span></h3>
             <br>
+            <a href="/public/client/review/view/{{viewDetailed.businessOwner._id}}" class="btn btn-large btn-primary"><i class="icon-home icon-white"></i>Reviews</a>
             <a href="/review/newReview/{{viewDetailed.businessOwner._id}}" class="btn btn-large btn-primary" ng-show="viewDetailed.client"><i class="icon-home icon-white"></i>Write a Review</a>
+            <br><br>
             <a href="/public/client/rate/{{viewDetailed.businessOwner._id}}" class="btn btn-large btn-primary" ng-show="viewDetailed.client"><i class="icon-home icon-white"></i>Rate</a>
         </div>
 
@@ -36,13 +155,29 @@
 
 <h2 ng-show="viewDetailed.businessOwner.images.length">Gallery</h2>
 
-<div class="containerIG">
-    <div id="carouselIG" ng-repeat="image in viewDetailed.BusinessOwner.images | limitTo:8" }>
-        <figure><img src={{image}} alt=""></figure>
+<!-- <div class="containerIG">
+    <div id="carouselIG" ng-repeat="image in viewDetailed.businessOwner.images | limitTo:8" style="width: 150px;height: 150px" }>
+        <figure><img src={{image}} ></figure>
     </div>
-</div>
+</div> -->
 
+<!-- slider container -->
+<div class="container slider">
+<!-- enumerate all photos -->
+<img style="border-radius: 10px"  width="770" height="470" ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo}}" />
+<!-- prev / next controls -->
+<a class="arrow prev" href="#" ng-click="showPrev()"></a>
+<a class="arrow next" href="#" ng-click="showNext()"></a>
+<!-- extra navigation controls -->
+<ul class="nav1">
+<li ng-repeat="photo in photos" ng-class="{'active':isActive($index)}">
+<img style="border-radius: 5px" width="50" height="21" src="{{photo}}" ng-click="showPhoto($index);" />
+</li>
+</ul>
+</div>
 
 <div class="alert alert-danger" ng-show="viewDetailed.errMsg">
     <span class="glyphicon glyphicon-remove"></span><strong> Error! {{viewDetailed.errMsg}}</strong>
 </div>
+<br><br><br><br>
+

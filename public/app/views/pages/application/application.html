@@ -4,7 +4,7 @@
 
 <div class = "container" ng-show = "currentApplication._id" ng-controller = "applicationCtrl as application">
 	<div class = "row">
-		<div>	
+		<div style="color: #ffffff">	
 			<h3>{{currentApplication.name}}</h3>
 			<hr>
 			<h3>{{currentApplication.username}}</h3>
@@ -29,6 +29,10 @@
 			</h3>
 			
 
+			<div ng-repeat = "error in errors" class="alert alert-danger fade in alert-dismissable" ng-show = "errors">
+			    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+			    <strong>{{error.message}}</strong>
+			</div>
 			<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
 			    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
 			    <strong>{{errMsg}}</strong>
