@@ -9,7 +9,10 @@ var paginate = require('express-paginate');
 //required models
 let Application = require('../models/Application');
 
-
+let NonRepeatableActivity = require('../models/NonRepeatableActivity');
+let RepeatableActivity = require("../models/RepeatableActivity");
+let NonRepeatableActivityReservation = require("../models/NonRepeatableActivityReservation");
+let RepeatableActivityReservation = require("../models/RepeatableActivityReservation");
 let Administrator = require('../models/Administrator');
 let BusinessOwner= require('../models/BusinessOwner');
 let User= require('../models/User');
@@ -34,52 +37,30 @@ let administratorController={
 		});
 	},
 
-	// Administrator removes business from the directory
-	removeBusiness: function(req,res){
-		BusinessOwner.find( {_id:req.params.businessId}, function(err,bus){ //edited conditions
 
+	removeBusiness2:function(req,res){
+		BusinessOwner.findOne( {_id:req.params.businessId},function(err,owner){
 			if(err){
 				res.json({success: false, message:err});
 				return;
-			}
-			if(!bus){
-				res.json({success: false, message:err});
+			}else{
+				if(owner){
+						owner.remove( function(err){
+							if(err)
+										return res.json({success: false, message:err});
+										else{
+											return res.json({success:true,message:"Everything deleted successfully"});
+										}
+						});
+			} else{
+				res.json({success:false,message:"User Does Not Exist"});
+				console.log("Does not exist");
 				return;
 			}
-			// remove activities of the deleted business owner
-			Activity.remove({BusinessOwner_id:req.params.businessId},function(err){
 
-				if(err){
-					res.json({success: false, message:err});
-					return;
-				}
-				// remove the business owner
-				BusinessOwner.remove({_id:req.params.businessId},function(err){
 
-					if(err){
-						res.json({success: false, message:err});
-						return;
-					}
-
-					//remove the user referenced by the deleted business owner
-					User.remove({_id:new mongoose.mongo.ObjectID(req.params.businessId)},function(err){
-
-						// console.log("Deleted user : "+user);
-						if(err){
-							res.json({success: false, message:err});
-							return;
-						}
-						console.log("Deleted user !!");
-						res.json({success:true, message:"Business deleted successfully"});
-					});
-
-				});
-
-			});
-
-		});
+		} } );
 	},
-
 	viewApplicationsIndex: function(req, res){
 
 		Application.find(function(err, applications){

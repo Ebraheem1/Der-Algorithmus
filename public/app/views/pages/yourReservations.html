@@ -1,10 +1,6 @@
-<br> <br>
-<br />
-<br />
+<br> <br><br /><br />
 <h1 style="color: white; position: fixed;left:40%;"><i><u><strong>Your Reservations</strong></u></i></h1>
-<br />
-<br />
-<br />
+<br /><br /><br />
 <div class="container" ng-show="success">
     <div class="row">
 
@@ -17,11 +13,9 @@
                 <div ng-if= "items.length>0" ng-repeat="x in items">
                   <br />
 
-                    <div ng-if = "x.nonRepeatableActivity_id">
+                    <div ng-if = "x.nonRepeatableActivity_id" ng-show="dateGreater(x.nonRepeatableActivity_id.travelingDate)">
 
-
-
-                    <li class="list-group-item"><strong>{{x.nonRepeatableActivity_id.type}}|| {{x.nonRepeatableActivity_id.destination}} ||
+                    <li class="list-group-item" ><strong> {{x.nonRepeatableActivity_id.businessOwner_id.name}} || {{x.nonRepeatableActivity_id.type}} || {{x.nonRepeatableActivity_id.destination}} ||
                        {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}} ||  {{x.price/100}}$</strong> <br />
                         <div class="pull-right">
                           <button class="btn btn-primary" style=" position: relative;
@@ -30,18 +24,20 @@
 
 
                     </li>
+                    <br / >
 
+                    <hr />
                               </div>
 
 
-                          <div ng-if ="x.repeatableActivity_id">
+                          <div ng-if ="x.repeatableActivity_id" ng-show="dateGreater(x.date)">
 
                             <div ng-repeat="z in x.repeatableActivity_id.slots">
 
                                 <div ng-if="z._id ==x.slot_id">
 
 
-                                    <li class="list-group-item"><strong>{{x.repeatableActivity_id.type}}  ||  {{x.date| limitTo : 10 : 0}}      ||      {{z.startTime}}
+                                    <li class="list-group-item"><strong>{{x.repeatableActivity_id.businessOwner_id.name}} || {{x.repeatableActivity_id.type}}  ||  {{x.date| limitTo : 10 : 0}}      ||      {{z.startTime}}
                                       || {{z.endTime}}  ||  {{x.price/100}}$</strong> <br />
                                 </div>
                             </div>
@@ -55,11 +51,11 @@
 
 
                             </li>
+                            <br / >
 
+                            <hr />
                                 </div>
-                                <br />
 
-                                <hr />
                 </div>
 
 

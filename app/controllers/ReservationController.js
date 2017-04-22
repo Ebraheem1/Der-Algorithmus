@@ -6,7 +6,7 @@ let stripe = require("stripe")("sk_test_Hr41ZUg64PJe2duUepC7ruyr");
 let ReservationController={
 
     reserveSlot:function(req,res){
-      
+
       if(req.params.type==0)
       return ReservationController.repeatableReserveSlot(req,res);
       else{
@@ -75,7 +75,7 @@ let ReservationController={
     nonRepeatableReserveSlot:function(req,res){
 
       var nonRepeatableActivity_id = req.params.activity_id;
-      var client_id = req.user._id ;// TODO : client._id;
+      var client_id = req.user._id ;
       var participants = req.body.participants;
       var price = req.body.price;
       if(Number(participants)<1){
@@ -244,13 +244,11 @@ var found = false ;
 
 
         var client_id = req.user._id;
-
-
-        NonRepeatableActivityReservation.find({client_id:client_id}).populate('nonRepeatableActivity_id').exec(function(err,reservations1){
+        NonRepeatableActivityReservation.find({client_id:client_id}).populate( {path: 'nonRepeatableActivity_id', populate: {path: 'businessOwner_id'} }).exec(function(err,reservations1){
               if(err){
               res.json({succes:false,message:err});
               }else{
-               RepeatableActivityReservation.find({client_id:client_id}).populate('repeatableActivity_id').exec(function(err,reservations2){
+               RepeatableActivityReservation.find({client_id:client_id}).populate( {path: 'repeatableActivity_id', populate: {path: 'businessOwner_id'} }).exec(function(err,reservations2){
                  if(err){
                    res.json({succes:false,message:err});
                  }else {

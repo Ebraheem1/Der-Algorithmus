@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+let NonRepeatableActivityReservation = require("../models/NonRepeatableActivityReservation");
 var Schema = mongoose.Schema;
 var Offer = new Schema({
 	offer : {type:String,required:true},
@@ -24,6 +25,14 @@ var NonRepeatableActivitySchema = new Schema({
 	cancellationWindow: Number ,//client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
     offer:{type:Offer,default:null}
 });
+NonRepeatableActivitySchema.pre('remove',function(next){
+	NonRepeatableActivityReservation.find({nonRepeatableActivity_id:this._id},function(err,reservations){
+		reservations.forEach(function(reservation){
+			reservation.remove();
+		});
+	});
 
+next();
+});
 
 module.exports = mongoose.model('NonRepeatableActivity', NonRepeatableActivitySchema);

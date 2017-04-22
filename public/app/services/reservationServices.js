@@ -7,10 +7,9 @@ angular.module('reservationServices', [])
 
         }
 
-        reservationFactory.ReserveNR = function(activity_id, price, reservationData, client_id) {
+        reservationFactory.ReserveNR = function(activity_id, price, reservationData) {
             var parameters = JSON.stringify({
                 activity_id: activity_id,
-                client_id: client_id,
                 participants: reservationData,
                 price: price
             });
@@ -18,12 +17,11 @@ angular.module('reservationServices', [])
         }
 
 
-        reservationFactory.ReserveR = function(activity_id, client_id, package_id, slot_id, date) {
+        reservationFactory.ReserveR = function(activity_id , package_id, slot_id, date) {
 
 
             var parameters = JSON.stringify({
                 activity_id: activity_id,
-                client_id: client_id,
                 package_id: package_id,
                 slot_id: slot_id,
                 date: date

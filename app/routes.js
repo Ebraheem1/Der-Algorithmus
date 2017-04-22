@@ -277,7 +277,7 @@ router.get('/viewRepeatableReservations/:activityId', passport.authenticate('bus
 
 
 router.get('/viewBusinesses',passport.authenticate('adminLogin', { session: false }),administratorController.viewBusinesses);//done--
-router.get('/removeBusiness/:businessId',passport.authenticate('adminLogin', { session: false }),administratorController.removeBusiness);//done--
+router.get('/removeBusiness/:businessId',passport.authenticate('adminLogin', { session: false }),administratorController.removeBusiness2);//done--
 
 router.post('/createAdmin',administratorController.createAdmin);//done--
 
@@ -287,6 +287,8 @@ router.post('/reserve/:type/:activity_id',passport.authenticate('clientLogin', {
 router.get('/reserve/activity/:activity_type/:activity_id',passport.authenticate('clientLogin', { session: false }),reservationController.getActivity);// type = 0 Repetable / 1 non Repeatable
 router.get('/getReservations/',passport.authenticate('clientLogin', { session: false }),reservationController.getAllReservations);
 router.get('/cancelReservation/:type/:reservation_id',passport.authenticate('clientLogin', { session: false }),reservationController.cancelReservation);
+
+
 
 
 //export router

@@ -23,11 +23,11 @@ let businessownerController={
 // this function for uploading pictures and videos to the gallery of the businessOwner
 
    /* addMedia:function(req,res){
-        
-            
+
+
             upload(req,res,function(err){
             if(err){
-              return res.json({ success: false, message: 'Error Uploading Files .' }); 
+              return res.json({ success: false, message: 'Error Uploading Files .' });
 
             }
             else if (checkUpload ==1)
@@ -36,14 +36,15 @@ let businessownerController={
                 return res.json({ success: true, message: 'Your gallery updated successfully' });
             }
             else{
-                
+
                 return res.json({ success: false, message: 'No Data Entered.' });
                 }
         });
-         }, 
+         },
    */
 
    addMedia:function(req,res){
+
     BusinessOwner.findById(req.user._id,function(err,businessowner){
                 if (err) 
                     res.json({success:false , message:'error'}) ; 
@@ -55,7 +56,7 @@ let businessownerController={
                         if(req.body.image.match(/\.(mp4|mov|avi|flv|wmv)$/)){
                      businessowner.videos.push(req.body.image);
                      businessowner.save();
-                     
+
                  }
                  else {
                      businessowner.images.push(req.body.image);
@@ -65,10 +66,10 @@ let businessownerController={
                         }
                         }
                         });
-                        },   
+                        },
 // this function for adding any offer (discount or bounse) by the businessOwner
     addOffer : function(req,res){
-    
+
         req.checkBody('offer', 'missingField').notEmpty();
         req.checkBody('discount', 'missingField').notEmpty();
         req.checkBody('exp_date', 'missingField').notEmpty();
@@ -85,7 +86,7 @@ let businessownerController={
             res.json({success:false , message:"missingField"});
             return ;
         }
-      
+
         if(x>y){
             res.json({success:false , message:"Invalid Date"});
             return ;
@@ -95,26 +96,26 @@ let businessownerController={
             res.json({success:false , message:"Invalid discount"});
             return ;
         }
-      
+
         if(req.file != undefined)
                 req.body.image=req.file.filename;
 
         var activityID = req.params.activityID;
         NonRepeatableActivity.findById(activityID,function(err,nonrepeatableactivity){
-            if (err) 
-                res.json({success:false , message:'Error occurred .. Try again'}) ; 
+            if (err)
+                res.json({success:false , message:'Error occurred .. Try again'}) ;
             else {
-             
+
                 if(!nonrepeatableactivity || nonrepeatableactivity.length==0){
 
                 RepeatableActivity.findById(activityID,function(err,repeatableactivity){
-            if (err) 
-                res.json({success:false , message:'Error occurred .. Try again'}) ; 
+            if (err)
+                res.json({success:false , message:'Error occurred .. Try again'}) ;
             else {
-             
+
                 if(!repeatableactivity || repeatableactivity.length==0){
-                 res.json({success:false , message:'No activity found'});   
-                    
+                 res.json({success:false , message:'No activity found'});
+
                                   }
                                   else{
                             
@@ -144,13 +145,13 @@ let businessownerController={
         var businessownerID=req.params.businessownerID;
         Review.find({business_id:businessownerID},function(err,reviews){
 
-        if (err) 
-            res.json({success:false , message : 'An Error occurred .. Try again later'}); 
+        if (err)
+            res.json({success:false , message : 'An Error occurred .. Try again later'});
 
         else {
                 if(!reviews || reviews.length == 0){
                     res.json({success:false , message:'No reviews found'});
-                    
+
                 }
                 else{
                 res.json({success:true , reviews:reviews});
@@ -167,18 +168,18 @@ let businessownerController={
         var reviewID=req.params.reviewID;
         Review.findById(reviewID,function(err,review){
 
-            if (err) res.json({success:false , message:'Error occurred ..try again'}) ; 
+            if (err) res.json({success:false , message:'Error occurred ..try again'}) ;
 
             else{
                 if(!review ){
                     res.json({success:false, message:'No review found'});
-                    
+
                 }
                 else{
                 
                 review.reply = reply;
 
-                review.save(); 
+                review.save();
                 res.json({success:true , message:'your reply has been posted successfully'});
             }}
 
@@ -222,7 +223,9 @@ let businessownerController={
               
     },
 
-    addActivity:function(req,res){
+addActivity:function(req,res){
+
+        console.log(req.body);       
 
         req.checkBody('data.type',' Type of Activity Required').notEmpty();
 
@@ -565,8 +568,8 @@ let businessownerController={
         businessownerController.getBusinessActivities(businessOwnerId,res);
 
     },
-
-   // business owner deletes a non-repeatable activity
+  
+    // business owner deletes a non-repeatable activity
     deleteNonRepeatableActivity: function(req,res){
 
         // should be replaced with req.user._id
@@ -691,7 +694,6 @@ let businessownerController={
         });
 
     },
-
     // business owner deletes a repeatable activity
     deleteRepeatableActivity: function(req,res){
 
@@ -718,8 +720,10 @@ let businessownerController={
 
                     if(reservationDate>=todayDate)
                     {
+
                         reserved=true;
                         break;                     
+
                     }
                 }
                 if(reserved)
@@ -799,6 +803,7 @@ let businessownerController={
                                 var index=typesArray.indexOf(deletedType);
                                 typesArray.splice(index, 1);
 
+
                                 businessOwner.types=typesArray;
                                 businessOwner.save(function(err,businessOwner){
                                     if(err){
@@ -849,21 +854,23 @@ let businessownerController={
                 for(var i=0;i<reservations.length;i++){
 
                     reservationsInfo.push({
+
                     participants: reservations[i].participants, 
                     price: (reservations[i].price/100)+' $',
+
                     firstName: reservations[i].client_id.firstName,
                     lastName: reservations[i].client_id.lastName,
                     email: reservations[i].client_id.user_id.email,
-                    phoneNumber: reservations[i].client_id.user_id.phoneNumber 
+                    phoneNumber: reservations[i].client_id.user_id.phoneNumber
 
-                    });                                   
+                    });
                 }
-                res.json({success:true, reservations:reservationsInfo})                
+                res.json({success:true, reservations:reservationsInfo})
             }
-            
+
         });
 
-    }, 
+    },
 
     viewRepeatableReservations: function(req,res){
 
@@ -894,8 +901,8 @@ let businessownerController={
                     var todayDate=new Date();
                     todayDate.setHours(0);
                     todayDate.setMinutes(0);
-                    todayDate.setSeconds(0); 
-                
+                    todayDate.setSeconds(0);
+
                     if(reservationDate>=todayDate){
 
                         upcomingReservation=true;
@@ -904,16 +911,18 @@ let businessownerController={
 
                         reservationsInfo.push({
                         reservedSlot: reservedSlot,
+
                         participants: reservations[i].participants, 
                         price: (reservations[i].price/100)+' $',
+
                         date: reservations[i].date,
                         firstName: reservations[i].client_id.firstName,
                         lastName: reservations[i].client_id.lastName,
                         email: reservations[i].client_id.user_id.email,
-                        phoneNumber: reservations[i].client_id.user_id.phoneNumber 
+                        phoneNumber: reservations[i].client_id.user_id.phoneNumber
 
                         });
-                    }                 
+                    }
 
                 }
 
@@ -926,12 +935,12 @@ let businessownerController={
                     res.json({success:false,message:'There are no upcoming reservations'});
 
                 }
-                
+
             }
 
         });
 
-    },    
+    },
 
 
  getBusinessInfo: function(req, res){
@@ -989,7 +998,7 @@ let businessownerController={
         var phoneNumber = req.body.phoneNumber;
         var name = req.body.name;
         var description = req.body.description;
-        
+
         var conditions = {_id: req.user._id};
 
         BusinessOwner.findOne(conditions, function(err, businessOwner){
@@ -1018,11 +1027,11 @@ let businessownerController={
                         }else{
 
                             User.findOne({_id: businessOwner.user_id}, function(err, user){
-                                
+
                                 if(err){
-                                
+
                                   res.json({success: false, message: err.message});
-                                
+
                                 }else{
 
                                     if(!user){
@@ -1077,25 +1086,25 @@ let businessownerController={
 
                                         }
 
-                                    
+
                                         User.update({_id: businessOwner.user_id}, {$set: {email: email, phoneNumber: phoneNumber}} ,function(err, userx){
 
                                             if(err){
-                                        
+
                                                 res.json({success: false, message: err.message});
-                                    
+
                                             }else{
-                                                
+
                                                 res.json({success: true, message: 'info updated!'})
-                                                
+
                                             }
-                                    
-                                        });                    
+
+                                        });
 
                                     }
 
                                 }
-                            
+
                             });
 
                         }
@@ -1119,7 +1128,7 @@ let businessownerController={
         var errors = req.validationErrors();
 
         if(!errors){
-            
+
             var conditions = { _id: req.user._id };
 
             BusinessOwner.findOne(conditions, function(err, businessOwner){
@@ -1146,23 +1155,23 @@ let businessownerController={
 
                         }
 
-                        if(!exists){                            
+                        if(!exists){
 
                             businessOwner.locations.push(req.body.location);
-    
+
                             businessOwner.save(function(err){
-    
+
                                 if(err){
-    
+
                                     res.json({success:false, message: err.message});
-    
+
                                 }else{
-    
+
                                     res.json({success:true, message: 'location added!'});
-    
+
                                 }
-    
-                            }); 
+
+                            });
 
                         }else{
 
@@ -1170,8 +1179,8 @@ let businessownerController={
 
                         }
 
-                    }    
-                
+                    }
+
                 }
 
             });
@@ -1187,7 +1196,7 @@ let businessownerController={
     //the business owner adds a location to his set of locations
 
     removeLocation: function (req, res){
-        
+
         var conditions = { _id: req.user._id };
 
         BusinessOwner.findOne(conditions, function(err, businessOwner){
@@ -1199,11 +1208,11 @@ let businessownerController={
             }else{
 
                 if(businessOwner){
-                
+
                     if(businessOwner.locations.length>1){
 
                         var i = businessOwner.locations.indexOf(req.body.location);
-                        
+
                         if(i == -1){
 
                             res.json({success: false, message: 'location not found!'});
@@ -1377,6 +1386,7 @@ getOwner:function(username,password,callback)
                 }
             });
     }
+
 };
 
 
