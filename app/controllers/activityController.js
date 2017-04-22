@@ -224,7 +224,7 @@ let activityController={
 								}
 								else{
 							        if(endTime <= startTime){
-							            res.json({ success: false, message: 'End Time must be greater than Start Time!'});
+							            res.json({ success: false, message: 'End Time should be greater than Start Time!'});
 							           return;
 							        }
 									repeatableActivity.slots.push({ startTime: startTimeString,  endTime: endTimeString });
@@ -422,6 +422,7 @@ let activityController={
 		//RepeatableActivity attributes
 		var theme = req.body.theme;
 		var dayOffsNames = req.body.dayOffsNames;
+		var None = req.body.None;
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='';
 		if(missingFields){
@@ -511,31 +512,40 @@ let activityController={
 												repeatableActivity.cancellationWindow = (cancellationWindow==null||cancellationWindow=='')? repeatableActivity.cancellationWindow : cancellationWindow;
 												repeatableActivity.theme = (theme==null||theme=='')? repeatableActivity.theme : theme;
 												repeatableActivity.dayOffsNames = (dayOffsNames==null||dayOffsNames=='')? repeatableActivity.dayOffsNames : dayOffsNames;
+
+
+												if(None==true){
+													repeatableActivity.dayOffsNames = [];
+												}
+
+
 												if(dayOffsNames!=null&&dayOffsNames!=''){
-
 													repeatableActivity.dayOffs = [];
+													if(None!=true){
+														if(dayOffsNames.indexOf("Sunday")!=-1){
+															repeatableActivity.dayOffs.push(0);
+														}
+														if(dayOffsNames.indexOf("Monday")!=-1){
+															repeatableActivity.dayOffs.push(1);
+														}
+														if(dayOffsNames.indexOf("Tuesday")!=-1){
+															repeatableActivity.dayOffs.push(2);
+														}
+														if(dayOffsNames.indexOf("Wednesday")!=-1){
+															repeatableActivity.dayOffs.push(3);
+														}
+														if(dayOffsNames.indexOf("Thursday")!=-1){
+															repeatableActivity.dayOffs.push(4);
+														}
+														if(dayOffsNames.indexOf("Friday")!=-1){
+															repeatableActivity.dayOffs.push(5);
+														}
+														if(dayOffsNames.indexOf("Saturday")!=-1){
+															repeatableActivity.dayOffs.push(6);
+														}
+													}
 
-													if(dayOffsNames.indexOf("Sunday")!=-1){
-														repeatableActivity.dayOffs.push(0);
-													}
-													if(dayOffsNames.indexOf("Monday")!=-1){
-														repeatableActivity.dayOffs.push(1);
-													}
-													if(dayOffsNames.indexOf("Tuesday")!=-1){
-														repeatableActivity.dayOffs.push(2);
-													}
-													if(dayOffsNames.indexOf("Wednesday")!=-1){
-														repeatableActivity.dayOffs.push(3);
-													}
-													if(dayOffsNames.indexOf("Thursday")!=-1){
-														repeatableActivity.dayOffs.push(4);
-													}
-													if(dayOffsNames.indexOf("Friday")!=-1){
-														repeatableActivity.dayOffs.push(5);
-													}
-													if(dayOffsNames.indexOf("Saturday")!=-1){
-														repeatableActivity.dayOffs.push(6);
-													}
+
 												}
 
 												repeatableActivity.save(function(err) {
