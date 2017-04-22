@@ -86,14 +86,14 @@
       <div class="panel-heading">
           <strong>Days Off</strong>
       </div>
-      <table class="table">
+      <table class="table" ng-show="!activity.activityData.None">
           <tr ng-repeat="day in activity.activityData.dayOffsNames">
               <td class="custom1"> <h5 class="custom1"> {{day}} </h5> </td>
           </tr>
       </table>
     </div>
 
-    <div class="form-group custom">
+    <div class="form-group custom" ng-show="!activity.activityData.None">
       <label> Edit Days Off</label>
       <select multiple class="form-control" ng-model="activity.activityData.dayOffsNames">
         <option>Sunday</option>
@@ -105,8 +105,7 @@
         <option>Saturday</option>
       </select>
     </div>
-
-    <br>
+    <input type="checkbox" ng-model="activity.activityData.None"><label class="custom"> None </label> <br>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
 
@@ -187,7 +186,7 @@
       <table class="table">
           <tr>
             <th>Participants</th>
-            <th>Price($)</th>
+            <th>Price</th>
             <th>Delete Package</th>
           </tr>
           <tr ng-repeat="package in activity.activityData.pricePackages">
@@ -203,7 +202,7 @@
           <div class="input-group">
               <span class="input-group-addon">Participants</span>
               <input type="Number" min="0" class="form-control" ng-model="participants">
-              <span class="input-group-addon">Price($)</span>
+              <span class="input-group-addon">Price</span>
               <input type="Number" min="0" class="form-control" ng-model="price">
           </div>
             
