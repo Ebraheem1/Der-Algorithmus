@@ -227,6 +227,19 @@ let activityController={
 							            res.json({ success: false, message: 'End Time should be greater than Start Time!'});
 							           return;
 							        }
+									var start1 = startTimeString;
+									var end1 = endTimeString;
+
+									for(var i=0; i<repeatableActivity.slots.length;i++){
+
+									    var start2 = repeatableActivity.slots[i].startTime;
+									    var end2 = repeatableActivity.slots[i].endTime;
+
+									    if( (start1>=start2 && start1<end2) || (end1>start2 && end1<=end2) ){
+									        res.json({ success: false, message: 'There must be no overlapping slots!'});
+									        return; 
+									    }
+									}
 									repeatableActivity.slots.push({ startTime: startTimeString,  endTime: endTimeString });
 									repeatableActivity.save(function(err) {
 						                if (err) {
