@@ -13,7 +13,7 @@ var UserSchema = new Schema({
 
 
 
-UserSchema.pre('save', function(next) {// before saving The User this schema will be executed
+UserSchema.pre('save', function(next) { // before saving The User this schema will be executed
   var user = this ;
 	bcrypt.genSalt(10, function(err, salt) {
 	bcrypt.hash(user.password, salt, function(err, hash) {

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+let RepeatableActivityReservation = require("../models/RepeatableActivityReservation");
 var PricePackage= new Schema({
 
 	participants: {type: Number, required:true},
@@ -36,6 +36,14 @@ var RepeatableActivitySchema = new Schema({
     dayOffsNames : [String],
 	cancellationWindow: Number //client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
 });
+RepeatableActivitySchema.pre('remove',function(next){
+		RepeatableActivityReservation.find({repeatableActivity_id:this._id},function(err,reservations){
+			reservations.forEach(function(reservation){
+				reservation.remove();
+			});
+		});
 
+next();
+});
 
 module.exports = mongoose.model('RepeatableActivity', RepeatableActivitySchema);

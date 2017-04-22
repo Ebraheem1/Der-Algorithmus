@@ -1,9 +1,9 @@
 <br> <br>
-<h1 style="color: white; position: relative;left:75px;">{{Activity.type}} Reservation </h1>
-<h4 style="color: white;position: relative;left:75px;"> {{Activity.description}}  </h4>
+<h1 style="color: white; position: relative;left:75px;" ng-show="load">{{Activity.type}} Reservation </h1>
+<h4 style="color: white;position: relative;left:75px;" ng-show = "load"> {{Activity.description}}  </h4>
 
 <br><br><br>
-<div id="test" class="container">
+<div id="test" class="container" ng-show="load">
     <div class="row">
         <form stripe-form="stripeCallBack" role="form" ng-submit="resCtrl.ReserveR(res)">
 
@@ -57,12 +57,13 @@
 
                 <div ng-repeat="x in Activity.pricePackages" style="">
 
-                    <h3 style="color: white" ng-model="res.price2" ng-if="res.selectedPackage ==x._id"> Amount :{{x.price}} $</h3>
+                    <h3 style="color: white" ng-model="res.price2" ng-if="res.selectedPackage ==x._id" > Amount :{{x.price - x.price*discount}} $</h3>
+
                 </div>
                 <input type="submit" name="submit" id="submitt" value="Reserve" class="btn btn-info pull-right">
 
                       <h5 style="color: white"ng-show="Activity.cancellationWindow">Note: No refunds are available {{Activity.cancellationWindow}} days before the reservation </h5>
-
+                      <h5 style="color: white" ng-show="Activity.cancellationWindow" ng-if="discount && discount >0">There is currently an offer on this activity , {{discount*100}}% off</h5>
             </div>
         </form>
 
@@ -95,7 +96,9 @@
         </div>
     </div>
 </div>
-
+<div class="alert alert-danger" ng-show="!load">
+    <span class="glyphicon glyphicon-remove"></span><strong>This Activity has been deleted or does not exist</strong>
+</div>
 <script>
   webshims.setOptions('waitReady', false);
   webshims.setOptions('forms-ext', {types: 'date'});

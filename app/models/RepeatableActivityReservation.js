@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+let stripe = require("stripe")("sk_test_Hr41ZUg64PJe2duUepC7ruyr");
 var RepeatableActivityReservationSchema = new Schema({
 
 	repeatableActivity_id: {type: mongoose.Schema.Types.ObjectId, ref: 'RepeatableActivity', required: true},
@@ -12,5 +12,14 @@ var RepeatableActivityReservationSchema = new Schema({
 	charge_key:{type:String,required:true}
 });
 
+RepeatableActivityReservationSchema.pre('remove',function(next){
+	stripe.refunds.create( {
+						charge : this.charge_key
+					},function(err,refund){
+						if(err)
+						res.json({succes:false,message:err});
+
+					});
+});
 
 module.exports = mongoose.model('RepeatableActivityReservation', RepeatableActivityReservationSchema);
