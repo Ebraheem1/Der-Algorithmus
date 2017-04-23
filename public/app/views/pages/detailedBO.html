@@ -59,7 +59,7 @@ border: 5px solid orange;
 width: 100%;
 }
 .slider {
-border: 15px solid #FFFFFF;
+border: 5px solid #FFFFFF;
 border-radius: 20px;
 height: 500px;
 margin: 20px auto;
@@ -155,16 +155,11 @@ opacity:1;
 
 <h2 ng-show="viewDetailed.businessOwner.images.length">Gallery</h2>
 
-<!-- <div class="containerIG">
-    <div id="carouselIG" ng-repeat="image in viewDetailed.businessOwner.images | limitTo:8" style="width: 150px;height: 150px" }>
-        <figure><img src={{image}} ></figure>
-    </div>
-</div> -->
 
 <!-- slider container -->
-<div class="container slider">
+<div class="container slider" ng-show="viewDetailed.businessOwner.images.length">
 <!-- enumerate all photos -->
-<img style="border-radius: 10px"  width="770" height="470" ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo}}" />
+<img style="border-radius: 10px; position: absolute;right: 0;left: 0;margin: 0 auto;max-width: 790px;" height="490" ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo}}" />
 <!-- prev / next controls -->
 <a class="arrow prev" href="#" ng-click="showPrev()"></a>
 <a class="arrow next" href="#" ng-click="showNext()"></a>

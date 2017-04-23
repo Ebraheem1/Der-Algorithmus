@@ -20,6 +20,7 @@ RepeatableActivityReservationSchema.pre('remove',function(next){
 						res.json({succes:false,message:err});
 
 					});
+	next();
 });
 
 module.exports = mongoose.model('RepeatableActivityReservation', RepeatableActivityReservationSchema);

@@ -73,7 +73,8 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 				app.successMsg=data.data.message;
 				app.sucessMsg=false;
 				AuthenticationToken.setUsername(app.Edata.username);
-					$location.path('/updateInfo');
+				$location.path('/updateInfo');
+				location.reload();
 
 			}else {
 				app.errMsg=data.data.message;
@@ -144,28 +145,27 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	Client.viewDetailed(app.id).then(function(data){
 		if(data.data.success){
 			app.businessOwner=data.data.businessOwner;
-			console.log(app.businessOwner.images);
 
 
-		$scope.photos = app.businessOwner.images;
-		// initial image index
-		$scope._Index = 0;
-		// if a current image is the same as requested image
-		$scope.isActive = function (index) {
-		return $scope._Index === index;
-		};
-		// show prev image
-		$scope.showPrev = function () {
-		$scope._Index = ($scope._Index > 0) ? --$scope._Index : $scope.photos.length - 1;
-		};
-		// show next image
-		$scope.showNext = function () {
-		$scope._Index = ($scope._Index < $scope.photos.length - 1) ? ++$scope._Index : 0;
-		};
-		// show a certain image
-		$scope.showPhoto = function (index) {
-		$scope._Index = index;
-		};
+			$scope.photos = app.businessOwner.images;
+			// initial image index
+			$scope._Index = 0;
+			// if a current image is the same as requested image
+			$scope.isActive = function (index) {
+			return $scope._Index === index;
+			};
+			// show prev image
+			$scope.showPrev = function () {
+			$scope._Index = ($scope._Index > 0) ? --$scope._Index : $scope.photos.length - 1;
+			};
+			// show next image
+			$scope.showNext = function () {
+			$scope._Index = ($scope._Index < $scope.photos.length - 1) ? ++$scope._Index : 0;
+			};
+			// show a certain image
+			$scope.showPhoto = function (index) {
+			$scope._Index = index;
+			};
 
 
 
@@ -175,6 +175,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 
 			if(data.data.activities)
 			{
+
 				app.activities=data.data.activities;
 
 			}else{
@@ -190,30 +191,29 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			Authentication.handleError();
 			}
 		});
+
+	$scope.checkDate=function(activity){
+		if(activity.type=="Trip"||activity.type=="Safari"){
+		var date=new Date();
+		date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+		var Adate=new Date(activity.travelingDate);
+		Adate.setHours(0);
+        Adate.setMinutes(0);
+        Adate.setSeconds(0);
+        Adate.setMilliseconds(0);
+
+
+		return Adate>date;
+	}
+	return true;
+
+	}
 	
 })
-.controller('ViewBOhomepageCtrl',function($http,Client,AuthenticationToken){
-	var app=this;
-	app.id=AuthenticationToken.getId();
 
-	Client.viewDetailed(app.id).then(function(data){
-		if(data.data.success){
-			app.businessOwner=data.data.businessOwner;
-			app.activities=data.data.activities;
-			app.reviews=data.data.reviews;
-		}
-		else {
-			app.errMsg=data.data.message;
-		}
-	},function(err)
-		{
-			if(err.data){
-			Authentication.handleError();
-			}
-		});
-
-
-})
 .controller('viewActivityCtrl',function($http,AuthenticationToken,Client,$routeParams,Authentication){
 	var app=this;
 	app.activityID=$routeParams.id;

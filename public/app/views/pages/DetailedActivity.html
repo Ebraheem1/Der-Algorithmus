@@ -1,5 +1,5 @@
 <div ng-hide="viewActivity.errMsg">
-  <img src="" alt="" style="width:100%;">
+  <img src={{viewActivity.activity.image}} style="width:100%;">
 <div class="row text-center" ng-show="viewActivity.type">
         <div class="col-lg-4">
           <h2>Description</h2>
@@ -20,22 +20,26 @@
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
           <h2>Dates</h2>
-          <p><strong>Traveling Date:</strong> {{viewActivity.activity.travelingDate}}</p>
-          <p><strong>Return Date:</strong> {{viewActivity.activity.returnDate}}</p>
+          <p><strong>Traveling Date:</strong> {{viewActivity.activity.travelingDate | limitTo : 10 : 0 }}</p>
+          <p><strong>Return Date:</strong> {{viewActivity.activity.returnDate | limitTo : 10 : 0 }}</p>
         </div><!-- /.col-lg-4 -->
       </div>
 
       <hr class="featurette-divider">
       <!-- Offer-->
-      <div class="row featurette">
+      <div class="row featurette" ng-show="viewActivity.offer">
         <div class="col-md-7">
           <h2 class="featurette-heading">Offers</h2>
-          <p class="lead">{{viewActivity.offer.offer}}</p>
+          <p class="lead"><strong>Description: </strong>{{viewActivity.offer.offer}}</p>
+          <p class="lead"><strong>Discount: </strong>{{viewActivity.offer.discount}} %</p>
+          <p class="lead"><strong>Expiry Date: </strong>{{viewActivity.offer.exp_date | limitTo : 10 : 0}}</p>
+
         </div>
         <div class="col-md-5">
-          <img class="featurette-image img-fluid mx-auto" alt="500x500" src="{{viewActivity.offer.image}}" data-holder-rendered="true" style="width: 500px; height: 500px;">
+        <img style="border-radius: 10px; position: absolute;right: 0;left: 0;margin: 0 auto; max-width: 200px;" class="featurette-image img-fluid mx-auto" src="{{viewActivity.offer.image}}" height="200" data-holder-rendered="true"/>
         </div>
       </div>
+      
 
 </div>
 <!--error-->

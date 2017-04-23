@@ -9,8 +9,6 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 	var app = this;
 
 	app.dataReady = false;
-	//AuthenticationToken.setToken();
-	//AuthenticationToken.setType();
 	app.isClient = Authentication.isClient();
 	app.isBusinessOwner = Authentication.isBusinessOwner();
 	app.isAdmin = Authentication.isAdmin();
@@ -98,7 +96,7 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 	//This function only redirects the user to the page that handles
 	//forget password issue.
 	app.forgetPassword = function(){
-		$location.path('/');
+		$location.path('/login/forgotPassword');
 	}
 
 

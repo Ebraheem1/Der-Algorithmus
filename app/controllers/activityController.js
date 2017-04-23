@@ -55,6 +55,16 @@ let activityController={
 			return;
 		}
 
+		if(participants!=null && participants!='' && participants<1){
+			res.json({success:false, message: 'Participants should be greater than or equal to 1!'});
+			return;
+		}
+
+		if(price!=null && price!='' && price<1){
+			res.json({success:false, message: 'Price should be greater than or equal to 1!'});
+			return;
+		}
+
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
 			if(err){
 				res.json({success:false, message: err});
@@ -437,6 +447,9 @@ let activityController={
 		var dayOffsNames = req.body.dayOffsNames;
 		var None = req.body.None;
 
+		req.checkBody('cancellationWindow', '').notEmpty();
+        var cancellationWindowEmpty = req.validationErrors();
+
 		var missingFields = businessOwner_id==null || businessOwner_id=='';
 		if(missingFields){
 			//The field: (businessOwner_id) is required!
@@ -456,6 +469,21 @@ let activityController={
 
 		if(pricePerPerson!=null && pricePerPerson!='' && isNaN(pricePerPerson)){
 			res.json({success:false, message: 'Price Per Person should be a number!'});
+			return;
+		}
+
+		if(cancellationWindow!=null && cancellationWindow!='' && cancellationWindow<0){
+			res.json({success:false, message: 'Cancellation Window should be greater than or equal to 0!'});
+			return;
+		}
+
+		if(maxParticipants!=null && maxParticipants!='' && maxParticipants<1){
+			res.json({success:false, message: 'Max Participants should be greater than or equal to 1!'});
+			return;
+		}
+
+		if(pricePerPerson!=null && pricePerPerson!='' && pricePerPerson<1){
+			res.json({success:false, message: 'Price Per Person should be greater than or equal to 1!'});
 			return;
 		}
 
@@ -481,6 +509,13 @@ let activityController={
 			var returnDateObject = new Date(returnDate);
 			if(returnDateObject<dateNow){
 				res.json({success:false, message: 'Return Date should be today or later!'});
+				return;
+			}
+		}
+
+		if(travelingDate!=null && travelingDate!='' && returnDate!=null && returnDate!=''){
+			if(returnDate<travelingDate){
+				res.json({success:false, message: 'Return Date should be greater than Traveling Date!'});
 				return;
 			}
 		}
@@ -522,7 +557,7 @@ let activityController={
 											}
 											else{
 												repeatableActivity.description = (description==null||description=='')? repeatableActivity.description : description;
-												repeatableActivity.cancellationWindow = (cancellationWindow==null||cancellationWindow=='')? repeatableActivity.cancellationWindow : cancellationWindow;
+												repeatableActivity.cancellationWindow = (cancellationWindowEmpty)? repeatableActivity.cancellationWindow : cancellationWindow;
 												repeatableActivity.theme = (theme==null||theme=='')? repeatableActivity.theme : theme;
 												repeatableActivity.dayOffsNames = (dayOffsNames==null||dayOffsNames=='')? repeatableActivity.dayOffsNames : dayOffsNames;
 
@@ -587,7 +622,7 @@ let activityController={
 							return;
 						}
 						nonRepeatableActivity.description = (description==null||description=='')? nonRepeatableActivity.description : description;
-						nonRepeatableActivity.cancellationWindow = (cancellationWindow==null||cancellationWindow=='')? nonRepeatableActivity.cancellationWindow : cancellationWindow;
+						nonRepeatableActivity.cancellationWindow = (cancellationWindowEmpty)? nonRepeatableActivity.cancellationWindow : cancellationWindow;
 						nonRepeatableActivity.travelingDate = (travelingDate==null||travelingDate=='')? nonRepeatableActivity.travelingDate : travelingDate;
 						nonRepeatableActivity.returnDate = (returnDate==null||returnDate=='')? nonRepeatableActivity.returnDate : returnDate;
 						nonRepeatableActivity.destination = (destination==null||destination=='')? nonRepeatableActivity.destination : destination;

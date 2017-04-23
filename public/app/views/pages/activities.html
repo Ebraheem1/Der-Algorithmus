@@ -1,14 +1,21 @@
+<br><br><br>
 <div ng-hide="viewDetailed.errAMsg && viewDetailed.errMsg" ng-repeat="activity in viewDetailed.activities">
-<figure class="snip1336">
+<figure class="snip1336" ng-show="checkDate(activity)">
     <img src={{activity.image}} alt="sample87" />
     <figcaption>
         <h2>{{activity.type}}</h2>
         <p><strong>Description: </strong>{{activity.description}}</p>
         <a href="/viewDetailedActivity/{{activity._id}}" class="follow">view Details</a>
+        <a href="/reserve/0/{{activity._id}}"  class="info" ng-show="viewDetailed.client && activity.theme"><i class="icon-home icon-white"></i> Reserve</a>
+		<a href="/reserve/1/{{activity._id}}" class="info" ng-if="viewDetailed.client && !activity.theme"><i class="icon-home icon-white"></i> Reserve</a>
     </figcaption>
 </figure>
+
 </div>
-<br><br>
+
+
+
+<br><br><br>
 <div class="alert alert-danger" ng-show="viewDetailed.errAMsg">
     <span class="glyphicon glyphicon-remove"></span><strong> Error! {{viewDetailed.errAMsg}}</strong>
 </div>

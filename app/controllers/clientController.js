@@ -25,7 +25,9 @@ getActivity:function(req,res){
         if(err){
           res.json({success:false,message:err});
         }
-        else if(!nactivity | nactivity.travelingDate<=date){
+        else {
+          var newDate=new Date(nactivity.travelingDate);
+          if(!nactivity | newDate<date){
           res.json({success:false,message:'404 Not found'});
 
         }
@@ -34,6 +36,9 @@ getActivity:function(req,res){
           res.json({success:true,activity:nactivity,type:'N'});
 
         }
+      }
+
+        
       });
     }
     else {
@@ -51,7 +56,7 @@ viewSummaries:function(req,res){
   }else {
 
     if(businessOwners.length==0){
-      res.json({success:false,message:'there exist no venues'});
+      res.json({success:false,message:'There exists no venues!'});
     }else{
       res.json({success:true,message:'Loading',BusinessOwners:businessOwners});
     }
@@ -75,7 +80,7 @@ updateInfo:function(req,res){
   var firstName=req.body.firstName;
   var lastName=req.body.lastName;
   var gender=req.body.gender;
-  User.findOne({username:req.body.username},function(err,user){
+  User.findOne({_id:req.user.user_id},function(err,user){
     if(err){
       res.json({success:false,message:err});
     }
@@ -129,19 +134,16 @@ updateInfo:function(req,res){
           res.json({success:false,message:'404 Not Found'});
         }else{
         NRActivity.find({businessOwner_id: req.params.id}, function(err, NRactivities){
-          console.log(req.params.id);
           if(err){
 
             res.json({success:false,message:err});
 
           }else{
-            console.log(NRactivities);
               RActivity.find({businessOwner_id:req.params.id},function(err,Ractivities){
               if(err){
                 res.json({success:false,message:err});
               }
               else {
-                console.log(Ractivities);
                 var activities=NRactivities.concat(Ractivities);
                 if(activities.length==0){
                   res.json({success:true,businessOwner:BusinessOwner,message:'No activities'});
@@ -279,8 +281,6 @@ updateInfo:function(req,res){
                         }
 
                         var average = sum / ratings.length;
-
-                        console.log("new average is " + business.ratings);
 
                         BusinessOwner.update(condition, {
                             avgRating: average

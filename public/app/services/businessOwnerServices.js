@@ -40,21 +40,18 @@ angular.module('businessOwnerServices', [])
 
 	businessOwnerFactory.updateInfo = function(id, info){
 	
-		console.log(info);
 		return $http.post('/api/business/update-info', info);
 	
 	};
 
 	businessOwnerFactory.addLocation = function(id, location){
 	
-		console.log(location);
 		return $http.post('/api/business/locations/add', location);
 	
 	};
 
 	businessOwnerFactory.removeLocation = function(id, location){
 	
-		console.log(location);
 		return $http.post('/api/business/locations/remove', location);
 	
 	};

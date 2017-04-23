@@ -185,7 +185,8 @@ angular.module('appRoutes', ['ngRoute'])
 	  .when('/offers/:activityId',{
 		templateUrl:'app/views/pages/offer.html',
 		controller: 'businessCtrl',
-		controllerAs : 'business'
+		controllerAs : 'business',
+		businessAuthenticated:true
 	})
 
   

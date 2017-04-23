@@ -64,7 +64,6 @@
 		        
 		        if(response.data.success){
 
-		          //$window.location.href = '/application/applications';
 		          $route.reload();
 		          controller.info = {};
 		                  

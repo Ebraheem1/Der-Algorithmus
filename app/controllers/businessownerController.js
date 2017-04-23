@@ -20,29 +20,6 @@ let RepeatableActivityReservation= require('../models/RepeatableActivityReservat
 
 let businessownerController={
 
-// this function for uploading pictures and videos to the gallery of the businessOwner
-
-   /* addMedia:function(req,res){
-
-
-            upload(req,res,function(err){
-            if(err){
-              return res.json({ success: false, message: 'Error Uploading Files .' });
-
-            }
-            else if (checkUpload ==1)
-            {
-                checkUpload = 0;
-                return res.json({ success: true, message: 'Your gallery updated successfully' });
-            }
-            else{
-
-                return res.json({ success: false, message: 'No Data Entered.' });
-                }
-        });
-         },
-   */
-
    addMedia:function(req,res){
 
     BusinessOwner.findById(req.user._id,function(err,businessowner){
@@ -225,8 +202,6 @@ let businessownerController={
 
 addActivity:function(req,res){
 
-        console.log(req.body);       
-
         req.checkBody('data.type',' Type of Activity Required').notEmpty();
 
         var errors=req.validationErrors();
@@ -316,9 +291,9 @@ addActivity:function(req,res){
                 todayDate.setSeconds(0);
                 todayDate.setMilliseconds(0);
 
-                if(travelingDate<todayDate){
+                if(travelingDate<=todayDate){
 
-                    res.json({success:false, message: 'Traveling Date must be greater than or equal the Current Date'});
+                    res.json({success:false, message: 'Traveling Date must be greater than the Current Date'});
                     return;
 
                 }
@@ -856,7 +831,7 @@ addActivity:function(req,res){
                     reservationsInfo.push({
 
                     participants: reservations[i].participants, 
-                    price: (reservations[i].price/100)+' $',
+                    price: (reservations[i].price/100)+' £',
 
                     firstName: reservations[i].client_id.firstName,
                     lastName: reservations[i].client_id.lastName,
@@ -913,7 +888,7 @@ addActivity:function(req,res){
                         reservedSlot: reservedSlot,
 
                         participants: reservations[i].participants, 
-                        price: (reservations[i].price/100)+' $',
+                        price: (reservations[i].price/100)+' £',
 
                         date: reservations[i].date,
                         firstName: reservations[i].client_id.firstName,

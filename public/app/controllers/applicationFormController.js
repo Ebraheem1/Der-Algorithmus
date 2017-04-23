@@ -41,7 +41,6 @@ var app = angular.module('applicationFormController', ['applicationServices']);
 
       Application.createApplication(controller.application).then(function(response){        
 
-        console.log(response);
         if(response.data.success){
 
           
@@ -53,7 +52,6 @@ var app = angular.module('applicationFormController', ['applicationServices']);
           
           $scope.errMsg = response.data.message;
           $scope.errors = response.data.errors;
-          console.log($scope.errors);
         
         }
     

@@ -45,7 +45,6 @@ app.controller('applicationsCtrl', function(Application, AuthenticationToken, Pa
 
 		}else{
 
-			console.log(applications.data.message);
 
 		}	
 	

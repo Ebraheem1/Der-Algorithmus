@@ -54,7 +54,6 @@ let administratorController={
 						});
 			} else{
 				res.json({success:false,message:"User Does Not Exist"});
-				console.log("Does not exist");
 				return;
 			}
 

@@ -4,23 +4,6 @@ angular.module('businessOwnerController', ['businessOwnerServices','authServices
 
 	var app = this;
 	
-	
-	/*app.addMedia = function(uploadedData){
-		
-		app.errMsg = false;
-		app.successMsg = false ;
-		console.log(app.uploadedData);
-		BusinessOwner.uploadMedia({fileToUpload :app.uploadedData}).then(function(data){
-			if(data.data.success){
-				$scope.successMsg = data.data.message;
-				app.uploadedData= {};
-				}
-			else{
-
-				$scope.errMsg = data.data.message;
-			}
-		});
-	};*/
 	$scope.file = {};
 	$scope.successMsg = false ;
     $scope.errMsg = false ;
@@ -31,7 +14,6 @@ angular.module('businessOwnerController', ['businessOwnerServices','authServices
 
 		fileUpload.upload($scope.file).then(function(data) {
         if (data.data.success) {
-            //$scope.file = {};
             var imageData = {};
             imageData.image = 'gallery/'+data.data.name;
             
@@ -82,6 +64,7 @@ angular.module('businessOwnerController', ['businessOwnerServices','authServices
                 	$scope.errMsg = false ;
 					$scope.successMsg = data.data.message;
 					$scope.uploading = false;
+					$scope.successMsg=false;
 					
 				}
 				else{

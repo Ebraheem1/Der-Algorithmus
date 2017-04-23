@@ -29,8 +29,6 @@
 
 		this.addLocation = function(){
 
-			console.log(controller.location);
-
 			BusinessOwner.addLocation($routeParams.id, {location: controller.location}).then(function(response){        
 		        
 		        if(response.data.success){
@@ -57,8 +55,6 @@
       	};
 
       	this.removeLocation = function(location){
-
-			console.log(location);
 
 			BusinessOwner.removeLocation($routeParams.id, {location: location}).then(function(response){        
 		        

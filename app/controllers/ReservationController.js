@@ -23,7 +23,9 @@ let ReservationController={
       var date = req.body.date;
       var repeatableActivity_id = req.params.activity_id;
       var price ;
-
+      var newDate = new Date(date);
+     
+      newDate.setDate(newDate.getDate()+1);
 
       var missingFields = client_id==null ||client_id=='' ||
        slot_id==null || slot_id==''||
@@ -32,6 +34,13 @@ let ReservationController={
       if(missingFields){
         res.json({success:false,status:-1,message:"Please insert all missing fields"});
       }else{
+        var today = new Date();
+          if(date<today){
+            res.json({success:false,message:"You can only reserve a date which is greater than or equal to today"});
+          return ;
+        }
+
+
          RepeatableActivityReservation.findOne({slot_id:slot_id,repeatableActivity_id:repeatableActivity_id,date:date},function(err,activity){
           if(err)
           res.json({success:false,status:0,message:err});
@@ -44,17 +53,16 @@ let ReservationController={
               RepeatableActivity.findOne({_id:repeatableActivity_id},function(err,activity){
                 if(activity)
                 {
-
+                // date.setDate(date.getDate()+1);
                   var packagee  = activity.pricePackages.id(package_id);
-                    var price = packagee.price;
-                    var participants = packagee.participants;
-
+                  var price = packagee.price;
+                  var participants = packagee.participants;
                   var reservation = new RepeatableActivityReservation();
                   reservation.repeatableActivity_id = repeatableActivity_id;
                   reservation.client_id=client_id;
                   reservation.slot_id=slot_id;
                   reservation.participants=participants;
-                  reservation.date=date;
+                  reservation.date=newDate;
                   reservation.price=price;
                   return ReservationController.FreeDayCheck(req,res,activity,date,reservation);
 
@@ -124,14 +132,18 @@ let ReservationController={
         if(activity_type==0){
 
           RepeatableActivity.findOne({_id:activity_id},function(err,activity){
+
             if(err)
             res.json({success:false,message:err});
             else {
               if(activity){
-              res.json({success:true,activity});
+                
+              res.json({success:true,activity:activity});
+              return ;
                     }
               else {
                 res.json({success:false,message:"Activity not found "});
+                return ;
               }
             }
           });

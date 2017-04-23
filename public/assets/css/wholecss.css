@@ -212,6 +212,7 @@ h2,h4,h1,p{
             margin: 10px 1%;
             min-width: 230px;
             max-width: 315px;
+            max-height: 450px;
             width: 100%;
             color: #ffffff;
             text-align: left;
@@ -226,8 +227,10 @@ h2,h4,h1,p{
         }
         .snip1336 img {
             max-width: 100%;
+            max-height: 100%
             vertical-align: top;
             opacity: 0.85;
+            overflow: hidden;
         }
         .snip1336 figcaption {
             width: 100%;

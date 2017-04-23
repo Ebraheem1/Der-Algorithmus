@@ -31,7 +31,6 @@ app.controller('adminBusinessCtrl', function ($http, Admin, Authentication, Page
 
             app.message = data.data.message;
             app.success = data.data.success;
-            console.log(data.data.business);
 
             if (data.data.success) {
 
@@ -60,7 +59,6 @@ app.controller('adminBusinessCtrl', function ($http, Admin, Authentication, Page
 
             } else {
 
-                console.log(app.message);
 
             }
 
@@ -78,7 +76,6 @@ app.controller('adminBusinessCtrl', function ($http, Admin, Authentication, Page
                     $scope.business = data2.data.business;
                     app.message = data2.data.message;
                     app.success = data2.data.success;
-                    console.log(data2.data.business);
                 });
             });
 

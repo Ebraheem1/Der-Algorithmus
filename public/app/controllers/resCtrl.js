@@ -3,7 +3,7 @@ angular.module('reservationController', ['authServices','reservationServices', '
     .controller('resCtrlNR', function(AuthenticationToken,Authentication,$http, $scope, $location, $timeout, Reservation, $routeParams) {
         var app = this; //TODO : handle negative number for participants // ADD cancelation window warning // Display to USer the price
 
-    $scope.discount =0 ;
+        $scope.discount =0 ;
         Reservation.getActivity($routeParams.activity_id, 1).then(function(data) {
             $scope.Activity = data.data.activity;
             if($scope.Activity){
@@ -11,7 +11,6 @@ angular.module('reservationController', ['authServices','reservationServices', '
             }else{
               $scope.load = false ;
             }
-
             $scope.discount = $scope.Activity.offer.discount/100;
             $scope.seatsLeft = data.data.activity.maxParticipants - data.data.activity.currentParticipants;
             $scope.travelDate = data.data.activity.travelingDate.substr(0, 10);
@@ -137,7 +136,6 @@ angular.module('reservationController', ['authServices','reservationServices', '
           var x = new Date();
           var g =  new Date(date);
           if(g>=x){
-            console.log("greater");
             return true ;
           }
           if(g<x){
@@ -151,7 +149,6 @@ angular.module('reservationController', ['authServices','reservationServices', '
                 $scope.success = true;
                 $scope.allReservations = data.data.repeatable.concat(data.data.nonRepeatable);
                 $scope.Items = $scope.allReservations;
-                console.log(data.data);
                 app.pager = {};
                 app.setPage = function(page) {
 

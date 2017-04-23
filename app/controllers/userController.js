@@ -37,6 +37,11 @@ let userController={
       req.checkBody('confirmPassword','Passwords do not match').equals(req.body.password);
 
       var errors=req.validationErrors();
+      if(isNaN(req.body.phoneNumber)){
+
+            errors.push({msg: 'Not a valid phone Number!'});
+
+        }
       if(errors)
       {
 

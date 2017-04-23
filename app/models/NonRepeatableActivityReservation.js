@@ -18,6 +18,7 @@ NonRepeatableActivityReservationSchema.pre('remove',function(next){
 						res.json({succes:false,message:err});
 
 					});
+	next();
 });
 
 module.exports = mongoose.model('NonRepeatableActivityReservation', NonRepeatableActivityReservationSchema);

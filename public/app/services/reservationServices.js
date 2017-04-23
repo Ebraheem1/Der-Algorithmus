@@ -2,7 +2,6 @@ angular.module('reservationServices', [])
     .factory('Reservation', function($http) {
         reservationFactory = {};
         reservationFactory.getActivity = function(activity_id, activity_type) { //$routeParams.activity_id in controller; TODO : remove actiity type and zbtha .
-
             return $http.get('api/reserve/activity/' + activity_type + '/' + activity_id);
 
         }

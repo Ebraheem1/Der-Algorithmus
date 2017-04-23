@@ -199,10 +199,8 @@ let applicationController = {
         errors = req.validationErrors();
 
         if(isNaN(req.body.phoneNumber)){
-            console.log()
 
-            errors.push({message: 'Not a valid phone Number!'});
-            console.log(error);
+            errors.push({msg: 'Not a valid phone Number!'});
 
         }
 

@@ -53,11 +53,11 @@
 
 
 
-                <h3 style="color: white" ng-if="res.selectedPackage == null">Amount : 0 $</h3>
+                <h3 style="color: white" ng-if="res.selectedPackage == null">Amount : 0 &#163</h3>
 
                 <div ng-repeat="x in Activity.pricePackages" style="">
 
-                    <h3 style="color: white" ng-model="res.price2" ng-if="res.selectedPackage ==x._id" > Amount :{{x.price - x.price*discount}} $</h3>
+                    <h3 style="color: white" ng-model="res.price2" ng-if="res.selectedPackage ==x._id" > Amount :{{x.price - x.price*discount}} &#163;</h3>
 
                 </div>
                 <input type="submit" name="submit" id="submitt" value="Reserve" class="btn btn-info pull-right">
@@ -81,7 +81,7 @@
 
 
             <form action="/api/pay" method ="POST"  ng-show="Successful && Output" >
-                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Aa5qI8FtYYlEKwkWjwQ2pzTI" data-amount={{price}} data-name="Stripe Secure Payment" data-description="Pay for reservation" data-locale="auto" data-currency="gbp">
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Aa5qI8FtYYlEKwkWjwQ2pzTI" data-amount={{price}} data-name="Stripe Secure Payment" data-description="Pay for reservation" data-locale="auto">
                 </script>
                 <input type="hidden" name="chargeAmount" value={{price}} />
                   <input type="hidden" name="price" value={{price}} />
