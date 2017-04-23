@@ -8,11 +8,10 @@ var User = require('../models/User');
 var ObjectId = require('mongodb').ObjectID;
 
 let clientController= {
-/*
-  function used to show summary of the venues of businessOwners on the website
-  it checks in the data base if exists businessOwners if not it will respond with that There
-  is no Venues else it will forward the array of businessOwners to the front end to be used
-*/
+
+  /* this function is used to get a specific activity corresponding to the id passed as a parameter
+  it searches in repeatable activities first if it finds it it will send it in json respond else it will search in 
+  non repeatable activities if it finds it it will send it in json response*/
 getActivity:function(req,res){
   var id= req.params.id;
   var date=new Date();
@@ -48,6 +47,11 @@ getActivity:function(req,res){
   });
 },
 
+  /*
+  function used to show summary of the venues of businessOwners on the website
+  it checks in the data base if exists businessOwners if not it will respond with that There
+  is no Venues else it will forward the array of businessOwners to the front end to be used
+*/
 viewSummaries:function(req,res){
   BusinessOwner.find(function(err,businessOwners)
 {
