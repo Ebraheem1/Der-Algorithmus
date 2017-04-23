@@ -17,7 +17,7 @@ var businessownerSchema = mongoose.Schema({
 	types: [String],
 	logo:String
 	});
-
+	//This pre function is used to delete the user and all his activites upon his deletion
 	businessownerSchema.pre('remove',function(next){
 		User.find({_id:this.user_id},function(err,users){
 
