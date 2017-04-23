@@ -1,5 +1,7 @@
 
 angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientServices','businessOwnerServices', 'authServices'])
+//this controller is responsible for registeration of clients, it takes the regData from user and forward it to the services
+//responsible to send this data to the backend
 .controller('regCtrl', function($http, $location, $timeout, User){
 
 	var app = this;
