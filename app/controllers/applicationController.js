@@ -75,6 +75,9 @@ let applicationController = {
         }
 
     },
+    
+    //this function is used for real time checking of username availabiltity when
+    //a business owner is applying.
    checkUsername: function(req, res){
 
 
@@ -129,7 +132,9 @@ let applicationController = {
         }
 
     },
-
+    
+    //this function is used for real time checking of email availability
+    //when a business owner is applying or when updating his info with a new email.
     checkEmail: function(req, res){
 
         if(req.body.email && req.body.email != ''){
