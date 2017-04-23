@@ -6,7 +6,7 @@ app.controller('applicationsCtrl', function(Application, AuthenticationToken, Pa
 
 	var controller = this;
 
-
+	//retrieve all application on page load
 	Application.getAllApplications().then(function(applications){
 		
 		
@@ -17,7 +17,7 @@ app.controller('applicationsCtrl', function(Application, AuthenticationToken, Pa
 				$scope.applications = applications.data.applications;
 
 				//start of pagination logic for controller
-				controller.Items = $scope.applications; //array of items to be paged
+				controller.Items = $scope.applications; //array of applications to be paged
 			    controller.pager = {};
 			    
 			    controller.setPage = function(page){
@@ -29,7 +29,7 @@ app.controller('applicationsCtrl', function(Application, AuthenticationToken, Pa
 			        }
 			        // get pager object from service
 			        controller.pager = Pager.getPager(controller.Items.length, page);
-			        // get current page of items
+			        // get current page of applications
 			        controller.items = controller.Items.slice(controller.pager.startIndex, controller.pager.endIndex + 1);
 			    
 			    };
