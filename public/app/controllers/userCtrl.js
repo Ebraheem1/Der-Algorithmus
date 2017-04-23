@@ -1,7 +1,8 @@
 
 angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientServices','businessOwnerServices', 'authServices'])
 //this controller is responsible for registeration of clients, it takes the regData from user and forward it to the services
-//responsible to send this data to the backend
+//responsible to send this data to the backend and then it checks if there is an error forwarded from the backend and show it to 
+//user if exists.
 .controller('regCtrl', function($http, $location, $timeout, User){
 
 	var app = this;
@@ -33,14 +34,16 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	};
 
 })
-
+// this controller is responsible for Updating information for the client, it takes the infomation going to be updated and forwards it 
+// to the service responsible for forwarding it to the backend and then if it sucesses it will direct the user to the homepage
+// else it will show the error
 .controller('updateCtrl',function($http,$location,$timeout,User, Authentication, AuthenticationToken){
 	var app=this;
 
 	app.updateUser=function(updateData){
 		app.successMsg = false;
 		app.errMsg = false;
-				User.updateInfo(app.updateData).then(function(data){
+		User.updateInfo(app.updateData).then(function(data){
 			if(data.data.success){
 				app.successMsg=data.data.message;
 				$location.path('/');
@@ -64,6 +67,9 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 
 })
 
+
+// this controller is responsible for updating the username of the user it forwards the new username to the service responsible
+// for updating the username in the backend and then any error message will be forwarded to html file to be shown to the user
 .controller('usernameCtrl',function($http,$location,User, Authentication, AuthenticationToken){
 	var app=this;
 	app.updateUsername=function(Edata){
@@ -91,6 +97,9 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	}
 
 })
+// this controller is responsible for handling the password update for the user, after the user enters the old password and new password
+// also the confirm of the password it sends this data to the service responsible for forwarding this data to the backend to update it
+
 .controller('PasswordCtrl',function($http,$location,User, Authentication, AuthenticationToken){
 	var app=this;
 	app.updatePassword=function(Edata){
@@ -123,6 +132,8 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 
 })
 
+// this controller is responsible for viewing ths summaries of all business Owners on the website, just gets all the business owners 
+// from the back end using the service in client services
 .controller('viewCtrl',function($http,$location,$timeout,Client){
 		var app=this;
 		app.BusinessOwners=[];
@@ -136,6 +147,10 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			}
 		});
 })
+// this controller used to view a detailed view of a specific business owner by giving the id to the service and getting this data from
+// the back end and if it successes it will view this data otherwise an error will come up
+
+// also this controller is used to view the summaries of all activities of this specific business owner and also controls the gallery of images of the business owner 
 .controller('viewDetailedCtrl',function($scope,$http,$location,$timeout,Client,$routeParams, AuthenticationToken, Authentication){
 	var app=this;
 	app.errMsg=false;
@@ -217,6 +232,8 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 })
 
 .controller('viewActivityCtrl',function($http,AuthenticationToken,Client,$routeParams,Authentication){
+// this controller is responsible for viewing all the details of an activity by taking the id of this activity and give it to the 
+	// service responsible for forwarding the id to the backend and get all the details and then it show this details if it successes
 	var app=this;
 	app.activityID=$routeParams.id;
 	app.errMsg=false;
