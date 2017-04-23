@@ -4,8 +4,7 @@ let RepeatableActivityReservation = require('../models/RepeatableActivityReserva
 
 let activityController={
 
-
-
+	//given the activity id, this function searches the 2 activity collections to retrieve the activity instance
 	getActivity:function(req,res){
 		var activity_id =  req.params.id;
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity) {
@@ -36,7 +35,8 @@ let activityController={
 	        }
         });
 	},
-
+	
+	//given the activity ID, and the business owner ID by passport, this function adds a price package to the selected repeatable activity
 	addRepeatableActivityPricePackage: function(req,res){
 		var activity_id =  req.params.id;
 		var businessOwner_id = req.user._id;
@@ -120,7 +120,8 @@ let activityController={
 			}
 		});	
 	},
-
+	
+	//given the activity ID, the business owner ID by passport, and the price package ID, this function deletes a price package of the selected repeatable activity
 	deleteRepeatableActivityPricePackage: function(req,res){
 		var activity_id =  req.body.activity_id;
 		var package_id = req.body.package_id;
@@ -180,7 +181,8 @@ let activityController={
 			}
 		});	
 	},
-
+	
+	//given the activity ID, and the business owner ID by passport, this function adds an activity slot to the selected repeatable activity
 	addRepeatableActivitySlot: function(req,res){
 		var activity_id =  req.params.id;
 		var businessOwner_id = req.user._id;
@@ -270,7 +272,7 @@ let activityController={
 		});	
 	},
 
-
+	//given the activity ID, the business owner ID by passport, and the slot ID, this function deletes a slot from the selected repeatable activity
 	deleteRepeatableActivitySlot: function(req,res){
 		var activity_id =  req.body.activity_id;
 		var slot_id =  req.body.slot_id;
@@ -331,7 +333,9 @@ let activityController={
 			}
 		});	
 	},
-
+	
+	//given the activity ID, the business owner ID by passport, and the path to an image, this function sets the image of the activity to the given path
+	//this function works on the 2 activity schemas
 	editActivityImage: function(req,res){
 
 		//common attributes between RepeatableActivity and NonRepeatableActivity
@@ -423,8 +427,9 @@ let activityController={
 		});		
 	},
 
-	/*	this function receives requests for editing activites, an activity has multiple attributes;
-	the function gurantees to edit all parameters given, the request should include the BusinessOwner_id and at least one attrbute to be edited*/
+	/*this function receives requests for editing activites, an activity has multiple attributes;
+	the function gurantees to edit all parameters given, the request should include the BusinessOwner_id and at least one attrbute to be edited
+	this function works on the 2 activity schemas*/
 	editActivity: function(req,res){
 
 		//common attributes between RepeatableActivity and NonRepeatableActivity
