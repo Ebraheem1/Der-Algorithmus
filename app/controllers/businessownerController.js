@@ -309,8 +309,9 @@ addActivity:function(req,res){
                         res.json({success:false, message: err.message});
                         return;
                     }
-                  
-                    res.json({success:true, message: 'Activity has been created successfully!'});
+                   
+                     businessownerController.updateBusinessTypes(businessOwner,type);
+                     res.json({success:true, message: 'Activity has been created successfully!'});
 
                 });
             } 
