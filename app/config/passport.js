@@ -13,6 +13,7 @@ module.exports = function(passport) {
 	opts.secretOrKey = secret;
 
 	//Passport authentication
+	//This function ensures that the logged in user is a client
 passport.use('clientLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
 
@@ -35,7 +36,7 @@ passport.use('clientLogin', new JwtStrategy(opts,function(jwt_payload,done)
       return done(null,false);
     }
   }));
-
+//This function ensures that the logged in user is a businessOwner
 passport.use('businessLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 2)
@@ -57,7 +58,7 @@ passport.use('businessLogin', new JwtStrategy(opts,function(jwt_payload,done)
       return done(null,false);
     }
   }));
-
+//This function ensures that the logged in user is admin
 passport.use('adminLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
     if(jwt_payload.type == 0)
@@ -79,7 +80,7 @@ passport.use('adminLogin', new JwtStrategy(opts,function(jwt_payload,done)
       return done(null,false);
     }
   }));
-
+//This function ensures that there is a logged in user, for general functions like logout function
 passport.use('generalLogin', new JwtStrategy(opts,function(jwt_payload,done)
   {
       User.findById(jwt_payload.user.user_id,function(err,user)
