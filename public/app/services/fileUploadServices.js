@@ -1,3 +1,4 @@
+// a service for uploading a file, and calling the backend route responsible for uploading
 angular.module('fileUploadService', [])
 
 
