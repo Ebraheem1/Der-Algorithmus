@@ -84,6 +84,10 @@ updateInfo:function(req,res){
   var firstName=req.body.firstName;
   var lastName=req.body.lastName;
   var gender=req.body.gender;
+  if(phoneNumber !=null && isNaN(phoneNumber)){
+    res.json({success:false,message:'Not a valid phoneNumber'});
+  }
+ 
   User.findOne({_id:req.user.user_id},function(err,user){
     if(err){
       res.json({success:false,message:err});
