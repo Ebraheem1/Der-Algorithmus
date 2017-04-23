@@ -26,7 +26,8 @@
 				}
 			
 			});
-
+		
+		//signaling service with new location to add. 
 		this.addLocation = function(){
 
 			BusinessOwner.addLocation($routeParams.id, {location: controller.location}).then(function(response){        
@@ -53,7 +54,7 @@
 			});	
 
       	};
-
+	//signaling service with location to be removed
       	this.removeLocation = function(location){
 
 			BusinessOwner.removeLocation($routeParams.id, {location: location}).then(function(response){        
@@ -79,7 +80,7 @@
 
       	};
 
-
+		//matching location to be added against existing locations. 
 		this.checkLocation = function(){
 
       		for (var i = 0; i<$scope.business.locations.length; i++){
@@ -96,7 +97,7 @@
       		$scope.locationExists = false;
 
       	};
-
+	//emptiness of field check
       	this.isEmpty = function(){
 
       		if(controller.location != null && controller.location != ''){
