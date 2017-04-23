@@ -12,7 +12,9 @@
 		$scope.editDescription =false;
 		$scope.emailAvailable = false;
 		$scope.manageLocations = false;
-
+		
+		
+		//retrieve current information of business owner on page load
 		BusinessOwner.getInfo($routeParams.id).then(function(business){
 
 			if(business.data.success){
@@ -33,7 +35,8 @@
 			}
 			
 			});
-
+		
+		//update information of business with supplied values.
 		this.updateInfo = function(){
 
 			if(!($scope.editName)){
@@ -84,7 +87,7 @@
 
       	};
 
-
+		//checking for email availability
 		this.checkEmail = function(){
 
       		return $http.post('/api/applications/check/email', {email: controller.info.email}).then(function(response){        
@@ -100,14 +103,14 @@
 			});
 
       	};
-
+	//validation of email format
       	this.isEmail = function(){
 
       		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     		return re.test(controller.info.email);
 
       	};
-
+	//matching new email against old one
       	this.isOldEmail = function(){
 
     		return $scope.user.email == controller.info.email;
