@@ -149,6 +149,8 @@ getAdmin:function(callback)
 {
 	Administrator.find(callback);
 },
+//This function creates only one admin in the system and prevent creating others
+//It just needs the password of the admin
 createAdmin:function(req,res){
 	var password = req.body.password;
 	Administrator.find(function(err,admins)
