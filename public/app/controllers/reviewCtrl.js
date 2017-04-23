@@ -7,7 +7,8 @@ angular.module('reviewController', ['reviewServices', 'authServices','businessOw
 	app.revData = {};
 	app.reviewExists = false;
 	app.revData.user_id = AuthenticationToken.getId();
-
+	
+	//if given a review ID, get that review instance to view its details
 	if($routeParams.reviewID){
 		Review.getReview($routeParams.reviewID).then(function(data){
 				if(data.data.success){
@@ -27,7 +28,7 @@ angular.module('reviewController', ['reviewServices', 'authServices','businessOw
 		);
 	}
 
-
+	//add a new review to the business, whose ID is given
 	app.addReview = function(revData){
 		app.successMsg = false;
 		app.errMsg = false;
@@ -53,7 +54,7 @@ angular.module('reviewController', ['reviewServices', 'authServices','businessOw
 		);
 	};
 
-
+	//edit a review to the business, whose ID is given
 	app.editReview = function(revData, comment){
 		app.successMsg = false;
 		app.errMsg = false;
@@ -81,7 +82,7 @@ angular.module('reviewController', ['reviewServices', 'authServices','businessOw
 		);
 	};
 
-
+	//delete a review to the business, whose ID is given
 	app.deleteReview = function(revData){
 
 		app.successMsg = false;
