@@ -8,27 +8,31 @@ var app = angular.module('applicationFormController', ['applicationServices']);
 
     $scope.choices = [{id: 'choice1', location: ''}];
     
+    //for adding a location field when applying
     $scope.addNewChoice = function() {
 
       var newItemNo = $scope.choices.length+1;
       $scope.choices.push({'id':'choice'+newItemNo, location: ''});
     
     };
-      
+    
+    //removing a location field when applying
     $scope.removeChoice = function() {
     
       var lastItem = $scope.choices.length-1;
       $scope.choices.splice(lastItem);
     
     };
-
+    
+    //real time checking of email pattern
     $scope.isEmail = function(){
 
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(controller.application.email);
 
     };
-
+    
+    //passes applicant's info to service to initiate the process of creating an application 
     this.apply = function(){
 
       controller.application.locations = [];
@@ -64,7 +68,8 @@ var app = angular.module('applicationFormController', ['applicationServices']);
       );
 
     };
-
+    
+    //real time checking of username availability
     this.checkUsername = function(){
 
       return $http.post('/api/applications/check/username', 
@@ -80,7 +85,8 @@ var app = angular.module('applicationFormController', ['applicationServices']);
       });
 
     };
-
+  
+    //real time checking of email availability
     this.checkEmail = function(){
 
       return $http.post('/api/applications/check/email', {email: controller.application.email}).then(function(response){        
@@ -95,13 +101,15 @@ var app = angular.module('applicationFormController', ['applicationServices']);
       });
 
     };
-
+    
+    //real time checking of phone number format
     this.isPhoneNumber = function(){
 
       $scope.isPhoneNumber = !isNaN(controller.application.phoneNumber);
 
     };
-
+    
+    //checking that a field is empty
     this.isEmpty = function(string){
 
         if(string.$viewValue != null && string.$viewValue != ''){
