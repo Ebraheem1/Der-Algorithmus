@@ -164,7 +164,8 @@ let businessownerController={
         });
 
     },
-
+      
+    // updates the types of activities provided by a business owner when he/she adds a new activity
     updateBusinessTypes:function(businessOwner,addedType){
 
         var typesArray=businessOwner.types;
@@ -185,7 +186,7 @@ let businessownerController={
     },
 
 
-
+    //converts ISO date format to a 24-hour system time format
     convertDateToTime: function(dateEntry){
 
         var date=new Date(dateEntry);
@@ -199,8 +200,9 @@ let businessownerController={
         return time;  
               
     },
-
-addActivity:function(req,res){
+   
+   // Adds a new Activity to the logged In business owner
+   addActivity:function(req,res){
 
         req.checkBody('data.type',' Type of Activity Required').notEmpty();
 
@@ -489,6 +491,7 @@ addActivity:function(req,res){
 
     },
 
+    // Returns all the activities provided by the logged in business owner
     getBusinessActivities:function(businessOwnerId,res){
 
         NonRepeatableActivity.find({businessOwner_id:businessOwnerId},function(err,nonRepeatableActivities){
@@ -536,16 +539,17 @@ addActivity:function(req,res){
 
         });
     },
-    
+ 
+    // Returns all the activities provided by the logged in business owner
     viewBusinessActivities: function(req,res){
 
-        // should be replaced with req.user._id
+        
         var businessOwnerId=req.user._id;
         businessownerController.getBusinessActivities(businessOwnerId,res);
 
     },
   
-    // business owner deletes a non-repeatable activity
+    // Business owner deletes a non-repeatable activity (Trip, Safari)
     deleteNonRepeatableActivity: function(req,res){
 
         // should be replaced with req.user._id
@@ -670,7 +674,8 @@ addActivity:function(req,res){
         });
 
     },
-    // business owner deletes a repeatable activity
+   
+    // Business owner deletes a repeatable activity (Room-escaping, Paintball Fighting, BattleField, Playground)
     deleteRepeatableActivity: function(req,res){
 
         var businessOwnerId=req.user._id;
@@ -804,7 +809,8 @@ addActivity:function(req,res){
         });
 
     },
-
+    
+    // Returns all the reservations of a specific non-repeatable activity (Trip, Safari) provided by the logged in business owner
     viewNonRepeatableReservations: function(req,res){
 
         NonRepeatableActivityReservation
@@ -848,6 +854,7 @@ addActivity:function(req,res){
 
     },
 
+   // Returns all the reservations of a specific repeatable activity (Room-escaping, Paintball Fighting, BattleField, Playground) provided by the logged in business owner
     viewRepeatableReservations: function(req,res){
 
         RepeatableActivityReservation
