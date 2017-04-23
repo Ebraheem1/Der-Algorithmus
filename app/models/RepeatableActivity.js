@@ -36,6 +36,7 @@ var RepeatableActivitySchema = new Schema({
     dayOffsNames : [String],
 	cancellationWindow: Number //client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
 });
+// This pre function is used to make sure that all the reservations related to this activity is deleted 
 RepeatableActivitySchema.pre('remove',function(next){
 		RepeatableActivityReservation.find({repeatableActivity_id:this._id},function(err,reservations){
 			reservations.forEach(function(reservation){
