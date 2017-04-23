@@ -9,6 +9,7 @@ var NonRepeatableActivityReservationSchema = new Schema({
 	price: {type:Number, required:true}, // calculated price according to number of participants, pricePerPerson and offer(if available)
 	charge_key:{type:String,required:true}
 });
+// this pre function is to make sure that this reservation is refunded before it's deletion
 NonRepeatableActivityReservationSchema.pre('remove',function(next){
 
 	stripe.refunds.create( {
