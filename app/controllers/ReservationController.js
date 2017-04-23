@@ -4,7 +4,7 @@ let NonRepeatableActivityReservation = require("../models/NonRepeatableActivityR
 let RepeatableActivityReservation = require("../models/RepeatableActivityReservation");
 let stripe = require("stripe")("sk_test_Hr41ZUg64PJe2duUepC7ruyr");
 let ReservationController={
-
+		//A Function that checks the type of the activity in hand and call the appropriate function accordingly.
     reserveSlot:function(req,res){
 
       if(req.params.type==0)
@@ -14,10 +14,13 @@ let ReservationController={
       }
     },
 
+		//This function is for the repeatable activity reservation . it takes the client id from the request paramters , the slot_id , the package id
+		// ,and the price . it checks if the reservation is in the past and rejects it if it is . it then checks if there is already a reservation 
+		// in this particular time given . if there is an appropriate error is sent back if it is not we reserve this slot after checking if it is not 
+		// a day off for the activity
+    repeatableReserveSlot:function(req,res){
 
-    repeatableReserveSlot:function(req,res){//TODO : User is in request params according to session ? / CLEAN
-
-      var client_id = req.user._id;  //TODO : to be changed to user._id;
+      var client_id = req.user._id;  
       var slot_id = req.body.slot_id;
       var package_id = req.body.package_id;
       var date = req.body.date;
@@ -80,6 +83,11 @@ let ReservationController={
 
 
     },
+		
+		//This function is for reserving in a nonRepeatable activity . it takes the repeatable activity id , the client id from the 
+		// Request paramters , and the price . it then checks if the number of participants is less than 1 . return an appropriate error message
+		// in this case . checks for missing fields, See if there is enough places in this activity and if there is we complete the reservation
+		// if there is not we send an appropriate error message
     nonRepeatableReserveSlot:function(req,res){
 
       var nonRepeatableActivity_id = req.params.activity_id;
@@ -123,7 +131,8 @@ let ReservationController={
 
       }
     },
-
+			// this function is used to give back a certain activity , it takes the activity id as a parameter and the type to check
+			// if it repetable of non repeatable .
     getActivity:function(req,res){
 
       var activity_id = req.params.activity_id;
@@ -161,6 +170,7 @@ let ReservationController={
         });
       }
     },
+		// This function is used to check if the slot you are trying to reserve is a day off for this activity. an appropriate error message 
     FreeDayCheck:function(req,res,activity,date,reservation){
   var dat = new Date(date);
 
@@ -177,6 +187,8 @@ var found = false ;
           res.json({success:false,status:0,message:"Sorry this day is a day Off. Please choose another"});
       }
     },
+		//this function is used for the actual reservation of an activity ( actually saving the data in the database ) it is executed after 
+		// stripe AI call . it takes charges the client and save the reservation . ( including the charge key for refunding later )
     Pay:function(req,resp){
 
       if(req.body.type==0){
@@ -251,7 +263,8 @@ var found = false ;
 
 
 
-      //Function for getting all reservations of a certain client
+      //Function for getting all reservations of a certain client . it takes the client_id from the request parameters and returns 
+			// all his relevant activities . both repeatable and non repeatable
       getAllReservations:function(req,res){
 
 
@@ -270,7 +283,9 @@ var found = false ;
           }
         });
       },
-       //Function for canceling reservation .
+       //Function for canceling reservation . it takes the reservation ID as a parameter and the type . looks for this current reservation
+			// whether it is repeatable or non repeatable and cancel it ( refunding and deleting it from the database ) if it is 
+			// not past the cancellation window .
        cancelReservation:function(req,res){
 
          var reservation_id = req.params.reservation_id;
