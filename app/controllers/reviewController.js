@@ -7,7 +7,7 @@ var BusinessOwner = require('../models/BusinessOwner');
       
 let reviewController={
 
-
+	//given the review ID, this function retrieves the review instance
 	getReview: function(req,res){
 		var review_id =  req.params.id;
 
