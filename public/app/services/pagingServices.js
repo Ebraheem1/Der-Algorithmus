@@ -64,7 +64,6 @@ app.factory('Pager', function(){
         // return object with all pager properties required by the view
         return{
 
-
             totalItems: totalItems,
             currentPage: currentPage,
             pageSize: pageSize,
