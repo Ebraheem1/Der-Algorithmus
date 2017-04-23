@@ -12,6 +12,7 @@ var RepeatableActivityReservationSchema = new Schema({
 	charge_key:{type:String,required:true}
 });
 
+// this pre function is to make sure that this reservation is refunded before it's deletion
 RepeatableActivityReservationSchema.pre('remove',function(next){
 	stripe.refunds.create( {
 						charge : this.charge_key
