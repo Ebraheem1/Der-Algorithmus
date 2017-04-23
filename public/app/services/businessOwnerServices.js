@@ -47,19 +47,20 @@ angular.module('businessOwnerServices', [])
 		return $http.get('/api/business');
 	
 	};
-
+	//this function supplies backend with updated info of a given business
+	//to update in database.
 	businessOwnerFactory.updateInfo = function(id, info){
 	
 		return $http.post('/api/business/update-info', info);
 	
 	};
-
+	//this function supplies backend with new ocation to add for a business.
 	businessOwnerFactory.addLocation = function(id, location){
 	
 		return $http.post('/api/business/locations/add', location);
 	
 	};
-
+	//this function supplies backend with a location of a business to remove.
 	businessOwnerFactory.removeLocation = function(id, location){
 	
 		return $http.post('/api/business/locations/remove', location);
