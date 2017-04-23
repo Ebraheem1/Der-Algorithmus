@@ -1,8 +1,8 @@
 angular.module('commentController', ['businessOwnerServices','authServices'])
 .controller('commentCtrl',function($http,$location,BusinessOwner,Authentication,AuthenticationToken)
-{	//This Contoller calles businessOwnerServices to perform the search query
-	//based on the keyword entered by the user which is now found in the url of the
-	//page then it takes the returned results and put them in properties of the 
+{	//This Contoller calles businessOwnerServices to show all reviews that belong to a logged-in businessowner
+	//it also calls the same service in order to reply on a specific review that has no reply 
+	//then it takes the returned results and put them in properties of the 
 	//controller to be used in the HTML file accordingly.
 	if(!AuthenticationToken.getId())
 	{		
