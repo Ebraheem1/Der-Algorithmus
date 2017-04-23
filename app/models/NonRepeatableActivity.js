@@ -25,6 +25,7 @@ var NonRepeatableActivitySchema = new Schema({
 	cancellationWindow: Number ,//client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
     offer:{type:Offer,default:null}
 });
+// this pre function is to make sure that all the related reservations is deleted before the deletion of this non repeatable activity
 NonRepeatableActivitySchema.pre('remove',function(next){
 	NonRepeatableActivityReservation.find({nonRepeatableActivity_id:this._id},function(err,reservations){
 		reservations.forEach(function(reservation){
