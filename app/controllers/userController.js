@@ -38,8 +38,13 @@ let userController={
 
       var errors=req.validationErrors();
       if(isNaN(req.body.phoneNumber)){
+          if(errors){
+             errors.push({msg: 'Not a valid phone Number!'});
 
+          }else{
+            errors=[];
             errors.push({msg: 'Not a valid phone Number!'});
+          }
 
         }
       if(errors)
