@@ -1,5 +1,7 @@
 angular.module('nonRepeatableActivityFormController',['businessActivitiesServices','fileModelDirective', 'fileUploadService','authServices'])
 
+// This controller takes the data submitted in the form of adding a new non-repeatable activity(Trip, Safari)
+// and sends it to the appropriate service 'BusinessActivities' which the sends it to the appropriate backend function
 .controller('nonRepeatableActivityFormCtrl',function($location,$scope,$route, $routeParams,BusinessActivities,Authentication,fileUpload){
 
 	$scope.file = {};
