@@ -1,5 +1,5 @@
 angular.module("modalDialog", [])
-
+// this Directive is for implementing a modal for angular . not used in this milestone though
 .directive('modalDialog', function() {
   return {
     restrict: 'E',
