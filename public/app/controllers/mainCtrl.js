@@ -103,6 +103,7 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 });
 
 //to prevent logged in user from going to register or login pages
+//Kind of ensuring the authentication in the front-end by preventing some redirect actions
 app.run(['$rootScope', 'Authentication','$location', function($rootScope, Authentication, $location){
 
 	$rootScope.$on('$routeChangeStart', function(event, next, current){
