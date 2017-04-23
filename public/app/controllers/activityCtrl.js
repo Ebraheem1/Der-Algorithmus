@@ -6,10 +6,10 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 	var app = this;
 	app.activityData = {};
 	app.activityExists = false;
-
+	//get the ID of the authenticated business owner
 	app.activityData.user_id = AuthenticationToken.getId();
 
-
+	//given the ID of the activity, using the function defined in Activity to get the details of the activity
 	Activity.getActivity($routeParams.id).then(function(data){
 		if(data.data.success){
 			var travelingDateNotAvailable = data.data.activity.travelingDate==null||data.data.activity.travelingDate=='';
@@ -52,7 +52,7 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 	);
 
 
-
+	//given the new data on the HTML form call the function defined in Activity to update the activity information
 	app.editActivity = function(activityData){
 		app.successMsg = false;
 		app.errMsg = false;
@@ -77,7 +77,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			}
 		});
 	};
-
+	
+	//add a slot to an activity by calling the function defined in Activity
 	app.addSlot = function(startTime, endTime){
 		app.slotSuccessMsg = false;
 		app.slotErrMsg = false;
@@ -103,7 +104,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			}
 		});
 	};
-
+	
+	//delete a slot from an activity by calling the function defined in Activity
 	app.deleteSlot = function(activity_id, slot_id){
 		app.slotSuccessMsg = false;
 		app.slotErrMsg = false;
@@ -130,7 +132,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			}
 		});
 	};
-
+	
+	//add a package to an activity by calling the function defined in Activity
 	app.addPackage = function(participants, price){
 		app.packageSuccessMsg = false;
 		app.packageErrMsg = false;
@@ -156,7 +159,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			}
 		});
 	};
-
+	
+	//delete a package from an activity by calling the function defined in Activity
 	app.deletePackage = function(activity_id, package_id){
 		app.packageSuccessMsg = false;
 		app.packageErrMsg = false;
@@ -182,7 +186,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			}
 		});
 	};
-
+	
+	//uploading an image, then setting the image attribute of the activity to the image's path
 	$scope.file = {};
     $scope.message = false;
     $scope.alert = '';
