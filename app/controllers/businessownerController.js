@@ -918,7 +918,8 @@ addActivity:function(req,res){
 
     },
 
-
+ // This function is for retrieving the information of currently logged in business owner
+ //for the viewing and updating purposes
  getBusinessInfo: function(req, res){
 
         BusinessOwner.findOne({_id: req.user._id}, function(err, businessOwner){
@@ -967,7 +968,6 @@ addActivity:function(req,res){
     },
     //this function updates the business owners info with that provided in the request
     //if a field has no specified value to update it with, it is not changed at all
-
     updateInfo: function (req,res) {
 
         var email=req.body.email;
