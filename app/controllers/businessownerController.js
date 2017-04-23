@@ -974,6 +974,9 @@ addActivity:function(req,res){
         var phoneNumber = req.body.phoneNumber;
         var name = req.body.name;
         var description = req.body.description;
+          if(phoneNumber != null && isNaN(phoneNumber)){
+             res.json({success:false,message:'Not a valid phoneNumber'});
+          }
 
         var conditions = {_id: req.user._id};
 
