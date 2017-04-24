@@ -1,5 +1,8 @@
 angular.module('repeatableActivityFormController',['businessActivitiesServices','fileModelDirective', 'fileUploadService','authServices'])
 
+
+// This controller takes the data submitted in the form of adding a new repeatable activity(Room-escaping, Paintball Fight, Battlefield, Playground)
+// and sends it to the appropriate service 'BusinessActivities' which then sends it to the appropriate backend function
 .controller('repeatableActivityFormCtrl',function($scope,$route, $routeParams,BusinessActivities,fileUpload,Authentication,$location){
 
   $scope.file = {};
