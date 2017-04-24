@@ -1,5 +1,7 @@
 angular.module('nonRepeatableReservationsController',['nonRepeatableReservationsServices', 'authServices'])
 
+// This controller calls the 'NonRepeatableReservations' service which then calls the appropriate backend function in order
+// to return all the reservations of a specific non-repeatable activity(Trip, Safari)
 .controller('nonRepeatableReservationsCtrl',function($scope, $route, $routeParams,NonRepeatableReservations,Authentication){
 
 	$scope.currentPage=1;
