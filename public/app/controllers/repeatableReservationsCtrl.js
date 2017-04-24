@@ -1,5 +1,7 @@
 angular.module('repeatableReservationsController',['repeatableReservationsServices', 'authServices'])
 
+// This controller calls the 'RepeatableReservations' service which then calls the appropriate backend function in order
+// to return all the reservations of a specific repeatable activity(Room-escaping, Paintball Fight, Battlefield, Playground)
 .controller('repeatableReservationsCtrl',function($scope, $route, $routeParams,RepeatableReservations,Authentication){
 
 	$scope.currentPage=1;
