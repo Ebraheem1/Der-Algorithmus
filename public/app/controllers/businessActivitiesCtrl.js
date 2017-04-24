@@ -1,5 +1,9 @@
 angular.module('businessActivitiesController',['businessActivitiesServices','authServices'])
 
+// This controller calls 'BusinessActivities' service which then calls the appropriate backend function in order to view
+// all the activities of the logged in business owner.In addition, it changes the url to the appropriate path depending on
+// the action required by the business owner: deleting an activity, viewing reservations of an activity, editing an activity or
+// deleting an activity
 .controller('businessActivitiesCtrl',function($location,$scope,BusinessActivities,Authentication){
 
 	$scope.loading=true;
