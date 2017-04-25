@@ -1,5 +1,5 @@
 angular.module('reservationController', ['authServices','reservationServices', 'pagingServices','modalDialog'])
-    // This is the controller for non repeatable activites 
+    // This is the controller for non repeatable activites
     .controller('resCtrlNR', function(AuthenticationToken,Authentication,$http, $scope, $location, $timeout, Reservation, $routeParams) {
         var app = this; //TODO : handle negative number for participants // ADD cancelation window warning // Display to USer the price
 
@@ -12,6 +12,7 @@ angular.module('reservationController', ['authServices','reservationServices', '
             }else{
               $scope.load = false ;
             }
+            if($scope.Activity.offer)
             $scope.discount = $scope.Activity.offer.discount/100;
             $scope.seatsLeft = data.data.activity.maxParticipants - data.data.activity.currentParticipants;
             $scope.travelDate = data.data.activity.travelingDate.substr(0, 10);
@@ -20,7 +21,7 @@ angular.module('reservationController', ['authServices','reservationServices', '
 
         });
         // This function is used to reserve in a non repeatable activity . it calculates the price and sends it back to the front end upon
-        // reserving 
+        // reserving
         app.ReserveNR = function(reservationData) {
 
             var price = reservationData * $scope.Activity.pricePerPerson;
@@ -49,12 +50,12 @@ angular.module('reservationController', ['authServices','reservationServices', '
 
     })
 
-    // This is the controller of repeatable activites 
+    // This is the controller of repeatable activites
     .controller('resCtrlR', function(AuthenticationToken,$http, $scope, $location, $timeout, Reservation, $routeParams) { //TODO : Logic of MAX day ;
         var app = this;
         $scope.offer = false ;
         $scope.discount = 0 ;
-    //This function is used to get a repeatable activity through it's id 
+    //This function is used to get a repeatable activity through it's id
         Reservation.getActivity($routeParams.activity_id, 0).then(function(data) {
 
             var d = new Date();
@@ -91,7 +92,7 @@ angular.module('reservationController', ['authServices','reservationServices', '
                 Authentication.handleError();
                 }
         });
-        //This function is used to reserve a repeatable activity . upon reserving . the output message,and the price is sent back to the view 
+        //This function is used to reserve a repeatable activity . upon reserving . the output message,and the price is sent back to the view
         app.ReserveR = function(res) {
 
             var package_id = res.selectedPackage;
@@ -123,7 +124,7 @@ angular.module('reservationController', ['authServices','reservationServices', '
     })
 
 
-    //This is the controller for the reservatinos of the user 
+    //This is the controller for the reservatinos of the user
     .controller('yourReservations', function(AuthenticationToken,Pager, $http, $scope, $location, $timeout, Reservation, $routeParams, $window) {
         var app = this;
         $scope.success = true;
@@ -138,8 +139,8 @@ angular.module('reservationController', ['authServices','reservationServices', '
         $scope.toggleModal = function (){
           $scope.modalShown = !$scope.modalShown;
         }
-        // A function in the scope to check if the given date is in the past 
-        
+        // A function in the scope to check if the given date is in the past
+
         $scope.dateGreater = function (date){
           var x = new Date();
           var g =  new Date(date);
@@ -194,9 +195,9 @@ angular.module('reservationController', ['authServices','reservationServices', '
         $scope.Delete = function(type, reservation_id) {
             var cancelReservation = $window.confirm('Are you sure you want to cancel this Reservation ? ');
             if (cancelReservation) {
-                 // upon acceptance of a removal . we check if the activity is repeatable or not and we cancel it accordingly 
+                 // upon acceptance of a removal . we check if the activity is repeatable or not and we cancel it accordingly
                 if (type == 0) {
-                    
+
                     Reservation.cancelReservationR(reservation_id).then(function(data) {
 
                         if (data.data.success) {
