@@ -204,8 +204,8 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 	                if(data.data.success){
 	                	$scope.alert = 'alert alert-success fade in alert-dismissable';
 						$scope.message = data.data.message;
-						$scope.uploading = false;
 						app.activityData.image = imageData.image;
+						$scope.uploading = false;
 					}
 					else{
 						$scope.uploading = false;
