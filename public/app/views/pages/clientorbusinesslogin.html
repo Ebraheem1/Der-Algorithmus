@@ -1,155 +1,61 @@
 <br>
-<br>
-<br>
-<div class="container">
-<div class="login-container">
-<div id="output"></div>
-<div class="avatar"></div>
-<div class="form-box">
-    <form ng-submit="main.doLogin(loginData);">
-        <input name="user" type="text" placeholder="username" ng-required="true" ng-model="main.loginData.username">
-        <input type="password" placeholder="password" ng-required="true" ng-model="main.loginData.password">
+<div class="container">    
+<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+<div class="panel panel-info" >
+<div class="panel-heading">
+<div class="panel-title">Sign In</div>
+<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="/login/forgotPassword">Forgot password?</a></div>
+</div>     
+
+<div style="padding-top:30px" class="panel-body" >
+
+<div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+    
+<form id="loginform" class="form-horizontal" role="form" ng-submit="main.doLogin(loginData);">
+            
+    <div style="margin-bottom: 25px" class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="Username" ng-required="true" ng-model="main.loginData.username">                                        
+            </div>
+        
+    <div style="margin-bottom: 25px" class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input id="login-password" type="password" class="form-control" name="password" placeholder="password" ng-required="true" ng-model="main.loginData.password">
+            </div>
+            
+
+        
+    
+
+
+        <div style="margin-top:10px" class="form-group">
+            <!-- Button -->
+
+            <div class="col-sm-12 controls">
         <button class="btn btn-info btn-block login" type="submit">Login</button>
-    </form>
-    <button class="btn btn-info btn-block login" ng-click="main.forgetPassword()" >ForgetPassword</button>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-12 control">
+                <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
+                    Don't have an account! 
+                <a href="/register">
+                    Sign Up Here
+                </a>
+                </div>
+            </div>
+        </div>    
+    </form> 
+</div>      
+
+</div> 
+       
 </div>
+<div class="row show-hide-message text-center bg-grey"  style="margin-top:400px;" ng-show="main.errMsg">
+    <div class="alert alert-danger"> {{main.errMsg}} </div>
+</div> 
 </div>
 
-<div class="row show-hide-message text-center bg-grey" ng-show="main.errMsg">
-<div class="alert alert-danger"> {{main.errMsg}} </div>
-</div>
 
-
-</div>
-<style>
-.login-container{
-position: relative;
-width: 300px;
-margin: 80px auto;
-padding: 20px 40px 40px;
-text-align: center;
-background: #fff;
-border: 1px solid #ccc;
-}
-
-#output{
-position: absolute;
-width: 300px;
-top: -75px;
-left: 0;
-color: #fff;
-}
-
-#output.alert-success{
-background: rgb(25, 204, 25);
-}
-
-#output.alert-danger{
-background: rgb(228, 105, 105);
-}
-
-
-.login-container::before,.login-container::after{
-content: "";
-position: absolute;
-width: 100%;height: 100%;
-top: 3.5px;left: 0;
-background: #fff;
-z-index: -1;
--webkit-transform: rotateZ(4deg);
--moz-transform: rotateZ(4deg);
--ms-transform: rotateZ(4deg);
-border: 1px solid #ccc;
-
-}
-
-.login-container::after{
-top: 5px;
-z-index: -2;
--webkit-transform: rotateZ(-2deg);
--moz-transform: rotateZ(-2deg);
--ms-transform: rotateZ(-2deg);
-
-}
-
-.avatar{
-width: 100px;height: 100px;
-margin: 10px auto 30px;
-border-radius: 100%;
-border: 2px solid #aaa;
-background-size: cover;
-}
-
-.form-box input{
-width: 100%;
-padding: 10px;
-text-align: center;
-height:40px;
-border: 1px solid #ccc;;
-background: #fafafa;
-transition:0.2s ease-in-out;
-
-}
-
-.form-box input:focus{
-outline: 0;
-background: #eee;
-}
-
-.form-box input[type="text"]{
-border-radius: 5px 5px 0 0;
-text-transform: lowercase;
-}
-
-.form-box input[type="password"]{
-border-radius: 0 0 5px 5px;
-border-top: 0;
-}
-
-.form-box button.login{
-margin-top:15px;
-padding: 10px 20px;
-}
-
-.animated {
--webkit-animation-duration: 1s;
-animation-duration: 1s;
--webkit-animation-fill-mode: both;
-animation-fill-mode: both;
-}
-
-@-webkit-keyframes fadeInUp {
-0% {
-    opacity: 0;
-    -webkit-transform: translateY(20px);
-    transform: translateY(20px);
-}
-
-100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-}
-}
-
-@keyframes fadeInUp {
-0% {
-    opacity: 0;
-    -webkit-transform: translateY(20px);
-    -ms-transform: translateY(20px);
-    transform: translateY(20px);
-}
-
-100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    -ms-transform: translateY(0);
-    transform: translateY(0);
-}
-}
-
-.fadeInUp {
--webkit-animation-name: fadeInUp;
-animation-name: fadeInUp;
-}
-</style>

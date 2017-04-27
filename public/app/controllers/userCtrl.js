@@ -269,6 +269,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	{
 		app.errMsg = false;
 		app.venues=[];
+		
 		if(data.data.success)
 		{
 			if(data.data.businesses.length == 0)
@@ -278,6 +279,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			else{
 				app.venues = data.data.businesses;
 			}
+
 		}
 		else{
 			app.errMsg = data.data.message;
