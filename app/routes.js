@@ -74,6 +74,14 @@ router.post('/upload', function (req, res) {
 //BusinessOwner, if not found then the data entered doesn't exist in my system
 //an error message is displayed accordingly.
 router.post('/login', function(req, res) {
+  //These extra checks to maintain the code secure 
+  req.checkBody('username',' Username Required').notEmpty();
+  req.checkBody('password',' Password Required').notEmpty();
+  var errors=req.validationErrors();
+  if(errors)
+  {
+    return res.json({success:false, message: 'Username and Password are required'});
+  }
   var username = req.body.username;
   var password = req.body.password;
   clientController.getClient(username,password, function(err, client){
@@ -82,32 +90,26 @@ router.post('/login', function(req, res) {
   }
   if(client){
     var token = jwt.sign({user:client,type:1}, secret, {
-        expiresIn: '24h' // in seconds
+        expiresIn: '24h' 
         });
-    return res.json({ success: true, token: token });
-    //return done(null, client);
+    return res.json({ success: true,id:client._id ,username:username ,type: 1 ,token: 'JWT ' + token });
  }
  else{
  administratorController.comparePassword(password,function(err, isAdmin){
     if(err){
       return res.json({ success: false, message: 'Authentication failed.' });
-      //return done(null, false, {message: 'Error Happened'});
     } 
     if(isAdmin && username=="admin"){
       administratorController.getAdmin(function(err,admin)
       {
         if(err)
-
-
         {
           return res.json({ success: false, message: 'Authentication failed.' });
-          //return done(null, false, {message: 'Error Happened'});
         }
         var token = jwt.sign({user:admin[0],type:0}, secret, {
-        expiresIn: '24h' // in seconds
+        expiresIn: '24h' 
         });
-        return res.json({ success: true, token: token });
-        //return done(null, admin[0]);
+        return res.json({ success: true,id:admin[0]._id , username:username ,type: 0 ,token: 'JWT ' + token });
       });
     }
   else{
@@ -120,10 +122,9 @@ router.post('/login', function(req, res) {
     if(businessOwner)
     {
       var token = jwt.sign({user:businessOwner,type:2}, secret, {
-        expiresIn: '24h' // in seconds
+        expiresIn: '24h' 
         });
-      return res.json({ success: true, token: token });
-      //return done(null, businessOwner);
+      return res.json({ success: true,id:businessOwner._id ,username:username , type:2 ,token: 'JWT ' + token });
     }
     else{
       return res.json({ success: false, message: 'Authentication failed. Invalid username or password' });
@@ -137,10 +138,6 @@ router.post('/login', function(req, res) {
     
   });//done--
 
-
-router.get('/dashboard', passport.authenticate('generalLogin', { session: false }), function(req, res) {
-  return res.json('It worked! User id is: ' + req.user._id + '.');
-});
 
 //Routes
 
@@ -181,7 +178,7 @@ router.post('/business/locations/remove', businessOwnerController.removeLocation
 //routing for security
 router.post('/security/change-password', businessOwnerController.changePassword);//done --
 
-router.get('/logout', authController.generalLogOut);
+router.get('/logout',passport.authenticate('generalLogin', { session: false }),authController.generalLogOut);
 
 router.get('/search/:keyword',userController.search);//done--
 

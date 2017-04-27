@@ -13,7 +13,6 @@ var path = require('path');
 var app = express();
 //Database name is Algorithmus
 var DB_URI = "mongodb://localhost:27017/Algorithmus";
-var path = require('path');
 
 // Body Parser Middleware
 app.use(bodyParser.json());
