@@ -32,7 +32,7 @@ let applicationController = {
      accept: function(req, res) {
 
         var pass = userController.generatePassword();
-    
+
         var errors=null;
         if (!errors) {
             var id = req.params.id;
@@ -75,7 +75,7 @@ let applicationController = {
         }
 
     },
-    
+
     //this function is used for real time checking of username availabiltity when
     //a business owner is applying.
    checkUsername: function(req, res){
@@ -132,7 +132,7 @@ let applicationController = {
         }
 
     },
-    
+
     //this function is used for real time checking of email availability
     //when a business owner is applying or when updating his info with a new email.
     checkEmail: function(req, res){
@@ -188,6 +188,7 @@ let applicationController = {
         }
 
     },
+
     //in this function we create a business owner application using the data provided by the applicant
     //this application is to be later reviewed by the admin
     createApplication: function(req, res) {
@@ -210,13 +211,13 @@ let applicationController = {
         }
 
         if (!errors){
-            
+
             if(req.body.username.toLowerCase() == 'admin'){
 
                 res.json({success:false, message: 'Username requested not available!'});
-            
+
             }else{
-            
+
                 User.find({username:req.body.username.toLowerCase()}, function(err, users){
 
                     if(err){
@@ -234,7 +235,7 @@ let applicationController = {
                             User.find({email: req.body.email.toLowerCase()}, function(err, users){
 
                                 if(err){
-                                    
+
                                     res.json({success:false, message: err.message});
 
                                 }else{
@@ -254,22 +255,22 @@ let applicationController = {
                                             description: req.body.description,
                                             locations: req.body.locations
 
-                                        });  
+                                        });
 
                                         application.save(function(err){
-                                        
+
                                             if(err){
-                                        
+
                                                 res.json({success:false, message: 'problem submitting application!'});
-                                        
+
                                             }else{
-                                                
+
                                                 res.json({success:true, message: 'Your application was submitted succesffuly! you\'ll be notified once it is reviewed'});
-                                        
+
                                             }
-                                                 
+
                                         });
-                                                                        
+
                                     }
 
                                 }
@@ -304,7 +305,7 @@ let applicationController = {
                 applicationController.sendRejectMail(application);
                 applicationController.removeApplication(application);
                 res.json({success:true, message: 'Application rejected!'});
-            
+
             } else {
 
                 res.json({success:false, message: 'Application was not found!'});
@@ -323,7 +324,7 @@ let applicationController = {
 
                 owner.user_id = UserA._id;
                 applicationController.save(owner, application);
-            } 
+            }
         });
     },
     //To save the owner.
@@ -372,20 +373,19 @@ let applicationController = {
         });
     },
     // To remove the application after acceptance or rejection . we search for the application with the application id
-    //and delete it 
+    //and delete it
     removeApplication: function(application) {
         Application.remove({
             _id: application._id
         }, function(err) {
             if (err){
-            
+
                 return;
             }
-            
+
         });
     }
 };
 
 //Exporting the module .
 module.exports = applicationController;
-

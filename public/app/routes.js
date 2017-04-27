@@ -14,15 +14,15 @@ angular.module('appRoutes', ['ngRoute'])
 		templateUrl: 'app/views/pages/home.html',
 		controller:'mainCtrl',
 		controllerAs:'main'
-	}) 
-	
+	})
+
 	 .when('/businessOwnerHP',{
 	  templateUrl: 'app/views/pages/BusinessOwnerHomePage.html'
 	})
 
 	.when('/register',{
 	  templateUrl:'app/views/pages/RegisterationPage.html',
-	  controller:'regCtrl',
+	  controller:'RegisterationPageCtrl',
 	  controllerAs:'register',
 	  authenticated:false
 	})
@@ -88,7 +88,7 @@ angular.module('appRoutes', ['ngRoute'])
       controllerAs:"Ctrl",
    	  authenticated:false
     })
-  
+
 	//This returns the page used for searchResults
 	//and assigns the controller to it
 	.when('/search/search/:keyword',{
@@ -133,20 +133,20 @@ angular.module('appRoutes', ['ngRoute'])
 		businessAuthenticated: true
 	})
 
-	.when('/viewBusinessActivities', {		
+	.when('/viewBusinessActivities', {
 		templateUrl: 'app/views/pages/businessActivities.html',
 		controller: 'businessActivitiesCtrl',
 		controllerAs: 'businessActivities',
 		businessAuthenticated:true
 	})
 
-	.when('/repeatableActivityForm/:activityType', {	
+	.when('/repeatableActivityForm/:activityType', {
 		templateUrl: 'app/views/pages/repeatableActivityForm.html',
 		controller: 'repeatableActivityFormCtrl',
 		businessAuthenticated:true
 	})
 
-	.when('/nonRepeatableActivityForm/:activityType', {	
+	.when('/nonRepeatableActivityForm/:activityType', {
 		templateUrl: 'app/views/pages/nonRepeatableActivityForm.html',
 		controller: 'nonRepeatableActivityFormCtrl',
 		businessAuthenticated:true
@@ -189,7 +189,7 @@ angular.module('appRoutes', ['ngRoute'])
 		businessAuthenticated:true
 	})
 
-  
+
   .when('/public/client/review/view/:businessownerID', {
   templateUrl: 'app/views/pages/review/clientViewReviews.html',
   controller: 'viewReviewCtrl',
@@ -203,7 +203,7 @@ angular.module('appRoutes', ['ngRoute'])
     clientAuthenticated: true
   })
 
-  
+
   .when('/public/client/review/myReviews', {
     templateUrl: 'app/views/pages/review/myReviews.html',
     controller: 'myReviewsCtrl',
@@ -223,44 +223,44 @@ angular.module('appRoutes', ['ngRoute'])
 	})
 
 	.when('/applications/:id',{
-	
+
 		templateUrl: 'app/views/pages/application/application.html',
 		controller: 'applicationCtrl',
 		adminAuthenticated:true
-	
+
 	})
 
 	.when('/applications',{
-	
+
 		templateUrl: 'app/views/pages/application/applications.html',
 		controller: 'applicationsCtrl',
 		adminAuthenticated:true
-	
+
 	})
 
 	.when('/apply',{
-	
+
 		templateUrl: 'app/views/pages/application/applicationForm.html',
 		controller: 'applicationFormCtrl',
 		As: 'applicationForm',
 		authenticated:false
-	
+
 	})
 
 	.when('/business/update-info',{
-	
+
 		templateUrl: 'app/views/pages/businessOwner/edit-info.html',
 		controller: 'businessOwnerInfoCtrl',
 		businessAuthenticated:true
-	
+
 	})
 
 	.when('/business/manage-locations',{
-	
+
 		templateUrl: 'app/views/pages/businessOwner/manage-locations.html',
 		controller: 'locationsCtrl',
 		businessAuthenticated:true
-	
+
 	})
 
 	.when('/change-password',{
@@ -275,7 +275,7 @@ angular.module('appRoutes', ['ngRoute'])
 	})
 
 
-	
+
 	.otherwise({
 		redirectTo: '/error404'
 	})

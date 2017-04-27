@@ -37,7 +37,7 @@ let userController={
       req.checkBody('confirmPassword','Passwords do not match').equals(req.body.password);
 
       var errors=req.validationErrors();
-      if(isNaN(req.body.phoneNumber)){
+      if(isNaN(req.body.phoneNumber)|| req.body.phoneNumber.length<5){
           if(errors){
              errors.push({msg: 'Not a valid phone Number!'});
 
@@ -63,7 +63,7 @@ let userController={
               if(err)
               {
 
-                res.json({success:false,message:err});
+                res.json({success:false,message:'Invalid Username'});
 
               }
               else
@@ -85,7 +85,7 @@ let userController={
     user.save(function(err){
       if(err){
 
-              res.json({success:false,message:err});
+              res.json({success:false,message:'Invalid Username or Email'});
         }
       else {
                 var client=new Client({

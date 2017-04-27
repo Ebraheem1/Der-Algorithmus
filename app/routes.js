@@ -210,7 +210,8 @@ router.get('/businessOwner/:id', clientController.viewBusiness);//done --
 //routing for changing the username of the User
 router.post('/change-username', passport.authenticate('generalLogin', { session: false }),userController.changeUsername);//done --
 
-//
+
+
 router.get('/view-activity/:id',clientController.getActivity);
 
 router.get('/application/:id/reject', passport.authenticate('adminLogin', { session: false }), applicationController.reject);//done --
