@@ -40,7 +40,7 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 					location.reload();
 				}
 				else if(data.data.type == 0){
-					console.log(data.data.type);
+					
 					$location.path('/applications');
 					$timeout(function() {
 						location.reload();
@@ -70,7 +70,7 @@ var app = angular.module('mainController', ['authServices','businessOwnerService
 			AuthenticationToken.setUsername();
 			AuthenticationToken.setId();
 		},function(err)
-		{	console.log(err.data);
+		{	
 			if(err.data){
 				Authentication.handleError();
 			}
