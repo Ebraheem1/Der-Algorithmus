@@ -38,7 +38,7 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 			app.activityData.theme = data.data.activity.theme;
 			app.activityData.pricePackages = data.data.activity.pricePackages;
 			app.activityData.slots = data.data.activity.slots;
-			app.activityData.dayOffs = data.data.activity.dayOffs;
+			app.activityData.dayOffsNames = data.data.activity.dayOffsNames;
 			app.activityExists = true;
 		}
 		else{
@@ -53,7 +53,7 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 		app.successMsg = false;
 		app.errMsg = false;
 		app.loading = true;
-
+		console.log(app.activityData.dayOffsNames);
 		Activity.editActivity($routeParams.id, app.activityData).then(function(data){
 			if(data.data.success){
 				app.successMsg = data.data.message;
@@ -116,12 +116,6 @@ angular.module('activityController', ['authServices', 'activityServices', 'fileM
 		var packageData = {};
 		packageData.participants = participants;
 		packageData.price = price;
-
-		if(isNaN(participants) || isNaN(price)){
-    		app.packageErrMsg = 'Participants and Price should be numbers!'
-			app.packageLoading = false;
-			return;
-		}
 
 		Activity.addPricePackage($routeParams.id,packageData).then(function(data){
 			if(data.data.success){

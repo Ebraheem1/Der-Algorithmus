@@ -50,6 +50,12 @@ let activityController={
 			res.json({success:false, message: 'You should include participants and price in the price package!'});
 			return;
 		}
+
+		if(isNaN(participants) || isNaN(price)){
+    		res.json({success:false, message: 'Participants and Price should be numbers!'});
+			return;
+		}
+		
 		RepeatableActivity.findOne({_id:activity_id}, function(err, repeatableActivity){
 			if(err){
 				res.json({success:false, message: err});
@@ -65,9 +71,22 @@ let activityController={
 								res.json({success:false, message: err});
 							}else{
 								if(repeatableActivityReservation){
-									var people = repeatableActivityReservation.participants+1;
-									res.json({success:false, message: 'This activity is currently reserved by '+people+' person(s), You can add price packages to an activity only when it is not reserved!'});
-									return;
+									var startTime, endTime;
+									for (var i =0; i<repeatableActivity.slots.length; i++){
+										if(repeatableActivity.slots[i]._id==repeatableActivityReservation.slot_id){
+											startTime = repeatableActivity.slots[i].startTime;
+											endTime = repeatableActivity.slots[i].endTime;
+										}
+									}
+									var reservationDate = new Date(repeatableActivityReservation.date);
+									reservationDate.setHours(endTime.substring(0,2));
+									reservationDate.setMinutes(endTime.substring(3,5));
+									var dateNow = new Date();
+									var reservationDateOnly = reservationDate.getDay()+'-'+reservationDate.getMonth()+'-'+reservationDate.getFullYear();
+									if(reservationDate>dateNow){
+										res.json({success:false, message: 'This activity is currently reserved. Reservation is on '+reservationDateOnly+', from '+startTime+' to '+endTime+'. You can only edit an ectivity when it is not reserved!'});
+										return;
+									}
 								}
 							}
 						});
@@ -113,9 +132,22 @@ let activityController={
 								res.json({success:false, message: err});
 							}else{
 								if(repeatableActivityReservation){
-									var people = repeatableActivityReservation.participants+1;
-									res.json({success:false, message: 'This activity is currently reserved by '+people+' person(s), You can delete price packages from an activity only when it is not reserved!'});
-									return;
+									var startTime, endTime;
+									for (var i =0; i<repeatableActivity.slots.length; i++){
+										if(repeatableActivity.slots[i]._id==repeatableActivityReservation.slot_id){
+											startTime = repeatableActivity.slots[i].startTime;
+											endTime = repeatableActivity.slots[i].endTime;
+										}
+									}
+									var reservationDate = new Date(repeatableActivityReservation.date);
+									reservationDate.setHours(endTime.substring(0,2));
+									reservationDate.setMinutes(endTime.substring(3,5));
+									var dateNow = new Date();
+									var reservationDateOnly = reservationDate.getDay()+'-'+reservationDate.getMonth()+'-'+reservationDate.getFullYear();
+									if(reservationDate>dateNow){
+										res.json({success:false, message: 'This activity is currently reserved. Reservation is on '+reservationDateOnly+', from '+startTime+' to '+endTime+'. You can only edit an ectivity when it is not reserved!'});
+										return;
+									}
 								}
 							}
 						});
@@ -172,9 +204,22 @@ let activityController={
 								res.json({success:false, message: err});
 							}else{
 								if(repeatableActivityReservation){
-									var people = repeatableActivityReservation.participants+1;
-									res.json({success:false, message: 'This activity is currently reserved by '+people+' person(s), You can add slots to an activity only when it is not reserved!'});
-									return;
+									var startTime, endTime;
+									for (var i =0; i<repeatableActivity.slots.length; i++){
+										if(repeatableActivity.slots[i]._id==repeatableActivityReservation.slot_id){
+											startTime = repeatableActivity.slots[i].startTime;
+											endTime = repeatableActivity.slots[i].endTime;
+										}
+									}
+									var reservationDate = new Date(repeatableActivityReservation.date);
+									reservationDate.setHours(endTime.substring(0,2));
+									reservationDate.setMinutes(endTime.substring(3,5));
+									var dateNow = new Date();
+									var reservationDateOnly = reservationDate.getDay()+'-'+reservationDate.getMonth()+'-'+reservationDate.getFullYear();
+									if(reservationDate>dateNow){
+										res.json({success:false, message: 'This activity is currently reserved. Reservation is on '+reservationDateOnly+', from '+startTime+' to '+endTime+'. You can only edit an ectivity when it is not reserved!'});
+										return;
+									}
 								}
 							}
 						});
@@ -221,9 +266,22 @@ let activityController={
 								res.json({success:false, message: err});
 							}else{
 								if(repeatableActivityReservation){
-									var people = repeatableActivityReservation.participants+1;
-									res.json({success:false, message: 'This activity is currently reserved by '+people+' person(s), You can delete time slots from an activity only when it is not reserved!'});
-									return;
+									var startTime, endTime;
+									for (var i =0; i<repeatableActivity.slots.length; i++){
+										if(repeatableActivity.slots[i]._id==repeatableActivityReservation.slot_id){
+											startTime = repeatableActivity.slots[i].startTime;
+											endTime = repeatableActivity.slots[i].endTime;
+										}
+									}
+									var reservationDate = new Date(repeatableActivityReservation.date);
+									reservationDate.setHours(endTime.substring(0,2));
+									reservationDate.setMinutes(endTime.substring(3,5));
+									var dateNow = new Date();
+									var reservationDateOnly = reservationDate.getDay()+'-'+reservationDate.getMonth()+'-'+reservationDate.getFullYear();
+									if(reservationDate>dateNow){
+										res.json({success:false, message: 'This activity is currently reserved. Reservation is on '+reservationDateOnly+', from '+startTime+' to '+endTime+'. You can only edit an ectivity when it is not reserved!'});
+										return;
+									}
 								}
 							}
 						});
@@ -277,9 +335,22 @@ let activityController={
 											res.json({success:false, message: err});
 										}else{
 											if(repeatableActivityReservation){
-												var people = repeatableActivityReservation.participants+1;
-												res.json({success:false, message: 'This activity is currently reserved by '+people+' person(s), You can change the image of an activity only when it is not reserved!'});
-												return;
+												var startTime, endTime;
+												for (var i =0; i<repeatableActivity.slots.length; i++){
+													if(repeatableActivity.slots[i]._id==repeatableActivityReservation.slot_id){
+														startTime = repeatableActivity.slots[i].startTime;
+														endTime = repeatableActivity.slots[i].endTime;
+													}
+												}
+												var reservationDate = new Date(repeatableActivityReservation.date);
+												reservationDate.setHours(endTime.substring(0,2));
+												reservationDate.setMinutes(endTime.substring(3,5));
+												var dateNow = new Date();
+												var reservationDateOnly = reservationDate.getDay()+'-'+reservationDate.getMonth()+'-'+reservationDate.getFullYear();
+												if(reservationDate>dateNow){
+													res.json({success:false, message: 'This activity is currently reserved. Reservation is on '+reservationDateOnly+', from '+startTime+' to '+endTime+'. You can only edit an ectivity when it is not reserved!'});
+													return;
+												}
 											}
 										}
 									});
@@ -342,14 +413,17 @@ let activityController={
 		
 		//RepeatableActivity attributes
 		var theme = req.body.theme;
-		var pricePackages = req.body.pricePackages;
-		var slots = req.body.slots;
-		var dayOffs = req.body.dayOffs;
+		var dayOffsNames = req.body.dayOffsNames;
 
 		var missingFields = businessOwner_id==null || businessOwner_id=='';
 		if(missingFields){
 			//The field: (businessOwner_id) is required!
 			res.json({success:false, message: 'Contact Development Team'});
+			return;
+		}
+
+		if(cancellationWindow!=null && cancellationWindow!='' && isNaN(cancellationWindow)){
+			res.json({success:false, message: 'Cancellation Window should be a number!'});
 			return;
 		}
 
@@ -380,7 +454,7 @@ let activityController={
 														endTime = repeatableActivity.slots[i].endTime;
 													}
 												}
-												var reservationDate = new Date(repeatableActivityReservation);
+												var reservationDate = new Date(repeatableActivityReservation.date);
 												reservationDate.setHours(endTime.substring(0,2));
 												reservationDate.setMinutes(endTime.substring(3,5));
 												var dateNow = new Date();
@@ -395,11 +469,37 @@ let activityController={
 									repeatableActivity.description = (description==null||description=='')? repeatableActivity.description : description;
 									repeatableActivity.cancellationWindow = (cancellationWindow==null||cancellationWindow=='')? repeatableActivity.cancellationWindow : cancellationWindow;
 									repeatableActivity.theme = (theme==null||theme=='')? repeatableActivity.theme : theme;
-									repeatableActivity.pricePackages = (pricePackages==null||pricePackages=='')? repeatableActivity.pricePackages : pricePackages;
-									repeatableActivity.slots = (slots==null||slots=='')? repeatableActivity.slots : slots;
-									repeatableActivity.dayOffs = (dayOffs==null||dayOffs=='')? repeatableActivity.dayOffs : dayOffs;
+									repeatableActivity.dayOffsNames = (dayOffsNames==null||dayOffsNames=='')? repeatableActivity.dayOffsNames : dayOffsNames;
+									if(dayOffsNames!=null&&dayOffsNames!=''){
+
+										repeatableActivity.dayOffs = [];
+
+										if(dayOffsNames.indexOf("Sunday")!=-1){
+											repeatableActivity.dayOffs.push(0);
+										}
+										if(dayOffsNames.indexOf("Monday")!=-1){
+											repeatableActivity.dayOffs.push(1);
+										}
+										if(dayOffsNames.indexOf("Tuesday")!=-1){
+											repeatableActivity.dayOffs.push(2);
+										}
+										if(dayOffsNames.indexOf("Wednesday")!=-1){
+											repeatableActivity.dayOffs.push(3);
+										}
+										if(dayOffsNames.indexOf("Thursday")!=-1){
+											repeatableActivity.dayOffs.push(4);
+										}
+										if(dayOffsNames.indexOf("Friday")!=-1){
+											repeatableActivity.dayOffs.push(5);
+										}
+										if(dayOffsNames.indexOf("Saturday")!=-1){
+											repeatableActivity.dayOffs.push(6);
+										}
+									}
+
 									repeatableActivity.save(function(err) {
 						                if (err) {
+						                	console.log(err);
 						                	res.json({success:false, message: err});
 						                } 
 						                else {
