@@ -63,7 +63,7 @@ let userController={
               if(err)
               {
 
-                res.json({success:false,message:err});
+                res.json({success:false,message:'Invalid Username'});
 
               }
               else
@@ -85,7 +85,7 @@ let userController={
     user.save(function(err){
       if(err){
 
-              res.json({success:false,message:err});
+              res.json({success:false,message:'Invalid Username or Password'});
         }
       else {
                 var client=new Client({
