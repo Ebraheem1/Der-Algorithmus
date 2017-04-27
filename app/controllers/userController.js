@@ -82,12 +82,12 @@ let userController={
           });
            UserId=user._id;
 
-    user.save(function(err){
-      if(err){
-
+            user.save(function(err){
+                if(err){
               res.json({success:false,message:'Invalid Username or Email'});
-        }
-      else {
+
+            }
+              else {
                 var client=new Client({
                 user_id:UserId,
                 firstName:req.body.firstName,
