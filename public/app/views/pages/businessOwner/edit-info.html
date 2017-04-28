@@ -1,10 +1,70 @@
 <br><br>
+<style type="text/css">
+	div.div-centered {
+	  	padding-left: 350px;
+	}
+	input.input-red{
+		border-color: red;
+	}
+	.sidenav {
+	    height: 100%;
+	    width: 0;
+	    position: fixed;
+	    z-index: 1;
+	    top: 0;
+	    left: 0;
+	    background-color: #111;
+	    overflow-x: hidden;
+	    transition: 0.5s;
+	    padding-top: 60px;
+	}
 
+	.sidenav a {
+	    padding: 8px 8px 8px 32px;
+	    text-decoration: none;
+	    font-size: 20px;
+	    color: #818181;
+	    display: block;
+	    transition: 0.3s;
+	}
 
+	.sidenav a:hover, .offcanvas a:focus{
+	    color: #f1f1f1;
+	}
+
+	.sidenav .closebtn {
+		position: relative;
+	    right: 25px;
+	    font-size: 30px;
+	    margin-left: 200px;
+	}
+
+	@media screen and (max-height: 450px) {
+	  .sidenav {padding-top: 15px;}
+	  .sidenav a {font-size: 18px;}
+	}	
+</style>
 <div class = "container">
-	<h1>My Profile</h1>
+	<div class = "container" ng-show = "business._id" ng-show = "info" ng-controller = "businessOwnerInfoCtrl as businessOwnerInfo">
+	<br><br>
+	<div id="mySidenav" class="sidenav">
+		<a href="" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="/business/update-info">Basic info</a>
+		<a href="/business/manage-locations">locations</a>
+		<a href="/change-password">change username</a>
+		<a href="/change-username">change password</a>	
+	</div>
+	<span style="font-size:24px;cursor:pointer; color: white;" onclick="openNav()">&#9776; info menu</span>
 	<hr>
-	<div class = "container" ng-show = "business._id" ng-controller = "businessOwnerInfoCtrl as businessOwnerInfo">
+	<script>
+		function openNav() {
+		    document.getElementById("mySidenav").style.width = "250px";
+		}
+
+		function closeNav() {
+		    document.getElementById("mySidenav").style.width = "0";
+		}
+	</script>
 		
 		<div class = "div-centered">
 			<form class = "form-horizontal" role = "form" name = "data" ng-submit="businessOwnerInfo.updateInfo();">
@@ -15,7 +75,7 @@
 	                		name: {{business.name}}
 	                	</label>
 						<input class="form-control" type="text" name="name" placeholder = "{{business.name}}" ng-model = "businessOwnerInfo.info.name" ng-show = "editName">
-						<a href="" ng-click = "editName = !editName">{{editName? "cancel": "edit";}}</a>		 
+						<a href="" ng-click = "editName = !editName; tidyForm();">{{editName? "cancel": "edit";}}</a>		 
 	                </div>
 	            </div>
 	            <br>
@@ -25,29 +85,29 @@
 	                    <label ng-show = "!editEmail" for="email" style="color: #ffffff">
 	                		email: {{user.email}}
 	                	</label>
-						<input class="form-control" type="email" name="email" ng-model = "businessOwnerInfo.info.email" placeholder = "{{user.email}}" ng-show = "editEmail" ng-change = "editEmail && !(businessOwnerInfo.isOldEmail()) && data.email.$dirty && businessOwnerInfo.isEmail() && businessOwnerInfo.checkEmail()" value = "(!editEmail)? '';">
-
-						<label for="email" style="color: #ffffff" ng-show = "!(businessOwnerInfo.isEmpty(data.email)) && editEmail && data.email!=user.email && data.email!=user.email && businessOwnerInfo.isEmail() && !(businessOwnerInfo.isOldEmail()) && data.email.$dirty">{{(emailAvailable)?"✔":"email not available!"}}</label>
-						
-						<label for="email" style="color: #ffffff" ng-show = "editEmail && data.email!=user.email && !businessOwnerInfo.isEmail() && data.email.$dirty">{{"not a valid email address!"}}</label>
-						
-						<label for="email" style="color: #ffffff" ng-show = "editEmail && data.email!=user.email && data.email!=user.email && businessOwnerInfo.isEmail() && businessOwnerInfo.isOldEmail() && data.email.$dirty">{{"New email must be different from current one or why the change!"}}</label>
-						
-						<a href="" ng-click = "editEmail = !editEmail;">{{editEmail? "cancel": "edit";}}</a>
-						
+						<input class="form-control" type="email" name="email" ng-model = "businessOwnerInfo.info.email" placeholder = "{{user.email}}" ng-show = "editEmail" ng-change = "isEmail() && !(isOldEmail()) && businessOwnerInfo.checkEmail()">
+						<a href="" ng-click = "editEmail = !editEmail; tidyForm();">{{editEmail? "cancel": "edit";}}</a>
 	                </div>
+	                
+	                <label for="email" style="color: #ffffff" ng-show = "isEmail() && !(isOldEmail())">{{(emailAvailable)?"✔":"email not available!"}}</label>
+	                
+	                <label for="email" style="color: #ffffff" ng-show = "editEmail && businessOwnerInfo.info.email.length && !(isEmail())">not a valid email address!</label>
+	                
+	                <label for="email" style="color: #ffffff" ng-show = "editEmail && isEmail() && isOldEmail()">{{"New email must be different from current one!"}}</label>
 	            </div>
 				<br>
-				
 				<div class="form-group">
 	                <div class="col-md-6">
-	                    <label ng-show = "!editNumber" for="phoneNumber" style="color: #ffffff">
+	                	<label ng-show = "!editNumber" for="phoneNumber" style="color: #ffffff">
 	                		phone number: {{user.phoneNumber}}
 	                	</label>
-						<input class="form-control" type="text" name="phoneNumber" placeholder = "{{user.phoneNumber}}" ng-show = "editNumber" ng-model = "businessOwnerInfo.info.phoneNumber">
-						<a href="" ng-click = "editNumber = !editNumber">{{editNumber? "cancel": "edit";}}</a> 
+	                	<input class="form-control" type="text" name="phoneNumber" placeholder = "{{user.phoneNumber}}" ng-show = "editNumber" ng-model = "businessOwnerInfo.info.phoneNumber" ng-change = "isPhoneNumber()">
+	                	<a href="" ng-click = "editNumber = !editNumber; tidyForm();">{{editNumber? "cancel": "edit";}}</a> 
 	                </div>
+	                	<label style="color: #ffffff" for="phoneNumber" ng-show = "businessOwnerInfo.info.phoneNumber.length>0 && editNumber">{{isPhoneNumber?"✔":"Not a valid phone number!"}}</label>
+	                	
 	            </div>
+				
 				<br>
 
 				<div class="form-group">
@@ -55,18 +115,15 @@
 	                    <label ng-show = "!editDescription" for="description" style="color: #ffffff">
 	                		description: {{business.description}}
 	                	</label>
-						<input class="form-control" type="text" name="description" placeholder = "{{business.description}}" ng-show = "editDescription" ng-model = "businessOwnerInfo.info.description">
-						<a href="" ng-click = "editDescription = !editDescription">{{editDescription? "cancel": "edit";}}</a>
+						<textarea class="form-control" type="text" name="description" placeholder = "{{business.description}}" ng-show = "editDescription" ng-model = "businessOwnerInfo.info.description">
+						</textarea>
+						<a href="" ng-click = "editDescription = !editDescription; tidyForm();">{{editDescription? "cancel": "edit";}}</a>
 	                </div>
 	            </div>	
-	            <ul>
-	            	<li><a href="/business/manage-locations">manage locations</a></li>
-	            	<li><a href="/change-password">change password</a></li>
-	            	<li><a href="/change-username">change username</a></li>
-	            </ul>	
+	
 				<br>
 				<div class = "inline-block">
-					<button class="btn btn-primary" ng-disabled = "data.$invalid || (!emailAvailable && editEmail) || !(editEmail || editDescription || editNumber || editName)" type="submit">Update Info</button>
+					<button class="btn btn-primary" ng-disabled = "data.$invalid || (!emailAvailable && editEmail) ||(!isPhoneNumber && editNumber) || !(editEmail || editDescription || editNumber || editName) || (!isEmail() && editEmail)" type="submit">Save changes!</button>
 					<a href="/">cancel</a>
 				</div>
 			</form>
