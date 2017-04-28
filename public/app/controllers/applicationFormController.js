@@ -1,8 +1,10 @@
-var app = angular.module('applicationFormController', ['applicationServices']);
+var app = angular.module('applicationFormController', ['applicationServices', 'modalDialog']);
 
-  app.controller('applicationFormCtrl', function(Application, Authentication,$http, $window, $scope) {
+  app.controller('applicationFormCtrl', function(Application, Authentication, $http, $window, $scope) {
 
     this.application = {};
+
+    $scope.modalShown = false;
 
     var controller = this;
 
@@ -22,6 +24,12 @@ var app = angular.module('applicationFormController', ['applicationServices']);
       var lastItem = $scope.choices.length-1;
       $scope.choices.splice(lastItem);
 
+    };
+
+    $scope.toggleModal = function(application) {
+
+      $scope.modalShown = !$scope.modalShown;
+      
     };
 
     //real time checking of email pattern
@@ -49,7 +57,7 @@ var app = angular.module('applicationFormController', ['applicationServices']);
 
 
 
-          $window.location.href = '/applications';
+          $window.location.href = '/apply/success';
           controller.application = {};
 
         }else{
@@ -62,10 +70,12 @@ var app = angular.module('applicationFormController', ['applicationServices']);
       },function(err){
 
         if(err.data){
+      
           Authentication.handleError();
+       
         }
-      }
-      );
+      
+      });
 
     };
 
@@ -105,7 +115,7 @@ var app = angular.module('applicationFormController', ['applicationServices']);
     //real time checking of phone number format
     this.isPhoneNumber = function(){
 
-      $scope.isPhoneNumber = !isNaN(controller.application.phoneNumber);
+      $scope.isPhoneNumber = !isNaN(controller.application.phoneNumber)&&(controller.application.phoneNumber.length>4);
 
     };
 
