@@ -1,4 +1,4 @@
-	var app = angular.module('applicationController', ['applicationServices', 'authServices']);
+var app = angular.module('applicationController', ['applicationServices', 'authServices']);
 
 	app.controller('applicationCtrl', function(Application, Authentication ,AuthenticationToken, $window, $location, $http, $scope, $routeParams){
 
