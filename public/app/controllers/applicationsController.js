@@ -1,10 +1,14 @@
 
 
-var app = angular.module('applicationsController', ['applicationServices', 'pagingServices', 'authServices']);
+var app = angular.module('applicationsController', ['applicationServices', 'pagingServices', 'authServices', 'modalDialog']);
 
 app.controller('applicationsCtrl', function(Application, AuthenticationToken, Pager, $location, $scope, $routeParams){
 
 	var controller = this;
+
+	$scope.modalShown = false;
+	$scope.app= null;
+
 
 	//retrieve all application on page load
 	Application.getAllApplications().then(function(applications){
@@ -55,5 +59,12 @@ app.controller('applicationsCtrl', function(Application, AuthenticationToken, Pa
         }
 	
 	});
+
+	$scope.toggleModal = function(application) {
+
+      $scope.modalShown = !$scope.modalShown;
+      $scope.app = application;
+      
+    };
 
 });
