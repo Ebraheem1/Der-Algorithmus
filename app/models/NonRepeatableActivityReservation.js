@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 let stripe = require("stripe")("sk_test_Hr41ZUg64PJe2duUepC7ruyr");
+
+
 var NonRepeatableActivityReservationSchema = new Schema({
 
 	nonRepeatableActivity_id: {type: mongoose.Schema.Types.ObjectId, ref: 'NonRepeatableActivity', required: true},
@@ -9,17 +11,20 @@ var NonRepeatableActivityReservationSchema = new Schema({
 	price: {type:Number, required:true}, // calculated price according to number of participants, pricePerPerson and offer(if available)
 	charge_key:{type:String,required:true}
 });
+
 // this pre function is to make sure that this reservation is refunded before it's deletion
 NonRepeatableActivityReservationSchema.pre('remove',function(next){
 
 	stripe.refunds.create( {
-						charge : this.charge_key
-					},function(err,refund){
-						if(err)
-						res.json({succes:false,message:err});
+										charge : this.charge_key
+									},function(err,refund){
+										if(err)
+										res.json({succes:false,message:err});
 
-					});
-	next();
+									});
+					next();
 });
+
+
 
 module.exports = mongoose.model('NonRepeatableActivityReservation', NonRepeatableActivityReservationSchema);
