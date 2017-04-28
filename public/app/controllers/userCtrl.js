@@ -1,5 +1,5 @@
 
-angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientServices','businessOwnerServices', 'authServices'])
+angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientServices','businessOwnerServices', 'authServices','pagingServices'])
 //this controller is responsible for registeration of clients, it takes the regData from user and forward it to the services
 //responsible to send this data to the backend and then it checks if there is an error forwarded from the backend and show it to
 //user if exists.
@@ -134,13 +134,32 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 
 // this controller is responsible for viewing ths summaries of all business Owners on the website, just gets all the business owners
 // from the back end using the service in client services
-.controller('viewCtrl',function($http,$location,$timeout,Client){
+.controller('viewCtrl',function($http,$location,$timeout,Client,Pager,$scope){
 		var app=this;
 		app.BusinessOwners=[];
 		app.errMsg=false;
 		Client.viewSummaries().then(function(data){
 			if(data.data.success){
 				app.BusinessOwners=data.data.BusinessOwners;
+				app.pager = {};
+				$scope.itemsPerPage = 9;
+		    	app.setPage = function (page) {
+
+                	if (page < 1 || page > app.pager.totalPages) {
+
+                    return;
+
+                	}
+	                // get pager object from service
+	                app.pager = Pager.getPager(app.BusinessOwners.length, page,$scope.itemsPerPage);
+	                // get current page of items
+	                app.items = app.BusinessOwners.slice(app.pager.startIndex, app.pager.endIndex + 1);
+
+            	};
+            // initialize to page 1
+            app.setPage(1);
+            //end of pagination logic for controller
+
 			}
 			else {
 					app.errMsg=data.data.message;
@@ -270,16 +289,17 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 
 
 })
-.controller('searchCtrl',function($http,BusinessOwner)
+.controller('searchCtrl',function($http,BusinessOwner,Pager,$scope)
 {	//This Contoller calles businessOwnerServices to perform the search query
 	//based on the keyword entered by the user which is now found in the url of the
-	//page then it takes the returned results and put them in properties of the
+	//page then it takes the returned results and put them in properties of the 
 	//controller to be used in the HTML file accordingly.
 	var app = this;
 	BusinessOwner.getResults().then(function(data)
 	{
 		app.errMsg = false;
 		app.venues=[];
+		
 		if(data.data.success)
 		{
 			if(data.data.businesses.length == 0)
@@ -289,12 +309,31 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			else{
 				app.venues = data.data.businesses;
 			}
+			app.pager = {};
+			$scope.itemsPerPage = 9;
+		    app.setPage = function (page) {
+
+                if (page < 1 || page > app.pager.totalPages) {
+
+                    return;
+
+                }
+                // get pager object from service
+                app.pager = Pager.getPager(app.venues.length, page,$scope.itemsPerPage);
+                // get current page of items
+                app.items = app.venues.slice(app.pager.startIndex, app.pager.endIndex + 1);
+
+            };
+            // initialize to page 1
+            app.setPage(1);
+            //end of pagination logic for controller
+
 		}
 		else{
 			app.errMsg = data.data.message;
 		}
 	});
-
+	
 
 })
 .controller('adminCtrl',function($http,Admin,$location)
