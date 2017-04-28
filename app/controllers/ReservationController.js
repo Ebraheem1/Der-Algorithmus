@@ -15,19 +15,19 @@ let ReservationController={
     },
 
 		//This function is for the repeatable activity reservation . it takes the client id from the request paramters , the slot_id , the package id
-		// ,and the price . it checks if the reservation is in the past and rejects it if it is . it then checks if there is already a reservation 
-		// in this particular time given . if there is an appropriate error is sent back if it is not we reserve this slot after checking if it is not 
+		// ,and the price . it checks if the reservation is in the past and rejects it if it is . it then checks if there is already a reservation
+		// in this particular time given . if there is an appropriate error is sent back if it is not we reserve this slot after checking if it is not
 		// a day off for the activity
     repeatableReserveSlot:function(req,res){
 
-      var client_id = req.user._id;  
+      var client_id = req.user._id;
       var slot_id = req.body.slot_id;
       var package_id = req.body.package_id;
       var date = req.body.date;
       var repeatableActivity_id = req.params.activity_id;
       var price ;
       var newDate = new Date(date);
-     
+
       newDate.setDate(newDate.getDate()+1);
 
       var missingFields = client_id==null ||client_id=='' ||
@@ -44,7 +44,7 @@ let ReservationController={
         }
 
 
-         RepeatableActivityReservation.findOne({slot_id:slot_id,repeatableActivity_id:repeatableActivity_id,date:date},function(err,activity){
+         RepeatableActivityReservation.findOne({slot_id:slot_id,repeatableActivity_id:repeatableActivity_id,date:newDate},function(err,activity){
           if(err)
           res.json({success:false,status:0,message:err});
           else
@@ -83,8 +83,8 @@ let ReservationController={
 
 
     },
-		
-		//This function is for reserving in a nonRepeatable activity . it takes the repeatable activity id , the client id from the 
+
+		//This function is for reserving in a nonRepeatable activity . it takes the repeatable activity id , the client id from the
 		// Request paramters , and the price . it then checks if the number of participants is less than 1 . return an appropriate error message
 		// in this case . checks for missing fields, See if there is enough places in this activity and if there is we complete the reservation
 		// if there is not we send an appropriate error message
@@ -146,7 +146,7 @@ let ReservationController={
             res.json({success:false,message:err});
             else {
               if(activity){
-                
+
               res.json({success:true,activity:activity});
               return ;
                     }
@@ -170,7 +170,7 @@ let ReservationController={
         });
       }
     },
-		// This function is used to check if the slot you are trying to reserve is a day off for this activity. an appropriate error message 
+		// This function is used to check if the slot you are trying to reserve is a day off for this activity. an appropriate error message
     FreeDayCheck:function(req,res,activity,date,reservation){
   var dat = new Date(date);
 
@@ -187,7 +187,7 @@ var found = false ;
           res.json({success:false,status:0,message:"Sorry this day is a day Off. Please choose another"});
       }
     },
-		//this function is used for the actual reservation of an activity ( actually saving the data in the database ) it is executed after 
+		//this function is used for the actual reservation of an activity ( actually saving the data in the database ) it is executed after
 		// stripe AI call . it takes charges the client and save the reservation . ( including the charge key for refunding later )
     Pay:function(req,resp){
 
@@ -263,7 +263,7 @@ var found = false ;
 
 
 
-      //Function for getting all reservations of a certain client . it takes the client_id from the request parameters and returns 
+      //Function for getting all reservations of a certain client . it takes the client_id from the request parameters and returns
 			// all his relevant activities . both repeatable and non repeatable
       getAllReservations:function(req,res){
 
@@ -284,7 +284,7 @@ var found = false ;
         });
       },
        //Function for canceling reservation . it takes the reservation ID as a parameter and the type . looks for this current reservation
-			// whether it is repeatable or non repeatable and cancel it ( refunding and deleting it from the database ) if it is 
+			// whether it is repeatable or non repeatable and cancel it ( refunding and deleting it from the database ) if it is
 			// not past the cancellation window .
        cancelReservation:function(req,res){
 

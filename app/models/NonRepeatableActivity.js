@@ -23,15 +23,17 @@ var NonRepeatableActivitySchema = new Schema({
 	currentParticipants: {type: Number, default: 0}, //number of people who already reserved the activity
 	pricePerPerson: {type: Number ,required: true},
 	cancellationWindow: Number ,//client is allowed to cancel reservation and get refund <cancellationWindow> days before reservation date
-    offer:{type:Offer,default:null}
+  offer:{type:Offer,default:null}
 });
 // this pre function is to make sure that all the related reservations is deleted before the deletion of this non repeatable activity
 NonRepeatableActivitySchema.pre('remove',function(next){
+	var date = new Date();
+	if(this.travelingDate>=date){
 	NonRepeatableActivityReservation.find({nonRepeatableActivity_id:this._id},function(err,reservations){
 		reservations.forEach(function(reservation){
 			reservation.remove();
 		});
-	});
+	});}
 
 next();
 });

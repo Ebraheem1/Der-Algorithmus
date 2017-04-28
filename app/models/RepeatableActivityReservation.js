@@ -14,6 +14,8 @@ var RepeatableActivityReservationSchema = new Schema({
 
 // this pre function is to make sure that this reservation is refunded before it's deletion
 RepeatableActivityReservationSchema.pre('remove',function(next){
+	var date = new Date();
+	if(this.date>=date){
 	stripe.refunds.create( {
 						charge : this.charge_key
 					},function(err,refund){
@@ -22,6 +24,9 @@ RepeatableActivityReservationSchema.pre('remove',function(next){
 
 					});
 	next();
+}else{
+		next();
+	}
 });
 
 module.exports = mongoose.model('RepeatableActivityReservation', RepeatableActivityReservationSchema);
