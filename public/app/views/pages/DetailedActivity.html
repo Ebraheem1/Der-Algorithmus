@@ -1,48 +1,105 @@
-<div ng-hide="viewActivity.errMsg">
-  <img src={{viewActivity.activity.image}} style="width:100%;">
-<div class="row text-center" ng-show="viewActivity.type">
-        <div class="col-lg-4">
-          <h2>Description</h2>
-          <p>{{viewActivity.activity.description}}</p>
-        </div><!-- /.col-lg-4 -->
-</div>
-<!-- Non RepeatableActivity -->
-<div class="row" ng-hide="viewActivity.type">
-        <div class="col-lg-4">
-          <h2>Description</h2>
-          <p>{{viewActivity.activity.description}}</p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-          <h2>Traveling Information</h2>
-          <p><strong>Destination:</strong> {{viewActivity.activity.destination}}</p>
-          <p><strong>Tansportation:</strong> {{viewActivity.activity.transportation}}</p>
-          <p><strong>Accommodation:</strong> {{viewActivity.activity.Accommodation}}</p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-          <h2>Dates</h2>
-          <p><strong>Traveling Date:</strong> {{viewActivity.activity.travelingDate | limitTo : 10 : 0 }}</p>
-          <p><strong>Return Date:</strong> {{viewActivity.activity.returnDate | limitTo : 10 : 0 }}</p>
-        </div><!-- /.col-lg-4 -->
-      </div>
+<div class="container">
 
-      <hr class="featurette-divider">
-      <!-- Offer-->
-      <div class="row featurette" ng-show="viewActivity.offer">
-        <div class="col-md-7">
-          <h2 class="featurette-heading">Offers</h2>
-          <p class="lead"><strong>Description: </strong>{{viewActivity.offer.offer}}</p>
-          <p class="lead"><strong>Discount: </strong>{{viewActivity.offer.discount}} %</p>
-          <p class="lead"><strong>Expiry Date: </strong>{{viewActivity.offer.exp_date | limitTo : 10 : 0}}</p>
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Portfolio Item
+                    <small>Subheading</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">{{viewActivity.activity.type}}</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Portfolio Item Row -->
+        <div class="row">
+
+            <div class="col-md-8">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class=""></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1" class="active"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item">
+                            <img class="img-responsive" src="{{viewActivity.activity.image}}">
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h3>Project Description</h3>
+                <p>{{viewActivity.activity.description}}</p>
+                <h3>Activity Details</h3>
+                <ul ng-show="viewActivity.type"> <!-- Repeatable Activity -->
+                    <li>Theme: {{viewActivity.activity.theme}}</li>
+                </ul>
+
+                <ul ng-hide="viewActivity.type"> <!-- Non repeatable activity-->
+                    <li><strong>Traveling information</strong>
+                        <ul>
+                          <li>Destination: {{viewActivity.activity.destination}}</li>
+                          <li>Transportation: {{viewActivity.activity.transportation}}</li>
+                          <li>Accommodation: {{viewActivity.activity.Accommodation}}</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>Dates </strong>
+                          <ul>
+                            <li>Traveling Date: {{viewActivity.activity.travelingDate | limitTo : 10 : 0 }}</li>
+                            <li>Return Date: {{viewActivity.activity.returnDate | limitTo : 10 : 0 }}</li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+                <h3 ng-show="viewActivity.offer" style="color:red">Offer</h3>
+                <ul ng-show="viewActivity.offer">
+                  <li>Description: {{viewActivity.offer.offer}}</li>
+                  <li>Discount: {{viewActivity.offer.discount}} %</li>
+                  <li>Expiry Date: {{viewActivity.offer.exp_date | limitTo : 10 : 0}}</li>
+                </ul>
+
+            </div>
 
         </div>
-        <div class="col-md-5">
-        <img style="border-radius: 10px; position: absolute;right: 0;left: 0;margin: 0 auto; max-width: 200px;" class="featurette-image img-fluid mx-auto" src="{{viewActivity.offer.image}}" height="200" data-holder-rendered="true"/>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <div class="row">
+
+            <div class="col-lg-12">
+                <h3 class="page-header">Related Projects</h3>
+            </div>
+
+            <div class="col-sm-3 col-xs-6" ng-repeat="activity in viewActivity.activities">
+                <a href="/viewDetailedActivity/{{activity._id}}">
+                    <img class="img-responsive img-hover img-related" src="{{activity.image}}">
+                </a>
+            </div>
+
+
         </div>
-      </div>
+        <!-- /.row -->
+
+        <hr>
 
 
-</div>
-<!--error-->
-<div class="alert alert-danger" ng-show="viewActivity.errMsg">
-    <span class="glyphicon glyphicon-remove"></span><strong> Error! {{viewActivity.errMsg.msg}}</strong>
-</div>
+    </div>
