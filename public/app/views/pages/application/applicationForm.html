@@ -7,86 +7,228 @@
 	input.input-red{
 		border-color: red;
 	}
+	.icon-button {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+	}
+	.modal-body{
+	/*#2f43b5 */
+	/*#696867 :   Calm Blue */
+	/*#e3dee0 : Grayyish white*/
+	/*#3330e6 darker blue*/
+	  background-color: #3166b5 ;
+	  width:100%;
+	  height:100%;
+	}
+	.ng-modal h3 {
+	  color: #e3dee0;
+	}
+	.ng-modal {
+	  position: fixed;
+	  z-index: 9999;
+	  top: 100px;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	}
+	.ng-modal-overlay {
+	  position: absolute;
+	  z-index: 9999;
+	  top: 0;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	  background-color: #000000;
+	  opacity: 0.8;
+	}
+	.ng-modal-dialog {
+	  z-index: 10000;
+	  position: absolute;
+	  top: 30%;
+	  left: 50%;
+	  width: 50%;
+	  transform: translate(-50%, -50%);
+	  -webkit-transform: translate(-50%, -50%);
+	  -moz-transform: translate(-50%, -50%);
+	  -ms-transform: translate(-50%, -50%);
+	  -o-transform: translate(-50%, -50%);
+	  background-color: #fff;
+	  box-shadow: 4px 4px 80px #000;
+	  -webkit-box-shadow: 4px 4px 80px #000;
+	  -moz-box-shadow: 4px 4px 80px #000;
+	  -ms-box-shadow: 4px 4px 80px #000;
+	  -o-box-shadow: 4px 4px 80px #000;
+	  padding: 10px;
+	}
+	.ng-modal-dialog-content {
+	  height: 100%;
+	}
+	.ng-modal-close {
+	  position: absolute;
+	  top: 3px;
+	  right: 5px;
+	  cursor: pointer;
+	  font-size: 120%;
+	  padding: 5px;
+	  display: inline-block;
+	}
+	.ng-modal-close-x {
+	  font-weight: bold;
+	  font-family: Arial, sans-serif;
+	}
+	.ng-modal-title {
+	  font-weight: bold;
+	  font-size: 200%;
+	  display: block;
+	  margin-bottom: 10px;
+	  padding-bottom: 7px;
+	  border-bottom: solid 1px #999;
+	}
 </style>
 <br>
-<div class = "container" ng-controller = "applicationFormCtrl as applicationForm">
-	<div class="page-header">
-		<h1>Business Application</h1>
+<div ng-controller = "applicationFormCtrl as applicationForm">
+	<div class = "container">
+		<div class="page-header">
+			<h1>Business Application</h1>
+		</div>
+
+		<div class = "div-centered">
+			<form class = "form-horizontal" role = "form" name = "data">
+				<div class="form-group">
+	                <div class="col-md-6">
+	                    <input class="form-control" type="text" name="username" placeholder="username" ng-model="applicationForm.application.username" ng-change = "data.username.$dirty && applicationForm.checkUsername()"
+						required>
+	                </div>
+	                <label for="email" style="color: #ffffff" ng-show = "!(applicationForm.isEmpty(data.username)) && data.username.$dirty">{{usernameAvailable?"✔":"username not available!"}}</label>
+	            </div>
+	            <br>
+	            <div class="form-group">
+	                <div class="col-md-6">
+	                    <input class="form-control" type="text" name="name" placeholder="Name" ng-model="applicationForm.application.name" required>
+	                </div>
+	            </div>
+				<br>
+
+				<div class="form-group">
+	                <div class="col-md-6">
+	                    <input class="form-control" type="email" name="email" placeholder="email@example.com" ng-model="applicationForm.application.email" ng-change = "data.email.$dirty && applicationForm.checkEmail()"
+						required>
+	                </div>
+	                <label style="color: #ffffff" for="email" ng-show = "applicationForm.application.email.length>0 && isEmail()">{{emailAvailable?"✔":"email not available!"}}</label>
+	                <label style="color: #ffffff" for="email" ng-show = "applicationForm.application.email.length>0 && !isEmail()">{{"Not valid Email Address"}}</label>
+	            </div>
+				<br>
+
+				<div class="form-group">
+	                <div class="col-md-6">
+	                    <textarea class="form-control" type="text" name="description" placeholder="description goes here!" ng-model="applicationForm.application.description" required>
+	                    </textarea>
+	                </div>
+	            </div>
+				<br>
+
+				<div class="form-group">
+	                <div class="col-md-6">
+	                    <input class="form-control" type="text" name="phoneNumber" placeholder="phone number" ng-model="applicationForm.application.phoneNumber" ng-change = "applicationForm.isPhoneNumber()" required>
+	                </div>
+	                <label style="color: #ffffff" for="phoneNumber" ng-show = "applicationForm.application.phoneNumber.length>0">{{isPhoneNumber?"✔":"Not a valid phone number!"}}</label>
+	            </div>
+	            <br>
+
+
+				<div>
+					<fieldset  data-ng-repeat="choice in choices">
+				      	<input type="text" name="" placeholder="location" ng-model = "choices[$index].location" required>
+				      	<a href="" class="remove" ng-show="$last && choices.length>1" ng-click="removeChoice()">-</a>
+				    </fieldset>
+				   <a href="" ng-click="addNewChoice()">Add locations</a>
+			    </div>
+
+				<button class="btn btn-primary" ng-disabled = "data.$invalid || !usernameAvailable || !emailAvailable" type="submit" ng-click = "toggleModal()">Apply</button>
+			</form>
+		</div>
+
+		<br>
+
+		<div class="jumbotron text-center" ng-show="loading">
+			<span class="glyphicon glyphicon-repeat spinner"></span>
+			<h2>Loading...</h2>
+		</div>
 	</div>
+<br><br><br>
 
-	<div class = "div-centered">
-		<form class = "form-horizontal" role = "form" name = "data" ng-submit="applicationForm.apply(applicationForm.application)">
-			<div class="form-group">
-                <div class="col-md-6">
-                    <input class="form-control" type="text" name="username" placeholder="username" ng-model="applicationForm.application.username" ng-change = "data.username.$dirty && applicationForm.checkUsername()"
-					required>
-                </div>
-                <label for="email" style="color: #ffffff" ng-show = "!(applicationForm.isEmpty(data.username)) && data.username.$dirty">{{usernameAvailable?"✔":"username not available!"}}</label>
-            </div>
-            <br>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <input class="form-control" type="text" name="name" placeholder="Name" ng-model="applicationForm.application.name" required>
-                </div>
-            </div>
-			<br>
+<modal-dialog show='modalShown' width="640px">
 
-			<div class="form-group">
-                <div class="col-md-6">
-                    <input class="form-control" type="email" name="email" placeholder="email@example.com" ng-model="applicationForm.application.email" ng-change = "data.email.$dirty && applicationForm.checkEmail()"
-					required>
-                </div>
-                <label style="color: #ffffff" for="email" ng-show = "applicationForm.application.email.length>0 && isEmail()">{{emailAvailable?"✔":"email not available!"}}</label>
-                <label style="color: #ffffff" for="email" ng-show = "applicationForm.application.email.length>0 && !isEmail()">{{"Not valid Email Address"}}</label>
-            </div>
-			<br>
+	<div class = "modal-body">
+		<h3 style = "color: #ffffff;">your application will look something like this!</h3>
+		<hr>
 
-			<div class="form-group">
-                <div class="col-md-6">
-                    <input class="form-control" type="text" name="description" placeholder="description" ng-model="applicationForm.application.description" required>
-                </div>
-            </div>
-			<br>
-
-			<div class="form-group">
-                <div class="col-md-6">
-                    <input class="form-control" type="text" name="phoneNumber" placeholder="phone number" ng-model="applicationForm.application.phoneNumber" ng-change = "applicationForm.isPhoneNumber()" required>
-                </div>
-                <label style="color: #ffffff" for="phoneNumber" ng-show = "applicationForm.application.phoneNumber.length>0">{{isPhoneNumber?"✔":"Not a valid phone number!"}}</label>
-            </div>
-            <br>
-
-
+		<div style = "color: #ffffff;">
 			<div>
-				<fieldset  data-ng-repeat="choice in choices">
-			      	<input type="text" name="" placeholder="location" ng-model = "choices[$index].location" required>
-			      	<a href="" class="remove" ng-show="$last && choices.length>1" ng-click="removeChoice()">-</a>
-			    </fieldset>
-			   <a href="" ng-click="addNewChoice()">Add locations</a>
-		    </div>
-
-			<button class="btn btn-primary" ng-disabled = "data.$invalid || !usernameAvailable || !emailAvailable" type="submit">Apply</button>
-		</form>
+                <label style = "color: #ffffff;">username: </label>
+                <label>
+                {{applicationForm.application.username}}
+                </label>
+            </div>
+        	<br>
+            
+            <div>
+                <label style = "color: #ffffff;">name: </label>
+                <label>
+                {{applicationForm.application.name}}
+                </label>
+            </div>
+            <br>
+            
+            <div>
+                <label style = "color: #ffffff;">email: </label>
+                <label>
+                {{applicationForm.application.email}}
+                </label>
+            </div>
+            <br>
+            
+		    <div>
+		    	<label style = "color: #ffffff;">description: </label>
+                <p> 
+                {{applicationForm.application.description}}
+                </p>
+            </div>
+            <br>
+            
+		    <div>
+                <label style = "color: #ffffff;">phone number: </label>
+                <label>
+                {{applicationForm.application.phoneNumber}}
+                </label>
+            </div>
+            <br>
+            
+	        <div>
+	            <label style = "color: #ffffff;">locations:</label>
+				<ul>
+					<label  data-ng-repeat="choice in choices">
+				      		{{choice.location}}
+				    </label>
+			    </ul>
+			</div>  
+		</div>    	
 	</div>
 
-	<br>
+	<button class="btn btn-info" href = "/" style="position: relative;
+	top: -50px; left:16px; width:100px;" ng-click="applicationForm.apply()"><strong>Yay, apply!</strong></button>
 
-	<div class="jumbotron text-center" ng-show="loading">
-		<span class="glyphicon glyphicon-repeat spinner"></span>
-		<h2>Loading...</h2>
-	</div>
+	<button class="btn btn-info" style="position: relative;
+	top: -50px; left:400px; width:100px; " ng-click="toggleModal()"><strong>Edit my app</strong></button>
 
-	<div ng-repeat = "error in errors" class="alert alert-danger fade in alert-dismissable" ng-show = "errors">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-	    <strong>{{error.msg}}</strong>
-	</div>
-	<div class="alert alert-danger fade in alert-dismissable" ng-show = "errMsg">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-	    <strong>{{errMsg}}</strong>
-	</div>
+</modal-dialog>
 
-	<div class="alert alert-success fade in alert-dismissable" ng-show = "successMsg">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-	    {{successMsg}}
-	</div>
+
+
+
+	
 </div>

@@ -17,7 +17,11 @@
   },
   "homepage": "https://github.com/Ebraheem1/Der-Algorithmus#readme",
   "dependencies": {
+    "angular-animate": "^1.6.4",
+    "angular-aria": "^1.6.4",
+    "angular-material": "^1.1.4",
     "angular-payments": "^1.0.7",
+    "angular-sweetalert": "^1.1.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
     "connect-flash": "^0.1.1",

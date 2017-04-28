@@ -1,5 +1,5 @@
 
-angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientServices','businessOwnerServices', 'authServices'])
+angular.module('userControllers', ['ngAnimate', 'userServices','clientServices','businessOwnerServices', 'authServices'])
 //this controller is responsible for registeration of clients, it takes the regData from user and forward it to the services
 //responsible to send this data to the backend and then it checks if there is an error forwarded from the backend and show it to 
 //user if exists.

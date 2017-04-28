@@ -1,32 +1,78 @@
-<br><br>
-
+<style type="text/css">
+	div.div-centered {
+	  	padding-left: 350px;
+	}
+	input.input-red{
+		border-color: red;
+	}
+</style>
 
 
 <div class = "container" ng-show = "currentApplication._id" ng-controller = "applicationCtrl as application">
 	<div class = "row">
-		<div style="color: #ffffff">	
-			<h3>{{currentApplication.name}}</h3>
-			<hr>
-			<h3>{{currentApplication.username}}</h3>
-			<h3>{{currentApplication.email}}</h3>
-			<h3>{{currentApplication.phoneNumber}}</h3>
-			<h3>{{currentApplication.description}}</h3>
-			<ul>locations:	
-				<li ng-repeat = "location in currentApplication.locations">
-					<h4>{{location}}</h4>
-				</li>
-			</ul>
-			<h6 ng-repeat = "location in application.locations">{{location}}</h6>
-
+		<div ng-show = "!writing" class = "container" style = "background-color: white;">
+		<br><br><br>
+			<h4>
+				<a href="/applications"> ☰ Applications</a>
+			</h4>
+			<div class = "div-centered">
+				<h3>{{currentApplication.name}}'s Application</h3>
+				<hr>
+				    <div>
+	                    <label style = "color: #581845;">username: </label>
+	                    <label>
+	                    {{currentApplication.username}}
+	                    </label>
+	                </div>
+	            <br>
+	            
+	                <div>
+	                    <label style = "color: #581845;">name: </label>
+	                    <label>
+	                    {{currentApplication.name}}
+	                    </label>
+	                </div>
+	            <br>
+	            
+	                <div>
+	                    <label style = "color: #581845;">email: </label>
+	                    <label>
+	                    {{currentApplication.email}}
+	                    </label>
+	                </div>
+	            <br>
+	            
+				    <div>
+				    	<label style = "color: #581845;">description: </label>
+	                    <p style = "color: black;"> 
+	                    {{currentApplication.description}}
+	                    </p>
+	                </div>
+	            <br>
+	            
+				    <div>
+	                    <label style = "color: #581845;">phone number: </label>
+	                    <label>
+	                    {{currentApplication.phoneNumber}}
+	                    </label>
+	                </div>
+	            <br>
+	            
+	            <label style = "color: #581845;">locations:</label>
+				<ul>
+					<label  data-ng-repeat="location in currentApplication.locations">
+				      		{{location}}
+				    </label>
+			    </ul>
+			    <h2>
+					<button href = "/applications" class = "btn btn-success" ng-click = "application.accept(currentApplication._id);" style="align-items: center;">Accept</button>
+					<button href = "/applications" class = "btn btn-danger" ng-click = "application.reject(currentApplication._id);">Reject</button>
+				
+				</h2>
 			
+			</div>
+		</div>
 
-			<h3>
-				<button href = "/applications" class = "btn btn-success" ng-click = "application.accept(currentApplication._id);">Accept</button>
-				<button href = "/applications" class = "btn btn-danger" ng-click = "application.reject(currentApplication._id);">Reject</button>
-				<h6>
-					<a href="/applications">Go back to Applications</a>
-				</h6>
-			</h3>
 			
 
 			<div ng-repeat = "error in errors" class="alert alert-danger fade in alert-dismissable" ng-show = "errors">
