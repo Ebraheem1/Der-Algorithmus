@@ -120,7 +120,7 @@
     <a href="/viewSummaries">View Venues</a>
 </li>
 <li>
-    <a href="#BusinessOwner" ng-show="!main.isLoggedIn" >Join Us</a>
+    <a href="/apply" ng-show="!main.isLoggedIn" >Join Us</a>
 </li>
 <li>
     <a href="/register" ng-show="!main.isLoggedIn">Register</a>
@@ -213,7 +213,7 @@
 </div>
 
 <div class="footer-center">
-<div>
+<div ng-show="!main.isLoggedIn">
     <i class="fa fa-paper-plane-o"></i>
     <a id = "BusinessOwner" href="/apply" style="color:white">Apply</a>
 </div>
