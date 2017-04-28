@@ -15,6 +15,10 @@ angular.module('appRoutes', ['ngRoute'])
 		controller:'mainCtrl',
 		controllerAs:'main'
 	})
+	.when('/faq', {
+		templateUrl: 'app/views/pages/faq.html',
+		
+	})
 
 	 .when('/businessOwnerHP',{
 	  templateUrl: 'app/views/pages/BusinessOwnerHomePage.html'
