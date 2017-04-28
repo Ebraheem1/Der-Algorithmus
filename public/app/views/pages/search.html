@@ -5,10 +5,10 @@
 
 <h2><strong>Search Results</strong></h2><br>
 
-<div class="col-sm-4" ng-hide="search.errMsg" ng-repeat="venue in search.venues">
+<div class="col-sm-4"  ng-hide="search.errMsg" ng-repeat="venue in search.items">
 <figure class="snip1336" >
-<img src="{{venue.images[0]}}" ng-show="venue.images.length"/>
-<img src="http://www.planwallpaper.com/static/images/3d-balls-hd-wallpapers-free.jpg" ng-hide="venue.images.length" />
+<img src="{{venue.images[0]}}" height="200" width="350" ng-show="venue.images.length"/>
+<img src="http://www.planwallpaper.com/static/images/3d-balls-hd-wallpapers-free.jpg" ng-hide="venue.images.length" height="200" width="350" />
     <figcaption>
         <h2>{{venue.name}}</h2>
         <p ng-show="venue.description">{{venue.description}}</p>
@@ -16,7 +16,29 @@
         <a href="/viewDetailedActivities/{{venue._id}}" class="info">View Activities</a>
     </figcaption>
 </figure>
+
 </div>
+<div class="col-sm-12" >
+<!-- pager: keep it as it is -->
+<ul ng-if="search.pager.pages.length" class="pagination">
+    <li ng-class="{disabled:search.pager.currentPage === 1}">
+        <a ng-click="search.setPage(1)">First</a>
+    </li>
+    <li ng-class="{disabled:search.pager.currentPage === 1}">
+        <a ng-click="search.setPage(search.pager.currentPage - 1)">Previous</a>
+    </li>
+    <li ng-repeat="page in search.pager.pages" ng-class="{active:search.pager.currentPage === page}">
+        <a ng-click="search.setPage(page)">{{page}}</a>
+    </li>
+    <li ng-class="{disabled:search.pager.currentPage === search.pager.totalPages}">
+        <a ng-click="search.setPage(search.pager.currentPage + 1)">Next</a>
+    </li>
+    <li ng-class="{disabled:search.pager.currentPage === search.pager.totalPages}">
+        <a ng-click="search.setPage(search.pager.totalPages)">Last</a>
+    </li>
+</ul>
+</div>
+
 
 <div class="row show-hide-message text-center bg-grey" ng-show = "search.errMsg" >
     <div class="alert alert-danger">
@@ -27,3 +49,4 @@
 
 
 </div>
+
