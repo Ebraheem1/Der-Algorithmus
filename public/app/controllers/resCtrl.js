@@ -1,19 +1,19 @@
-angular.module('reservationController', ['authServices','reservationServices', 'pagingServices','modalDialog'])
+angular.module('reservationController', ['authServices', 'reservationServices', 'pagingServices', 'modalDialog'])
     // This is the controller for non repeatable activites
-    .controller('resCtrlNR', function(AuthenticationToken,Authentication,$http, $scope, $location, $timeout, Reservation, $routeParams) {
+    .controller('resCtrlNR', function(AuthenticationToken, Authentication, $http, $scope, $location, $timeout, Reservation, $routeParams) {
         var app = this; //TODO : handle negative number for participants // ADD cancelation window warning // Display to USer the price
 
-        $scope.discount =0 ;
+        $scope.discount = 0;
         // this function is used to get an activity through it;d ID .
         Reservation.getActivity($routeParams.activity_id, 1).then(function(data) {
             $scope.Activity = data.data.activity;
-            if($scope.Activity){
-              $scope.load = true ;
-            }else{
-              $scope.load = false ;
+            if ($scope.Activity) {
+                $scope.load = true;
+            } else {
+                $scope.load = false;
             }
-            if($scope.Activity.offer)
-            $scope.discount = $scope.Activity.offer.discount/100;
+            if ($scope.Activity.offer)
+                $scope.discount = $scope.Activity.offer.discount / 100;
             $scope.seatsLeft = data.data.activity.maxParticipants - data.data.activity.currentParticipants;
             $scope.travelDate = data.data.activity.travelingDate.substr(0, 10);
             $scope.returnDate = data.data.activity.returnDate.substr(0, 10);
@@ -36,13 +36,13 @@ angular.module('reservationController', ['authServices','reservationServices', '
                     $scope.Output = true;
                     $scope.Successful = true;
                     $scope.reservation = data.data.reservation;
-                    $scope.price = (data.data.reservation.price-data.data.reservation.price*$scope.discount) * 100;
+                    $scope.price = (data.data.reservation.price - data.data.reservation.price * $scope.discount) * 100;
 
 
                 }
-            },function(err){
-             if(err.data){
-                Authentication.handleError();
+            }, function(err) {
+                if (err.data) {
+                    Authentication.handleError();
                 }
             });
         }
@@ -51,11 +51,11 @@ angular.module('reservationController', ['authServices','reservationServices', '
     })
 
     // This is the controller of repeatable activites
-    .controller('resCtrlR', function(AuthenticationToken,$http, $scope, $location, $timeout, Reservation, $routeParams) { //TODO : Logic of MAX day ;
+    .controller('resCtrlR', function(AuthenticationToken, $http, $scope, $location, $timeout, Reservation, $routeParams) { //TODO : Logic of MAX day ;
         var app = this;
-        $scope.offer = false ;
-        $scope.discount = 0 ;
-    //This function is used to get a repeatable activity through it's id
+        $scope.offer = false;
+        $scope.discount = 0;
+        //This function is used to get a repeatable activity through it's id
         Reservation.getActivity($routeParams.activity_id, 0).then(function(data) {
 
             var d = new Date();
@@ -70,16 +70,16 @@ angular.module('reservationController', ['authServices','reservationServices', '
                 mm = '0' + mm;
             }
             $scope.Activity = data.data.activity;
-            if($scope.Activity.offer){
-              $scope.offer = true ;
-              $scope.discount = $scope.Activity.offer.discount/100;
+            if ($scope.Activity.offer) {
+                $scope.offer = true;
+                $scope.discount = $scope.Activity.offer.discount / 100;
             }
 
-            if($scope.Activity){
-              $scope.load = true ;
+            if ($scope.Activity) {
+                $scope.load = true;
 
-            }else{
-              $scope.load = false ;
+            } else {
+                $scope.load = false;
             }
             $scope.Output = false;
 
@@ -87,10 +87,10 @@ angular.module('reservationController', ['authServices','reservationServices', '
 
 
 
-        },function(err){
-           if(err.data){
+        }, function(err) {
+            if (err.data) {
                 Authentication.handleError();
-                }
+            }
         });
         //This function is used to reserve a repeatable activity . upon reserving . the output message,and the price is sent back to the view
         app.ReserveR = function(res) {
@@ -111,21 +111,21 @@ angular.module('reservationController', ['authServices','reservationServices', '
                     $scope.Successful = true;
 
                     $scope.reservation = data.data.reservation;
-                    $scope.price = (data.data.reservation.price-data.data.reservation.price*$scope.discount) * 100;
+                    $scope.price = (data.data.reservation.price - data.data.reservation.price * $scope.discount) * 100;
 
-                  }
+                }
 
-            },function(err){
-                    if(err.data){
-                        Authentication.handleError();
-                    }
+            }, function(err) {
+                if (err.data) {
+                    Authentication.handleError();
+                }
             });
         }
     })
 
 
     //This is the controller for the reservatinos of the user
-    .controller('yourReservations', function(AuthenticationToken,Pager, $http, $scope, $location, $timeout, Reservation, $routeParams, $window) {
+    .controller('yourReservations', function(AuthenticationToken, Pager, $http, $scope, $location, $timeout, Reservation, $routeParams, $window) {
         var app = this;
         $scope.success = true;
         $scope.errorMessage = "You have no reservations currently !";
@@ -133,27 +133,36 @@ angular.module('reservationController', ['authServices','reservationServices', '
         $scope.currentPage = 1;
         $scope.itemsPerPage = 6;
         $scope.dateNow = new Date();
-
-        $scope.modalShown = false ;
+        $scope.type = -1;
+        $scope.id = -1;
+        $scope.modalShown = false;
         // A function to toggle the modal . which is to be implemented later
-        $scope.toggleModal = function (){
-          $scope.modalShown = !$scope.modalShown;
+        $scope.toggleModal = function(type, id) {
+            $scope.modalShown = !$scope.modalShown;
+            if (typeof(type) != "undefined" && typeof(id) != "undefined") {
+                $scope.type = type;
+                $scope.id = id;
+            } else {
+                $scope.type = -1;
+                $scope.id = -1;
+            }
+      
         }
         // A function in the scope to check if the given date is in the past
 
-        $scope.dateGreater = function (date){
-          var x = new Date();
-          var g =  new Date(date);
-          if(g>=x){
-            return true ;
-          }
-          if(g<x){
+        $scope.dateGreater = function(date) {
+            var x = new Date();
+            var g = new Date(date);
+            if (g >= x) {
+                return true;
+            }
+            if (g < x) {
 
-            return false ;
-          }
+                return false;
+            }
         }
-            // This function is used to get all the repeatable , non repeatable activites of one user . concatenates the both and send
-            // them back to the front end along with any errors that might come up
+        // This function is used to get all the repeatable , non repeatable activites of one user . concatenates the both and send
+        // them back to the front end along with any errors that might come up
         Reservation.getAllReservation().then(function(data) {
 
             if (data.data.success && (data.data.repeatable.length > 0 || data.data.nonRepeatable.length > 0)) {
@@ -183,22 +192,22 @@ angular.module('reservationController', ['authServices','reservationServices', '
                 $scope.success = false;
 
             }
-        },function(err){
-           if(err.data){
+        }, function(err) {
+            if (err.data) {
                 Authentication.handleError();
-                }
+            }
         });
 
 
 
         // this function is used for confirmation of deletion of a certain reservation
-        $scope.Delete = function(type, reservation_id) {
-            var cancelReservation = $window.confirm('Are you sure you want to cancel this Reservation ? ');
-            if (cancelReservation) {
-                 // upon acceptance of a removal . we check if the activity is repeatable or not and we cancel it accordingly
-                if (type == 0) {
+        $scope.Delete = function() {
+            $scope.modalShown = false;
+            // upon acceptance of a removal . we check if the activity is repeatable or not and we cancel it accordingly
+            if ($scope.id != -1 && $scope.type != -1)
+                if ($scope.type == 0) {
 
-                    Reservation.cancelReservationR(reservation_id).then(function(data) {
+                    Reservation.cancelReservationR($scope.id).then(function(data) {
 
                         if (data.data.success) {
                             $window.alert(data.data.message);
@@ -211,15 +220,17 @@ angular.module('reservationController', ['authServices','reservationServices', '
                             $window.alert(data.data.message);
                         }
 
-                    },function(err){
-                      if(err.data){
-                        Authentication.handleError();
-                     }
+                    }, function(err) {
+                        if (err.data) {
+                            Authentication.handleError();
+                        }
                     });
                 } else {
-                    Reservation.cancelReservationNR(reservation_id).then(function(data) {
+                    Reservation.cancelReservationNR($scope.id).then(function(data) {
                         if (data.data.success) {
+
                             $window.alert(data.data.message);
+
                             $timeout(function() {
                                 location.reload();
                                 $location.path('/profile/reservations/');
@@ -227,13 +238,13 @@ angular.module('reservationController', ['authServices','reservationServices', '
                         } else {
                             $window.alert(data.data.message);
                         }
-                    },function(err){
-                       if(err.data){
-                        Authentication.handleError();
+                    }, function(err) {
+                        if (err.data) {
+                            Authentication.handleError();
                         }
                     });
                 }
-            }
+
         }
 
     })
