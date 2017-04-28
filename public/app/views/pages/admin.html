@@ -1,44 +1,38 @@
-<br>
-<div class="container">    
-<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
-<div class="panel panel-info" >
-<div class="panel-heading">
-<div class="panel-title">Admin Registeration</div>
-</div>     
-
-<div style="padding-top:30px" class="panel-body" >
-
-<div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
-    
-<form id="loginform" class="form-horizontal" role="form" ng-submit="admin.doReg(regData);">
-            
-    
+<br><br>
+<div class="container">
+    <div class="inner">
+        <h1>Admin Page</h1>
+        <h3 style="color:red;" ng-show="admin.errMsg" >{{admin.errMsg}}</h3>
         
-<div style="margin-bottom: 25px" class="input-group">
-    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-    <input id="login-password" type="password" class="form-control" name="password" placeholder="password" ng-required="true" ng-model="admin.regData.password">
+        <form ng-submit="admin.doReg(regData);" >
+            <label><span class="glyphicon glyphicon-lock"></span></label>
+            <input type="password" placeholder="password" class="input" ng-required="true" ng-model="admin.regData.password"/><br>
+            <button type="submit" class="button">Register</button>
+        </form>
+        
+    </div>    
 </div>
 
-<div style="margin-top:10px" class="form-group">
-    <!-- Button -->
-
-    <div class="col-sm-12 controls">
-<button class="btn btn-info btn-block login" type="submit">Register</button>
-    </div>
-</div>
+<style>
+	
 
 
-   
-</form> 
-</div>      
+.col-md-4 h1{ color : #9f00a7; font-family: calibri, arial; font-weight: bold; font-size: 30px; position: relative; left: 30px;} 
 
-</div> 
-       
-</div>
+#col-md-4{ height: 50px;}
+.header a:hover{ transition-duration: 0.3s; color: rgb(0,0,0); }
 
-<div class="row show-hide-message text-center bg-grey" style="margin-top:400px;" ng-show="admin.errMsg">
-<div class="alert alert-danger"> {{admin.errMsg}} </div>
-</div>
-</div>
-
-
+/*container design*/
+.control-label{float: left;}
+.container .inner{width: 480px; margin: 100px auto; border : 1px solid none; background: rgba(55,55,55, 0.4); padding: 10px; -webkit-transform: skew(30deg,10deg);-moz-transform: skew(30deg,10deg); -o-transform: skew(30deg,10deg); transition-duration: 0.7s;}
+.container .inner:hover{-webkit-transform:skew(0deg,0deg); -moz-transform:skew(0deg,0deg);-o-transform:skew(0deg,0deg);transition-duration: 0.7s; background: transparent;}
+.inner h1{color : rgb(200,200,200); font-family: calibri, arial; font-weight: bold; text-align: center; font-size: 40px}
+.inner h3{color: rgb(200,200,200); font-size: 18px; font-family: calibri; text-align: center; margin-top: -5px}
+.inner form label span{color: white;}
+.inner form lagend{color: white;}
+.inner .input{width : 90%; border: none; border-bottom: 1px solid white; color: #9f00a7; background: transparent; padding: 10px;}
+.inner .input:focus{box-shadow: none; border: 1px solid none;}
+.container hr{border-color: rgb(100,100,100);}
+.inner .button{border-radius:10px 10px 10px 10px;color: #9f00a7; background: rgba(50,50,50, 0.4); padding: 2px 30px ;  border: 2px solid #9f00a7;  font-family: calibri; margin:10px auto; font-weight: bold;}
+.inner .button:hover{background: #8f00a7; color: white;}
+</style>
