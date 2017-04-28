@@ -120,6 +120,9 @@
     <a href="/viewSummaries">View Venues</a>
 </li>
 <li>
+    <a href="#BusinessOwner" ng-show="!main.isLoggedIn" >Join Us</a>
+</li>
+<li>
     <a href="/register" ng-show="!main.isLoggedIn">Register</a>
 </li>
 <li>
@@ -210,6 +213,10 @@
 </div>
 
 <div class="footer-center">
+<div>
+    <i class="fa fa-paper-plane-o"></i>
+    <a id = "BusinessOwner" href="/apply" style="color:white">Apply</a>
+</div>
 
 <div>
     <i class="fa fa-map-marker"></i>
@@ -220,10 +227,7 @@
     <i class="fa fa-envelope"></i>
     <p>der_algorithmus@gmail.com</p>
 </div>
-<div>
-    <i class="fa fa-building-o"></i>
-    <a href="/apply" style="color:white">Apply</a>
-</div>
+
 
 </div>
 
