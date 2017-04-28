@@ -64,7 +64,7 @@ angular.module('businessOwnerController', ['businessOwnerServices','authServices
                 	$scope.errMsg = false ;
 					$scope.successMsg = data.data.message;
 					$scope.uploading = false;
-					$scope.successMsg=false;
+					
 					
 				}
 				else{
