@@ -1,7 +1,7 @@
 <br><br><br>
-<div ng-hide="viewDetailed.errAMsg && viewDetailed.errMsg" ng-repeat="activity in viewDetailed.activities">
+<div class="col-sm-4" ng-hide="viewDetailed.errAMsg && viewDetailed.errMsg" ng-repeat="activity in viewDetailed.activities">
 <figure class="snip1336" ng-show="checkDate(activity)">
-    <img src={{activity.image}} alt="sample87" />
+    <img src="{{activity.image}}" height="200" width="350" alt="sample87" />
     <figcaption>
         <h2>{{activity.type}}</h2>
         <p><strong>Description: </strong>{{activity.description}}</p>
@@ -12,8 +12,6 @@
 </figure>
 
 </div>
-
-
 
 <br><br><br>
 <div class="alert alert-danger" ng-show="viewDetailed.errAMsg">
