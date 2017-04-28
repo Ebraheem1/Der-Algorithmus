@@ -21,7 +21,7 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Activity Image</strong>
+        <strong>Activity's Image</strong>
     </div>
 
     <div class="panel-body">
@@ -55,52 +55,99 @@
   </div>
 
   <form ng-submit="activity.editActivity(activityData);">
+    <div class="row">
+      <div class="form-group col-xs-6 custom">
+        <div class="form-group custom">
+          <div class="input-group">
+            <span class="input-group-addon"><strong>Destination</strong></span>
+            <input type="text" class="form-control" name="destination"  ng-model="activity.activityData.destination">
+          </div>  
+        </div>
+      </div>
 
-    <div class="form-group custom">
-      <label>Destination</label>
-      <input type="text" class="form-control" name="destination"  ng-model="activity.activityData.destination">
-    </div>
-    <div class="form-group custom">
-      <label>Transportation</label>
-      <select class="form-control" name="transportation" ng-model="activity.activityData.transportation">
-        <option>Airplane</option>
-        <option>Bus</option>
-        <option>Car</option>
-        <option>Train</option>
-      </select>
-    </div>
-    <div class="form-group custom">
+      <div class="form-group col-xs-6 custom">
+        <div class="form-group custom">
+          <div class="input-group">
+            <span class="input-group-addon"><strong>Transportation</strong></span>
+            <select class="form-control" name="transportation" ng-model="activity.activityData.transportation">
+              <option>Airplane</option>
+              <option>Bus</option>
+              <option>Car</option>
+              <option>Train</option>
+            </select>
+          </div>  
+        </div>
 
-      <label>Traveling Date</label>
-      <div class="col-10">
-        <input class="form-control" type="date" name="travelingDate" ng-model="activity.activityData.travelingDate">
       </div>
     </div>
-    <div class="form-group custom">
-      <label>Return Date</label>
-      <div class="col-10">
-        <input class="form-control" type="date" name="returnDate" ng-model="activity.activityData.returnDate">
+
+    <div class="row">
+      <div class="form-group col-xs-6 custom">
+        <div class="form-group custom">
+          <div class="input-group">
+            <span class="input-group-addon"><strong>Traveling Date</strong></span>
+            <input class="form-control" type="date" name="travelingDate" ng-model="activity.activityData.travelingDate">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-xs-6 custom">
+        <div class="form-group custom">
+          <div class="input-group">
+            <span class="input-group-addon"><strong>Return Date</strong></span>
+            <input class="form-control" type="date" name="returnDate" ng-model="activity.activityData.returnDate">
+          </div>
+        </div>
       </div>
     </div>
-    <div class="form-group custom">
-      <label>Accommodation</label>
-      <textarea class="form-control" name="Accommodation" rows="5" ng-model="activity.activityData.Accommodation"></textarea>
+
+    <div class="row">
+      <div class="form-group col-xs-4 custom">
+        <div class="form-group custom">
+          <div class="input-group">
+            <span class="input-group-addon"><strong>Max Participants</strong></span>
+            <input type="Number" min="1"  class="form-control" name="maxParticipants" ng-model="activity.activityData.maxParticipants">
+          </div>
+        </div>
+      </div>
+        
+      <div class="form-group col-xs-4 custom">  
+        <div class="form-group custom">
+          <div class="input-group">
+            <span class="input-group-addon"><strong>Price Per Person(&#163;)</strong></span>
+            <input type="Number" min="1" class="form-control" name="pricePerPerson" ng-model="activity.activityData.pricePerPerson">
+          </div>  
+        </div>
+      </div>  
+
+      <div class="form-group col-xs-4 custom">  
+        <div class="form-group custom">
+          <div class="input-group">
+            <span class="input-group-addon"><strong>Cancellation Window</strong></span>
+            <input type="Number" min="0" class="form-control" name="cancellationWindow" ng-model="activity.activityData.cancellationWindow">
+          </div>  
+        </div>
+      </div>  
     </div>
+
     <div class="form-group custom">
-      <label>Description</label>
-      <textarea class="form-control" name="description" rows="5" ng-model="activity.activityData.description"></textarea>
-    </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Accommodation</strong>
+        </div>
+        <textarea class="form-control" name="Accommodation" rows="5" ng-model="activity.activityData.Accommodation"></textarea>
+      </div>
+    </div>  
+
+
+
     <div class="form-group custom">
-      <label>Maximum Number of Participants</label>
-      <input type="Number" min="1"  class="form-control" name="maxParticipants" ng-model="activity.activityData.maxParticipants">
-    </div>
-    <div class="form-group custom">
-      <label>Price Per Person(&#163;)</label>
-      <input type="Number" min="1" class="form-control" name="pricePerPerson" ng-model="activity.activityData.pricePerPerson">
-    </div>
-    <div class="form-group custom">
-      <label>Cancellation Window</label>
-      <input type="Number" min="0" class="form-control" name="cancellationWindow" ng-model="activity.activityData.cancellationWindow">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Description</strong>
+        </div>
+        <textarea class="form-control" name="description" rows="5" ng-model="activity.activityData.description"></textarea>
+      </div>  
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
