@@ -1,7 +1,7 @@
 
 angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientServices','businessOwnerServices', 'authServices'])
 //this controller is responsible for registeration of clients, it takes the regData from user and forward it to the services
-//responsible to send this data to the backend and then it checks if there is an error forwarded from the backend and show it to 
+//responsible to send this data to the backend and then it checks if there is an error forwarded from the backend and show it to
 //user if exists.
 .controller('regCtrl', function($http, $location, $timeout, User){
 
@@ -34,7 +34,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	};
 
 })
-// this controller is responsible for Updating information for the client, it takes the infomation going to be updated and forwards it 
+// this controller is responsible for Updating information for the client, it takes the infomation going to be updated and forwards it
 // to the service responsible for forwarding it to the backend and then if it sucesses it will direct the user to the homepage
 // else it will show the error
 .controller('updateCtrl',function($http,$location,$timeout,User, Authentication, AuthenticationToken){
@@ -132,7 +132,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 
 })
 
-// this controller is responsible for viewing ths summaries of all business Owners on the website, just gets all the business owners 
+// this controller is responsible for viewing ths summaries of all business Owners on the website, just gets all the business owners
 // from the back end using the service in client services
 .controller('viewCtrl',function($http,$location,$timeout,Client){
 		var app=this;
@@ -150,7 +150,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 // this controller used to view a detailed view of a specific business owner by giving the id to the service and getting this data from
 // the back end and if it successes it will view this data otherwise an error will come up
 
-// also this controller is used to view the summaries of all activities of this specific business owner and also controls the gallery of images of the business owner 
+// also this controller is used to view the summaries of all activities of this specific business owner and also controls the gallery of images of the business owner
 .controller('viewDetailedCtrl',function($scope,$http,$location,$timeout,Client,$routeParams, AuthenticationToken, Authentication){
 	var app=this;
 	app.errMsg=false;
@@ -228,11 +228,11 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	return true;
 
 	}
-	
+
 })
 
 .controller('viewActivityCtrl',function($http,AuthenticationToken,Client,$routeParams,Authentication){
-// this controller is responsible for viewing all the details of an activity by taking the id of this activity and give it to the 
+// this controller is responsible for viewing all the details of an activity by taking the id of this activity and give it to the
 	// service responsible for forwarding the id to the backend and get all the details and then it show this details if it successes
 	var app=this;
 	app.activityID=$routeParams.id;
@@ -257,12 +257,23 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			}
 		});
 
+	if(data.data.success){
+	Client.getRelatedActivities(app.activity.type).then(function(data){
+		if(data.data.success){
+			app.activities=data.data.activities;
+		}
+		else {
+			app.errMsg=data.data.message;
+		}
+	});
+}
+
 
 })
 .controller('searchCtrl',function($http,BusinessOwner)
 {	//This Contoller calles businessOwnerServices to perform the search query
 	//based on the keyword entered by the user which is now found in the url of the
-	//page then it takes the returned results and put them in properties of the 
+	//page then it takes the returned results and put them in properties of the
 	//controller to be used in the HTML file accordingly.
 	var app = this;
 	BusinessOwner.getResults().then(function(data)
@@ -283,7 +294,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			app.errMsg = data.data.message;
 		}
 	});
-	
+
 
 })
 .controller('adminCtrl',function($http,Admin,$location)
@@ -291,14 +302,14 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	//Its link is known only by the team members and anyone tries to hack it
 	//It will be give him/her access denied
 	var app = this;
-	
+
 	app.doReg=function(regData){
 		app.errMsg = false;
 		Admin.addAdmin(app.regData).then(function(data)
 		{
 			if(data.data.success)
 			{
-				
+
 				$location.path('/');
 			}
 			else{
@@ -309,5 +320,3 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	}
 
 });
-
-

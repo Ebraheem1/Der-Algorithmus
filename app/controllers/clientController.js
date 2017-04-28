@@ -10,7 +10,7 @@ var ObjectId = require('mongodb').ObjectID;
 let clientController= {
 
   /* this function is used to get a specific activity corresponding to the id passed as a parameter
-  it searches in repeatable activities first if it finds it it will send it in json respond else it will search in 
+  it searches in repeatable activities first if it finds it it will send it in json respond else it will search in
   non repeatable activities if it finds it it will send it in json response*/
 getActivity:function(req,res){
   var id= req.params.id;
@@ -37,7 +37,7 @@ getActivity:function(req,res){
         }
       }
 
-        
+
       });
     }
     else {
@@ -47,6 +47,34 @@ getActivity:function(req,res){
   });
 },
 
+viewRelatedActivities:function(req,res){
+  var Atype=req.body.type;
+  console.log(Atype);
+  RActivity.find({type:Atype},function(err,activities){
+    if(err)
+    res.json({success:false,message:'No related activities'});
+    else {
+      if(activities){
+        res.json({success:true,activities:activities});
+      }
+      else {
+        NRActivity.find({type:Atype},function(err,activities){
+          if(err)
+          res.json({success:false,message:'No related activities'});
+          else {
+            if(activities){
+              res.json({success:true,activities:activities});
+            }
+            else {
+              res.json({success:false,message:'No related activities'});
+            }
+          }
+        });
+      }
+    }
+  });
+
+},
   /*
   function used to show summary of the venues of businessOwners on the website
   it checks in the data base if exists businessOwners if not it will respond with that There
@@ -87,7 +115,7 @@ updateInfo:function(req,res){
   if(phoneNumber !=null && isNaN(phoneNumber)){
     res.json({success:false,message:'Not a valid phoneNumber'});
   }
- 
+
   User.findOne({_id:req.user.user_id},function(err,user){
     if(err){
       res.json({success:false,message:err});

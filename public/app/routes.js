@@ -53,7 +53,7 @@ angular.module('appRoutes', ['ngRoute'])
 	  controllerAs:'ViewBOhomepage'
 	})
 	.when('/viewDetailedActivity/:id',{
-	  templateUrl:'app/views/pages/DetailedActivity.html',
+	  templateUrl:'app/views/pages/detailedActivity.html',
 	  controller:'viewActivityCtrl',
 	  controllerAs:'viewActivity'
 	})
