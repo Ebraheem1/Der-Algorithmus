@@ -73,7 +73,6 @@ angular.module('repeatableActivityFormController',['businessActivitiesServices',
                   {
                     $scope.errorMsg=data.data.message;
                     $scope.loading=false;
-                    $scope.activityData={};
                   }
 
                 },function(err)
@@ -89,7 +88,6 @@ angular.module('repeatableActivityFormController',['businessActivitiesServices',
                 $scope.errorMsg = data.data.message;
                 $scope.loading=false;
                 $scope.file = {};
-                $scope.activityData={};
             }
 
 
