@@ -359,7 +359,22 @@ let userController={
 
 
 
+getUser:function(req,res){
+  User.findById(req.user.user_id,function(err,user){
+    if(err){
+      res.json({success:false,message:"Error Getting the User"});
+    }else {
+      if(user){
+        res.json({success:true,user:user,client:req.user});
+      }
+      else {
 
+        res.json({success:false,message:"No user found"});
+      }
+    }
+
+  });
+}
 
 
 };
