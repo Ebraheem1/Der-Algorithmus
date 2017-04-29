@@ -19,7 +19,7 @@ clientFactory.viewActivity=function(id){
   return $http.get('/api/view-activity/'+id);
 };
 clientFactory.getRelatedActivities=function(type){
-  return $http.get('/api/view-relatedActivities',type);
+  return $http.get('/api/view-relatedActivities/'+type);
 }
   return clientFactory;
 
