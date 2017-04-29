@@ -211,6 +211,7 @@ router.get('/businessOwner/:id', clientController.viewBusiness);//done --
 router.post('/change-username', passport.authenticate('generalLogin', { session: false }),userController.changeUsername);//done --
 
 router.get('/view-relatedActivities/:type',clientController.viewRelatedActivities);
+router.get('/getUser',passport.authenticate('clientLogin', { session: false }),userController.getUser);
 
 
 router.get('/view-activity/:id',clientController.getActivity);
