@@ -1246,7 +1246,7 @@ let businessownerController={
 
     changePassword: function(req, res){
 
-        var loginId = req.user._id;
+          var loginId = req.user._id;
         var conditions = { _id: loginId };
 
         req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
@@ -1272,7 +1272,7 @@ let businessownerController={
 
                             if(err){
 
-                                res.json({success:false,message:err});
+                                res.json({success:false,message:'Error while Updating, Try Again..'});
 
                             }else{
 
@@ -1284,7 +1284,7 @@ let businessownerController={
 
                                         if(err){
 
-                                            res.json({success:false,message:err});
+                                            res.json({success:false,message:'Error while Updating, Try Again..'});
 
                                         }else{
 
@@ -1296,7 +1296,7 @@ let businessownerController={
 
                                 }else{
 
-                                    res.json({success:false,message:'wrong password'});
+                                    res.json({success:false,message:'wrong Old Passwords'});
 
                                 }
 
@@ -1315,7 +1315,7 @@ let businessownerController={
 
         }else{
 
-            res.json({success:false,message:errors});
+            res.json({success:false,errors:errors});
 
         }
 
