@@ -12,7 +12,7 @@ angular.module('commentController', ['businessOwnerServices','authServices'])
 	var app = this;
 	app.reply=function(replyData,reviewID){
 		app.errMsg = false ; 
-		BusinessOwner.reply({reply: app.replyData},reviewID).then(function(data){
+		BusinessOwner.reply({reply: replyData},reviewID).then(function(data){
 			if(data.data.success){
 				$location.path('/reviews');
 				location.reload();
