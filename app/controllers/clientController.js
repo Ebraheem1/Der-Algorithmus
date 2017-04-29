@@ -48,7 +48,7 @@ getActivity:function(req,res){
 },
 
 viewRelatedActivities:function(req,res){
-  var Atype=req.body.type;
+  var Atype=req.params.type;
   console.log(Atype);
   RActivity.find({type:Atype},function(err,activities){
     if(err)
