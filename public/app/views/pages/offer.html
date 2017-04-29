@@ -20,19 +20,19 @@
 
 
     <div class="form-group custom">
-      <label>Description</label>
+      <label style="color:white">Description</label>
       <textarea class="form-control" name="description" rows="5" placeholder="Descripe Your Offer Here !."
        ng-required="true" ng-model="offerData.offer"></textarea>
     </div>
 
     <div class="form-group custom"> 
-      <label class="custom">Discount (in %):</label> <br>
+      <label style="color:white" class="custom">Discount (in %):</label> <br>
       <input name="discount" type="number" min="5" step="5" ng-required="true" 
       ng-model="offerData.discount" placeholder="discount in percentage">
     </div>
 
     <div class="form-group custom"> 
-      <label class="custom">Expiry Date:</label><br>
+      <label style="color:white" class="custom">Expiry Date:</label><br>
       <input name="exp_date" type="date" ng-required="true" ng-model="offerData.exp_date" 
       format ="YYYY-MM-DD">
     </div>
@@ -40,7 +40,7 @@
    
      
      <div class="form-group custom"> 
-      <label class="custom">Upload an Image :</label><br>
+      <label style="color:white" class="custom">Upload an Image :</label><br>
       <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" > 
     </div>
       
@@ -50,7 +50,7 @@
       
   
 
-    <button type="submit" class="btn btn-primary"">Submit</button>
+    <button style="color:white" type="submit" class="btn btn-primary"">Submit</button>
 
   </form>
 
