@@ -254,12 +254,22 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 // this controller is responsible for viewing all the details of an activity by taking the id of this activity and give it to the
 	// service responsible for forwarding the id to the backend and get all the details and then it show this details if it successes
 	var app=this;
+	var flag=false;
 	app.activityID=$routeParams.id;
 	app.errMsg=false;
+	app.errRelatedActivities=false;
 	Client.viewActivity(app.activityID).then(function(data){
 		if(data.data.success){
 			app.activity=data.data.activity;
 			app.offer=data.data.activity.offer;
+			Client.getRelatedActivities(app.activity.type).then(function(data){
+				if(data.data.success){
+					app.Ractivities=data.data.activities;
+				}
+				else{
+					app.errRelatedActivities=false;
+				}
+			});
 			if(data.data.type=='N'){
 				app.type=false;
 			}
@@ -276,16 +286,8 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			}
 		});
 
-	if(data.data.success){
-	Client.getRelatedActivities(app.activity.type).then(function(data){
-		if(data.data.success){
-			app.activities=data.data.activities;
-		}
-		else {
-			app.errMsg=data.data.message;
-		}
-	});
-}
+
+
 
 
 })
