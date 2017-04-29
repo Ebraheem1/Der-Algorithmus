@@ -34,7 +34,6 @@ angular.module('nonRepeatableActivityFormController',['businessActivitiesService
 						
 						$scope.errorMsg=data.data.message;
 						$scope.loading=false;
-						$scope.activityData={};
 						
 					}
 
@@ -50,10 +49,7 @@ angular.module('nonRepeatableActivityFormController',['businessActivitiesService
             {
             	
                 $scope.errorMsg = data.data.message;
-                $scope.loading=false;
-                $scope.file = {};
-                $scope.activityData={};
-                
+                $scope.loading=false;                
             }
 
         },function(err)
