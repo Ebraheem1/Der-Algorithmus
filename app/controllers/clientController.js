@@ -54,7 +54,7 @@ viewRelatedActivities:function(req,res){
     if(err)
     res.json({success:false,message:'No related activities'});
     else {
-      if(activities){
+      if(activities.length>1){
         res.json({success:true,activities:activities});
       }
       else {
@@ -62,7 +62,7 @@ viewRelatedActivities:function(req,res){
           if(err)
           res.json({success:false,message:'No related activities'});
           else {
-            if(activities){
+            if(activities.length>1){
               res.json({success:true,activities:activities});
             }
             else {
