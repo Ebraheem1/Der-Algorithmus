@@ -121,7 +121,7 @@ let userController={
 
   changeUsername:function(req,res){
 
-      var newUsername=req.body.username;
+     var newUsername=req.body.username;
       if(req.user.username == newUsername){
 
         res.json({success:false,message:'this is your current username'});
@@ -133,7 +133,7 @@ let userController={
           {
                 if(err)
                 {
-                  res.json({success:false,message:err});
+                  res.json({success:false,message:'Error in Updating, try again..'});
                 }
                 else
                 {
@@ -146,8 +146,8 @@ let userController={
                     User.findOne({username:newUsername},function(err,user){
 
                       if(err){
-                  res.json({success:false,message:err});
-                }
+                  res.json({success:false,message:'Error in Updating, try again..'});
+                      }
                       else {
                         if(!user)
                         {
@@ -156,7 +156,7 @@ let userController={
 
                             if(err){
 
-                              res.json({success:false,message:err});
+                              res.json({success:false,message:'Error in Updating, try again..'});
 
                             }else{
 
@@ -167,7 +167,7 @@ let userController={
                                    User.update({_id:currentUser._id},{$set :{username:newUsername}},function(err){
                                     if(err){
 
-                                      res.json({success:false,message:err});
+                                      res.json({success:false,message:'Error in Updating, try again..'});
 
                                     }else{
 
@@ -198,6 +198,7 @@ let userController={
                     }
               });
         }
+
 
 
 
