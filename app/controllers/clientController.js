@@ -113,6 +113,7 @@ updateInfo:function(req,res){
   var gender=req.body.gender;
   if(phoneNumber !=null && isNaN(phoneNumber)){
     res.json({success:false,message:'Not a valid phoneNumber'});
+    return;
   }
 
   User.findOne({_id:req.user.user_id},function(err,user){
