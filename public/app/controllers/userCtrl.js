@@ -262,7 +262,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	var flag=false;
 	app.activityID=$routeParams.id;
 	app.errMsg=false;
-	app.errRelatedActivities=false;
+	app.errRelatedActivities=true;
 	Client.viewActivity(app.activityID).then(function(data){
 		if(data.data.success){
 			app.activity=data.data.activity;
