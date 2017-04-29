@@ -1,208 +1,235 @@
 <br> <br><br /><br />
-<h1 style="color: white; position: fixed;left:40%;"><i><u><strong>Your Reservations</strong></u></i></h1>
+<div class="page-header">
+    <h1>Reservations</h1>
+</div>
+
 <br /><br /><br />
-<div class="container" ng-show="success">
-    <div class="row">
+<br>
 
-        <div class=".col-md-6 ">
+<div class="panel panel-primary" ng-show="success">
 
-            <br />
-            <hr />
-            <ul class="list-group">
-                <!-- for each -->
-                <div ng-if= "items.length>0" ng-repeat="x in items">
-                  <br />
+    <!-- Start: Table -->
 
-                    <div ng-if = "x.nonRepeatableActivity_id" ng-show="dateGreater(x.nonRepeatableActivity_id.travelingDate)">
-
-                    <li class="list-group-item" ><strong> {{x.nonRepeatableActivity_id.businessOwner_id.name}} || {{x.nonRepeatableActivity_id.type}} || {{x.nonRepeatableActivity_id.destination}} ||
-                       {{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}} ||  {{x.price/100}}$</strong> <br />
-                        <div class="pull-right">
-                          <button class="btn btn-primary" style=" position: relative;
-        top: -27px; left:16px " ng-click="toggleModal(1)">Cancel Reservation</button>
-
-                        </div>
+    <table class="table">
+        <tr style="color: grey">
+            <th>Reservation Info</th>
+            <th>Traveling Time </th>
+            <th>Price </th>
+            <th> </th>
+        </tr>
+        <div ng-if="items.length>0">
 
 
-                    </li>
-                    <br / >
+            <tr ng-repeat="x in items">
+                {{x.nonRepeatableActivity_id}}
+                <td ng-show="x.nonRepeatableActivity_id && dateGreater(x.nonRepeatableActivity_id.travelingDate) ">
 
-                    <hr />
-                              </div>
+                    <strong>Provider: </strong> {{x.nonRepeatableActivity_id.businessOwner_id.name}}
+                    <br>
+                    <strong>Type: </strong>{{x.nonRepeatableActivity_id.type}}<br>
+                    <strong>Destination: </strong>{{x.nonRepeatableActivity_id.destination}} <br>
+                </td>
+                <td ng-show="x.nonRepeatableActivity_id && dateGreater(x.nonRepeatableActivity_id.travelingDate) ">
+                    <strong>Traveling Date : </strong>{{x.nonRepeatableActivity_id.travelingDate| limitTo : 10 : 0}} <br>
+                    <strong>Return Date : </strong>{{x.nonRepeatableActivity_id.returnDate| limitTo : 10 : 0}} <br>
+                </td>
+                <td ng-show="x.nonRepeatableActivity_id && dateGreater(x.nonRepeatableActivity_id.travelingDate) ">
+                    <strong>Price : </strong>{{x.price/100}}£ <br>
+                </td>
 
+                <td ng-show="x.nonRepeatableActivity_id && dateGreater(x.nonRepeatableActivity_id.travelingDate) ">
 
-                          <div ng-if ="x.repeatableActivity_id" ng-show="dateGreater(x.date)">
-
-                            <div ng-repeat="z in x.repeatableActivity_id.slots">
-
-                                <div ng-if="z._id ==x.slot_id">
-
-
-                                    <li class="list-group-item"><strong>{{x.repeatableActivity_id.businessOwner_id.name}} || {{x.repeatableActivity_id.type}}  ||  {{x.date| limitTo : 10 : 0}}      ||      {{z.startTime}}
-                                      || {{z.endTime}}  ||  {{x.price/100}}$</strong> <br />
-                                </div>
-                            </div>
-                            <div class="pull-right">
-
-                                <button class="btn btn-primary" style=" position: relative;
-              top: -37px; " ng-click="toggleModal(0,x._id)">Cancel Reservation</button>
+                    <button type="button" class="btn btn-primary button" ng-click="toggleModal(1,x._id)">Cancel Reservation</button> <br><br>
 
 
-                            </div>
-
-
-
-                            </li>
-                            <br / >
-
-                            <hr />
-                                </div>
-
-                </div>
-
-
-
-
-
-            </ul>
-
-            <hr>
-
-
+                </td>
         </div>
+</div>
+
+
+<div ng-show="dateGreater(x.date)">
+
+
+    <td ng-show=" x.repeatableActivity_id && dateGreater(x.date) ">
+
+        <strong>Provider: </strong>{{x.repeatableActivity_id.businessOwner_id.name}} <br>
+        <strong>Type: </strong>{{x.repeatableActivity_id.type}}<br>
+
+    </td>
+    <div>
+
+
+        <td ng-show=" x.repeatableActivity_id&& dateGreater(x.date) " ng-if="z._id ==x.slot_id" ng-repeat="z in x.repeatableActivity_id.slots">
+
+            <strong>Date : </strong> {{x.date| limitTo : 10 : 0}} <br>
+
+
+            <strong>Start Time  : </strong> {{z.startTime}}<br>
+
+
+            <strong>End Time  : </strong> {{z.endTime}} <br>
+
+        </td>
+        <td ng-show=" x.repeatableActivity_id && dateGreater(x.date)">
+            <strong>Price : </strong>{{x.price/100}}£ <br>
+        </td>
+
+        <td ng-show=" x.repeatableActivity_id && dateGreater(x.date)">
+            <button type="button" class="btn btn-primary button" ng-click="toggleModal(0,x._id)">Cancel Reservation</button> <br><br>
+
+        </td>
+
     </div>
-
-    <ul ng-if="yrCtrl.pager.pages.length" class="pagination">
-           <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
-               <a ng-click="yrCtrl.setPage(1)">First</a>
-           </li>
-
-           <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
-               <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage - 1)">Previous</a>
-           </li>
-           <li ng-repeat="page in yrCtrl.pager.pages" ng-class="{active:yrCtrl.pager.currentPage === page}">
-               <a ng-click="yrCtrl.setPage(page)">{{page}}</a>
-           </li>
-           <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
-               <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage + 1)">Next</a>
-           </li>
-           <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
-               <a ng-click="yrCtrl.setPage(yrCtrl.pager.totalPages)">Last</a>
-           </li>
-       </ul>
 
 </div>
 
+</tr>
+
+<!-- If Repeatable -->
+
+
+
+</div>
+<!-- End: Table -->
+</table>
+</div>
+
+<ul ng-if="yrCtrl.pager.pages.length" class="pagination">
+    <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
+        <a ng-click="yrCtrl.setPage(1)">First</a>
+    </li>
+
+    <li ng-class="{disabled:yrCtrl.pager.currentPage === 1}">
+        <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage - 1)">Previous</a>
+    </li>
+    <li ng-repeat="page in yrCtrl.pager.pages" ng-class="{active:yrCtrl.pager.currentPage === page}">
+        <a ng-click="yrCtrl.setPage(page)">{{page}}</a>
+    </li>
+    <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
+        <a ng-click="yrCtrl.setPage(yrCtrl.pager.currentPage + 1)">Next</a>
+    </li>
+    <li ng-class="{disabled:yrCtrl.pager.currentPage === yrCtrl.pager.totalPages}">
+        <a ng-click="yrCtrl.setPage(yrCtrl.pager.totalPages)">Last</a>
+    </li>
+</ul>
 
 <div class="col-lg-10 col-md-push-1" ng-show="!success">
     <div class="col-md-12">
 
         <div class="alert alert-danger">
-            <span ></span><strong> You have no reservations currently !</strong>
+            <span></span><strong> You have no reservations currently !</strong>
         </div>
     </div>
 </div>
 </div>
+
 <modal-dialog show='modalShown' width='640px' height='30%'>
-<div class = "modal-body">
-<h3>
-  Are You Sure You Want To Delete This Reservation!?</h3>
+    <div class="modal-body">
+        <h3>
+         Are You Sure You Want To Delete This Reservation!?</h3>
 
 
 
-      <button style="float:right" class ="icon-button" ng-click="toggleModal()"><span class="	glyphicon glyphicon-remove-sign" style=" position :relative ; top:-60px;float:right;"></span></span></button>
-</div>
+        <button style="float:right" class="icon-button" ng-click="toggleModal()"><span class="	glyphicon glyphicon-remove-sign" style=" position :relative ; top:-60px;float:right;"></span></span></button>
+    </div>
 
-<button class="btn btn-info" style=" position: relative;
-top: -50px; left:16px; width:100px; " ng-click="toggleModal()"><strong>NO</strong></button>
+    <button class="btn btn-info" style=" position: relative;
+       top: -50px; left:16px; width:100px; " ng-click="toggleModal()"><strong>NO</strong></button>
 
-<button class="btn btn-info" style=" position: relative;
-top: -50px; left:400px; width:100px; " ng-click="Delete()"><strong>YES</strong></button>
+    <button class="btn btn-info" style=" position: relative;
+       top: -50px; left:400px; width:100px; " ng-click="Delete()"><strong>YES</strong></button>
 
 </modal-dialog>
 <style>
-.icon-button {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    outline: none;
-    border: 0;
-    background: transparent;
-}
-.modal-body{
-/*#2f43b5 */
-/*#696867 :   Calm Blue */
-/*#e3dee0 : Grayyish white*/
-/*#3330e6 darker blue*/
-  background-color: #3166b5 ;
-  width:100%;
-  height:100%;
-}
-.ng-modal h3 {
-  color: #e3dee0;
-}
+    .icon-button {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        outline: none;
+        border: 0;
+        background: transparent;
+    }
 
-.ng-modal {
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.ng-modal-overlay {
-  position: absolute;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #000000;
-  opacity: 0.8;
-}
-.ng-modal-dialog {
-  z-index: 10000;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  width: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  background-color: #fff;
-  box-shadow: 4px 4px 80px #000;
-  -webkit-box-shadow: 4px 4px 80px #000;
-  -moz-box-shadow: 4px 4px 80px #000;
-  -ms-box-shadow: 4px 4px 80px #000;
-  -o-box-shadow: 4px 4px 80px #000;
-  padding: 10px;
-}
-.ng-modal-dialog-content {
-  overflow: hidden;
-  height: 100%;
-}
-.ng-modal-close {
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  cursor: pointer;
-  font-size: 120%;
-  padding: 5px;
-  display: inline-block;
-}
-.ng-modal-close-x {
-  font-weight: bold;
-  font-family: Arial, sans-serif;
-}
-.ng-modal-title {
-  font-weight: bold;
-  font-size: 200%;
-  display: block;
-  margin-bottom: 10px;
-  padding-bottom: 7px;
-  border-bottom: solid 1px #999;
-}
+    .modal-body {
+        /*#2f43b5 */
+        /*#696867 :   Calm Blue */
+        /*#e3dee0 : Grayyish white*/
+        /*#3330e6 darker blue*/
+        background-color: #3166b5;
+        width: 100%;
+        height: 100%;
+    }
 
+    .ng-modal h3 {
+        color: #e3dee0;
+    }
+
+    .ng-modal {
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .ng-modal-overlay {
+        position: absolute;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000000;
+        opacity: 0.8;
+    }
+
+    .ng-modal-dialog {
+        z-index: 10000;
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        width: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        background-color: #fff;
+        box-shadow: 4px 4px 80px #000;
+        -webkit-box-shadow: 4px 4px 80px #000;
+        -moz-box-shadow: 4px 4px 80px #000;
+        -ms-box-shadow: 4px 4px 80px #000;
+        -o-box-shadow: 4px 4px 80px #000;
+        padding: 10px;
+    }
+
+    .ng-modal-dialog-content {
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .ng-modal-close {
+        position: absolute;
+        top: 3px;
+        right: 5px;
+        cursor: pointer;
+        font-size: 120%;
+        padding: 5px;
+        display: inline-block;
+    }
+
+    .ng-modal-close-x {
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+    }
+
+    .ng-modal-title {
+        font-weight: bold;
+        font-size: 200%;
+        display: block;
+        margin-bottom: 10px;
+        padding-bottom: 7px;
+        border-bottom: solid 1px #999;
+    }
 </style>
