@@ -1,24 +1,26 @@
 var app = angular.module('adminBusinessController', ['adminServices', 'authServices', 'pagingServices']);
 
-app.directive( "mwConfirmClick", [
-  function( ) {
-    return {
-      priority: -1,
-      restrict: 'A',
-      scope: { confirmFunction: "&mwConfirmClick" },
-      link: function( scope, element, attrs ){
-        element.bind( 'click', function( e ){
-          // message defaults to "Are you sure?"
-          var message = attrs.mwConfirmClickMessage ? attrs.mwConfirmClickMessage : "Are you sure?";
-          // confirm() requires jQuery
-          if( confirm( message ) ) {
-            scope.confirmFunction();
-          }
-        });
-      }
-    }
-  }
-]);
+// app.directive( "mwConfirmClick", [
+//   function( ) {
+//     return {
+//       priority: -1,
+//       restrict: 'A',
+//       scope: { confirmFunction: "&mwConfirmClick" },
+//       link: function( scope, element, attrs ){
+//         element.bind( 'click', function( e ){
+//           // message defaults to "Are you sure?"
+//           var message = attrs.mwConfirmClickMessage ? attrs.mwConfirmClickMessage : "Are you sure?";
+//           // confirm() requires jQuery
+//           if( confirm( message ) ) {
+//             scope.confirmFunction();
+//           }
+//         });
+//       }
+//     }
+//   }
+// ]);
+
+
 
 app.controller('adminBusinessCtrl', function ($http, Admin, Authentication, Pager, $scope, $routeParams) {
 
@@ -58,7 +60,7 @@ app.controller('adminBusinessCtrl', function ($http, Admin, Authentication, Page
                 //end of pagination logic for controller			
 
             } else {
-
+                 $scope.success = false;
 
             }
 
@@ -66,20 +68,33 @@ app.controller('adminBusinessCtrl', function ($http, Admin, Authentication, Page
 
         });
 
-        app.deleteBusiness = function (businessId) {
-
-            Admin.deleteBusiness(businessId).then(function (data1) {
+        app.deleteBusiness = function () {
+            $scope.modalShown = false;
+            if($scope.id != -1){
+                Admin.deleteBusiness($scope.id).then(function (data1) {
                 app.deleteSuccess = data1.success;
                 app.deleteMessage = data1.message;
 
-                Admin.getBusiness().then(function (data2) {
+                    Admin.getBusiness().then(function (data2) {
                     $scope.business = data2.data.business;
                     app.message = data2.data.message;
                     app.success = data2.data.success;
+                    });
                 });
-            });
+
+            }
 
         };
+
+         // A function to toggle the modal . which is to be implemented later
+        $scope.toggleModal = function(id) {
+            $scope.modalShown = !$scope.modalShown;
+            if (typeof(id) != "undefined") {
+                $scope.id = id;
+            } else {
+                $scope.id = -1;
+            }
+        }
 
 
 
