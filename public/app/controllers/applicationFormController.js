@@ -57,7 +57,7 @@ var app = angular.module('applicationFormController', ['applicationServices', 'm
 
 
 
-          $window.location.href = '/apply/success';
+          $window.location.href = '/';
           controller.application = {};
 
         }else{
