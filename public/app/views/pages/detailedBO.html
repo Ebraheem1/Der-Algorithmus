@@ -1,5 +1,5 @@
 <style type="text/css">
-    
+
 .arrow {
 cursor: pointer;
 display: block;
@@ -10,6 +10,9 @@ position: absolute;
 top: 50%;
 width: 64px;
 z-index: 5;
+}
+.img-circle{
+  border-radius: 50%;
 }
 .arrow.prev {
 background-image: url("../images/prev.png");
@@ -132,7 +135,8 @@ opacity:1;
     <div class="row">
 
         <div class="col-md-6">
-            <img class="img-responsive" src="{{viewDetailed.businessOwner.images[0]}}" alt="" width="200" height="200">
+            <img class="img-circle" src="{{viewDetailed.businessOwner.images[0]}}" alt="" width="200" height="200" ng-show="{{viewDetailed.businessOwner.images.length>0}}" style="position:absolute; left:40px">
+            <img class="img-circle" src="http://gazettereview.com/wp-content/uploads/2016/03/facebook-avatar.jpg" alt="" width="200" height="200" ng-hide="{{viewDetailed.businessOwner.images.length>0}}" style="position:absolute; left:40px">
         </div>
 
         <div class="col-md-6">
@@ -152,10 +156,10 @@ opacity:1;
 
     </div>
 </div>
-
+<hr>
 <h2 ng-show="viewDetailed.businessOwner.images.length">Gallery</h2>
 
-
+<br><br>
 <!-- slider container -->
 <div class="container slider" ng-show="viewDetailed.businessOwner.images.length">
 <!-- enumerate all photos -->
@@ -175,4 +179,3 @@ opacity:1;
     <span class="glyphicon glyphicon-remove"></span><strong> Error! {{viewDetailed.errMsg}}</strong>
 </div>
 <br><br><br><br>
-
