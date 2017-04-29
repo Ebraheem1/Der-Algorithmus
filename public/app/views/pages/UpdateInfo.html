@@ -15,21 +15,21 @@
                 <div class="form-group">
                     <label style="color: white">First name</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="firstName" placeholder="First Name" ng-model="update.updateData.firstName">
+                        <input type="text" class="form-control" name="firstName" placeholder="{{update.client.firstName}}" ng-model="update.updateData.firstName">
                         <span class="input-group-addon"><span class="glyphicon glyphicon"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label style="color: white">last name</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="lastName" placeholder="Last Name" ng-model="update.updateData.lastName">
+                        <input type="text" class="form-control" name="lastName" placeholder="{{update.client.lastName}}" ng-model="update.updateData.lastName">
                         <span class="input-group-addon"><span class="glyphicon glyphicon"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label style="color: white">Phone Number</label>
                     <div class="input-group">
-                        <input type="text" class="form-control"  name="phoneNumber" placeholder="Phone Number" ng-model="update.updateData.phoneNumber">
+                        <input type="text" class="form-control"  name="phoneNumber" placeholder="{{update.user.phoneNumber}}" ng-model="update.updateData.phoneNumber">
                         <span class="input-group-addon"><span class="glyphicon glyphicon"></span></span>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label style="color: white">Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control"  name="email" placeholder="Email" ng-model="update.updateData.email">
+                        <input type="email" class="form-control"  name="email" placeholder="{{update.user.email}}" ng-model="update.updateData.email">
                         <span class="input-group-addon"><span class="glyphicon glyphicon"></span></span>
                     </div>
                 </div>
@@ -54,12 +54,12 @@
 
 
                 <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
+
                 <a href="/change-username" class="btn btn-large btn-primary"><i class="icon-home icon-white"></i> Change Username</a>
                 <a href="/change-password" class="btn btn-large btn-primary"><i class="icon-home icon-white"></i> Change Password</a>
-        
             </div>
-           </form>
-        
+        </form>
+
 
         <div class="col-lg-5 col-md-push-1">
             <div class="col-md-12">
