@@ -39,7 +39,17 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 // else it will show the error
 .controller('updateCtrl',function($http,$location,$timeout,User, Authentication, AuthenticationToken){
 	var app=this;
-
+	User.getUser().then(function(data){
+		if(data.data.success){
+			app.user=data.data.user;
+			app.client=data.data.client;
+		}
+	},function(err)
+	{
+		if(err.data){
+		Authentication.handleError();
+		}
+	});
 	app.updateUser=function(updateData){
 		app.successMsg = false;
 		app.errMsg = false;
