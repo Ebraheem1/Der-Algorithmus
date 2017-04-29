@@ -6,11 +6,10 @@
 
 <div ng-repeat="rev in businessReviews" ng-show="review.reviewsFound">
 
-    <div class="panel panel-default">
-         <div class="panel-heading" style="font-size: x-large; color: darkslategray; font-family: cursive"><strong> Business Name:{{" "+ rev.business_id.user_id.username}} </strong></div>
+     <div class="panel panel-info">
+         <div class="panel-heading" style="font-size: x-large; color: darkslategray; font-family: cursive"><strong> Business Name:{{" "+ rev.business_id.name}} </strong><input type="button" style="float: right" value="Modify" class="btn btn-primary" ng-click="review.goToReview(rev._id)" ></div>
         <div class="panel-body" style="font-size: large">{{rev.comment}} </div>
         <div class="panel-body" style="font-size: medium; color: darkgreen" ng-show="rev.reply"><strong>Reply: </strong>{{" " + rev.reply}} </div>
-         <div class="panel-body"><h3> <input type="button" value="Modify" class="btn btn-primary" ng-click="review.goToReview(rev._id)" ></h3></div>
     </div>
 
 </div>
