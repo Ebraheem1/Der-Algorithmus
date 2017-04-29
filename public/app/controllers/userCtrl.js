@@ -105,7 +105,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 	app.updatePassword=function(Edata){
 		app.successMsg = false;
 		app.errMsg = false;
-
+		app.errors= false;
 		User.updatePassword(app.Edata).then(function(data){
 			if(data.data.success){
 				app.successMsg=data.data.message;
@@ -119,7 +119,11 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 				app.sucessMsg=false;
 
 			}else {
-				app.errMsg=data.data.message;
+				if(data.data.errors){
+					app.errors=data.data.errors
+				}else {
+					app.errMsg=data.data.message;
+				}
 
 			}
 		},function(err)
@@ -129,6 +133,7 @@ angular.module('userControllers', ['ngAnimate','ngTouch','userServices','clientS
 			}
 		});
 	}
+
 
 })
 
