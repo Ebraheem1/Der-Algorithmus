@@ -1,3 +1,3 @@
 # Der-Algorithmus
 SE term Project
-Website: http://54.218.246.237:8080
+Website: http://54.202.135.150:8080/
