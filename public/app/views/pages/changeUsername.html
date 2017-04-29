@@ -4,7 +4,8 @@
 <div class="container">
 <div class="login-container">
 <div id="output"></div>
-<div class="avatar"></div>
+<div class="glyphicon glyphicon-pencil"></div>
+<br> <br>
 <div class="form-box">
     <form ng-submit="username.updateUsername(Edata)">
       <div class="input-group">
@@ -25,6 +26,9 @@
 
 </div>
 <style>
+.glyphicon.glyphicon-pencil{
+    font-size: 40px;
+}
 .login-container{
 position: relative;
 width: 300px;
@@ -101,7 +105,6 @@ background: #eee;
 
 .form-box input[type="text"]{
 border-radius: 5px 5px 0 0;
-text-transform: lowercase;
 }
 
 .form-box input[type="password"]{
