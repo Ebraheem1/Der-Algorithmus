@@ -6,6 +6,16 @@
           max-height:100px;
         }
 
+        .button{
+
+            width: 140px;
+        }
+
+        .button2{
+
+            width: 70px;
+        }
+
 
     </style>
 </head>
@@ -69,22 +79,23 @@
                 </td>
                 <td>
                    <strong>Price Per Person: </strong>{{ activity.pricePerPerson }} &#163;
+                   <br><br>
                     <div ng-show="activity.offer" >
-                        <strong style="color: red;">Offer</strong><br>
-                        <strong style="color: red;">Discount: </strong>{{activity.offer.discount}}<br>
+                        <strong style="color: red;">Offer: </strong><br>
+                        <strong style="color: red;">Discount: </strong>{{activity.offer.discount}} % <br>
                         <strong style="color: red;">Expiration Date: </strong>{{activity.offer.exp_date | limitTo : 10 : 0}}
                     </div>          
                 </td>
                 <td>
-                   <button type="button" class="btn btn-info" 
+                    <button type="button" class="btn btn-primary button" 
+                    ng-click="viewNonRepeatableReservations(activity._id)">Reservations</button> <br><br>
+                    <button type="button" class="btn btn-warning button" 
+                    ng-click="addOffer(activity._id)">Add Offer</button> <br><br> 
+                    <button type="button" class="btn btn-info button2" 
                      ng-click="editNonRep(activity._id)">Edit</button>
-                    <button type="button" class="btn btn-danger" 
+                    <button type="button" class="btn btn-danger button2" 
                      ng-click="deleteNonRepeatableActivity(activity._id)">Delete</button>
                      <br><br>
-                    <button type="button" class="btn btn-primary" 
-                    ng-click="viewNonRepeatableReservations(activity._id)">Reservations</button><br><br>
-                    <button type="button" class="btn btn-warning" 
-                    ng-click="addOffer(activity._id)">Add Offer</button> 
                 </td>
 
             </tr>
@@ -125,20 +136,22 @@
                         <span style="display:inline-block; width:10px;"></span>
                         <strong>Price: </strong>{{package.price}} &#163;
                     </div>
+                    <br>
                     <div ng-show="activity.offer">
-                        <strong style="color: red;">Offer</strong><br>
-                        <strong style="color: red;">Discount: </strong>{{activity.offer.discount}}<br>
+                        <strong style="color: red;">Offer: </strong><br>
+                        <strong style="color: red;">Discount: </strong>{{activity.offer.discount}} %<br>
                         <strong style="color: red;">Expiration Date: </strong>{{activity.offer.exp_date | limitTo : 10 : 0}}
                     </div>        
                 </td>
                 <td>
-                     <button type="button" class="btn btn-info" 
-                     ng-click="editRep(activity._id)">Edit</button>
-                    <button type="button" class="btn btn-danger" ng-click="deleteRepeatableActivity(activity._id)">Delete</button> <br><br>
-                    <button type="button" class="btn btn-primary" 
-                    ng-click="viewRepeatableReservations(activity._id)">Reservations</button><br><br>
-                    <button type="button" class="btn btn-warning" 
-                    ng-click="addOffer(activity._id)">Add Offer</button>  
+                    <button type="button" class="btn btn-primary button" 
+                    ng-click="viewRepeatableReservations(activity._id)">Reservations</button> <br><br>
+                    <button type="button" class="btn btn-warning button" 
+                    ng-click="addOffer(activity._id)">Add Offer</button> <br><br>
+                    <button type="button" class="btn btn-info button2" 
+                     ng-click="editRep(activity._id)">Edit</button> 
+                    <button type="button" class="btn btn-danger button2" ng-click="deleteRepeatableActivity(activity._id)">Delete</button> <br><br>
+ 
                 </td>
 
             </tr>
