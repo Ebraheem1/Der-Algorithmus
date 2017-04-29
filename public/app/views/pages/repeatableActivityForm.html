@@ -3,6 +3,9 @@
     .custom {
         color: white;
     }
+    .button{
+      width:80px;
+    }
   </style>
 </head>
 
@@ -17,15 +20,12 @@
 
     <div class="form-group custom"> 
       <label>Upload an Image</label><br>
-      <label class="btn btn-success">
-          Browse
-          <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" style="display: none;">
-      </label>
+      <input type="file" ng-disabled="uploading" file-model="file.upload" name="myfile" >
     </div>
 
     <div class="form-group custom">
-      <label>Theme/Title</label>
-      <input type="text" class="form-control" placeholder="Theme/Title" ng-model="activityData.theme" required>
+      <label>Theme / Title</label>
+      <input type="text" class="form-control" placeholder="Theme / Title" ng-model="activityData.theme" required>
     </div>
 
     <div class="form-group custom">
@@ -36,9 +36,13 @@
     <div class="form-group custom">
       <label>Description</label>
       <textarea class="form-control" name="description" rows="5" placeholder="Write about the activity you are offering." ng-model="activityData.description" required></textarea>
-    </div>
+    </div> <br>
 
-    <label class="custom">Slots:</label> 
+    <label class="custom">Available Time Slots: <br>
+    <i>
+    [ Add all the available time slots (start time and end time) for which this activity could be reserved by clients ]
+    </i>
+    </label> 
     <div class="form-group" data-ng-repeat="slot in slots">
       <label class="custom">Start Time</label>
       <span style="display:inline-block; width:5px;"></span>
@@ -48,30 +52,43 @@
       <span style="display:inline-block; width:5px;"></span>
       <input type="time" ng-model="slot.endTime" required>
       <span style="display:inline-block; width:5px;"></span>
-      <button class="btn btn-success" ng-show="showSlotButton(slot)" ng-click="addNewSlot()">Add</button>
+      <button class="btn btn-success button" ng-show="showSlotButton(slot)" ng-click="addNewSlot()">Add</button>
       <span style="display:inline-block; width:5px;"></span>
-      <button class="btn btn-danger" ng-show="showSlotButton(slot)" ng-click="removeNewSlot()">Remove</button>  
-    </div>
+      <button class="btn btn-danger button" ng-show="showSlotButton(slot)" ng-click="removeNewSlot()">Remove</button>  
+    </div> <br>
 
-    <label class="custom">Price Packages:</label> 
+    <label class="custom">Price Packages: <br>
+    <i>
+    [ <b>Example:  </b> <span style="display:inline-block; width:3px;"></span>
+    Particpants = 2 and Price(£) = 100,<span style="display:inline-block; width:3px;"></span>
+    means that if the number of participants in the reservation is 2,
+    <span style="display:inline-block; width:3px;"></span>
+    then they will pay 100 £ ]
+    </i>
+    </label> 
     <div class="form-group" data-ng-repeat="pricePackage in pricePackages">
       <label class="custom">Particpants</label>
       <span style="display:inline-block; width:5px;"></span>
-      <input type="number" min="1" ng-model="pricePackage.participants" required>
+      <input type="number" placeholder="  Number of Particpants" min="1" ng-model="pricePackage.participants" required>
       <span style="display:inline-block; width:5px;"></span>
       <label class="custom">Price (&#163;)</label>      
       <span style="display:inline-block; width:5px;"></span>
-      <input type="number" min="1" ng-model="pricePackage.price" required>
+      <input type="number" placeholder="  Corresponding Price" min="1" ng-model="pricePackage.price" required>
       <span style="display:inline-block; width:5px;"></span>
-      <button class="btn btn-success" ng-show="showPricePackageButton(pricePackage)" 
+      <button class="btn btn-success button" ng-show="showPricePackageButton(pricePackage)" 
       ng-click="addNewPricePackage()">Add</button>
       <span style="display:inline-block; width:5px;"></span>
-      <button class="btn btn-danger" ng-show="showPricePackageButton(pricePackage)" 
+      <button class="btn btn-danger button" ng-show="showPricePackageButton(pricePackage)" 
       ng-click="removeNewPricePackage()">Remove</button>  
     </div>
 -
     <div class="form-group">
-      <label class="custom">Days Off:</label> <br>
+      <label class="custom">Days Off: <br>
+      <i>
+        [ Choose days on which this activity will not be availabele for reservation by clients. <br>
+          If you want this activity to be available for reservation everyday, then simply avoid choosing any of the below days. ]
+      </i>
+      </label> <br>
       <input type="checkbox" ng-model="activityData.Sunday"><label class="custom">Sunday</label> <br>
       <input type="checkbox" ng-model="activityData.Monday"><label class="custom">Monday</label> <br>
       <input type="checkbox" ng-model="activityData.Tuesday"><label class="custom">Tuesday</label> <br>
@@ -83,7 +100,7 @@
       
   
 
-    <button type="submit" class="btn btn-primary"">Submit</button>
+    <button type="submit" class="btn btn-primary button"">Submit</button>
 
   </form>
 
