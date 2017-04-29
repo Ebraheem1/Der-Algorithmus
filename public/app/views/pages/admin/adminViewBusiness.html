@@ -36,7 +36,7 @@
                 <h2 style="color: cornflowerblue"> Description </h2>
             </div>
             <div class="col-sm-3">
-                <h2 style="color: cornflowerblue"> Delete </h2>
+                <h2 style="color: cornflowerblue"> Delete Business</h2>
             </div>
 
         </div>
@@ -53,8 +53,12 @@
                     <h3> {{item.description}} </h3>
                 </div>
                 <div class="col-sm-3">
-                    <h3> <input type="button" value="Delete" class="btn btn-danger" mw-confirm-click="adminBusiness.deleteBusiness(item._id)"
-                            mw-confirm-click-message="You are about to delete {{item.name}} , are you sure you want to delete ?!">                        </h3>
+                    <!--<h3> <input type="button" value="Delete" class="btn btn-danger" mw-confirm-click="adminBusiness.deleteBusiness(item._id)"
+                            mw-confirm-click-message="You are about to delete {{item.name}} , are you sure you want to delete ?!">                        </h3>-->
+               <h3>
+                   <button class="btn btn-danger" style="font-size: medium" ng-click="toggleModal(item._id)">Delete</button>
+               </h3>
+               
                 </div>
             </div>
         </div>
@@ -87,3 +91,108 @@
     </ul>
 </div>
 </div>
+
+<modal-dialog show='modalShown' width='640px' height='30%'>
+<div class = "modal-body">
+<h3>
+  Are You Sure You Want To Delete This Business ?!</h3>
+
+
+
+      <button style="float:right" class ="icon-button" ng-click="toggleModal()"><span class="	glyphicon glyphicon-remove-sign" style=" position :relative ; top:-60px;float:right;"></span></span></button>
+</div>
+
+<button class="btn btn-info" style=" position: relative;
+top: -50px; left:16px; width:100px; " ng-click="toggleModal()"><strong>NO</strong></button>
+
+<button class="btn btn-info" style=" position: relative;
+top: -50px; left:400px; width:100px; " ng-click="adminBusiness.deleteBusiness()"><strong>YES</strong></button>
+
+</modal-dialog>
+<style>
+.icon-button {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+}
+.modal-body{
+/*#2f43b5 */
+/*#696867 :   Calm Blue */
+/*#e3dee0 : Grayyish white*/
+/*#3330e6 darker blue*/
+  background-color: #3166b5 ;
+  width:100%;
+  height:100%;
+}
+.ng-modal h3 {
+  color: #e3dee0;
+}
+
+.ng-modal {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.ng-modal-overlay {
+  position: absolute;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0.8;
+}
+.ng-modal-dialog {
+  z-index: 10000;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 4px 4px 80px #000;
+  -webkit-box-shadow: 4px 4px 80px #000;
+  -moz-box-shadow: 4px 4px 80px #000;
+  -ms-box-shadow: 4px 4px 80px #000;
+  -o-box-shadow: 4px 4px 80px #000;
+  padding: 10px;
+}
+.ng-modal-dialog-content {
+  overflow: hidden;
+  height: 100%;
+}
+.ng-modal-close {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 120%;
+  padding: 5px;
+  display: inline-block;
+}
+.ng-modal-close-x {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+.ng-modal-title {
+  font-weight: bold;
+  font-size: 200%;
+  display: block;
+  margin-bottom: 10px;
+  padding-bottom: 7px;
+  border-bottom: solid 1px #999;
+}
+
+</style>
+
