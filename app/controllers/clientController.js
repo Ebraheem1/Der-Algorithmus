@@ -49,7 +49,6 @@ getActivity:function(req,res){
 
 viewRelatedActivities:function(req,res){
   var Atype=req.params.type;
-  console.log(Atype);
   RActivity.find({type:Atype},function(err,activities){
     if(err)
     res.json({success:false,message:'No related activities'});
