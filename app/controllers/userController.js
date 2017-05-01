@@ -33,7 +33,7 @@ let userController={
       req.checkBody('gender',' Gender Required').notEmpty();
       req.checkBody('phoneNumber',' phoneNumber Required').notEmpty();
       req.checkBody('password', 'Password at least 8 characters and at most 20').len(8, 20);
-      req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i");
+      req.checkBody('password', 'must contain a digit and a special character').matches(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%_]{8,20}$/, "i");
       req.checkBody('confirmPassword','Passwords do not match').equals(req.body.password);
 
       var errors=req.validationErrors();
@@ -290,7 +290,7 @@ let userController={
         for (var i = 0; i < length; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
-        while(!text.match(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%]{8,20}$/, "i")){
+        while(!text.match(/^(?=(.*\d){1})(?=.*[a-zA-Z])(?=.*[!@#$%])[0-9a-zA-Z!@#$%_]{8,20}$/, "i")){
 
           text = "";
 
