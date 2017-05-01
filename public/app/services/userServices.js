@@ -26,5 +26,9 @@ angular.module('userServices',[])
 		// and forwards it to the backend function responsible for updating the user's password
 		return $http.post('/api/security/change-password',passwords);
 	};
+	userFactory..getUser=function(){
+	//this service is used to get the current logged in User
+	return $http.get('/api/getUser');
+};
 	return userFactory;
 });
