@@ -21,10 +21,6 @@ clientFactory.viewActivity=function(id){
 clientFactory.getRelatedActivities=function(type){
   return $http.get('/api/view-relatedActivities/'+type);
 };
-clientFactory.getUser=function(){
-	//this service is used to get the current logged in User
-	return $http.get('/api/getUser');
-};
 return clientFactory;
 
 });
